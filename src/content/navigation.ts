@@ -5,17 +5,16 @@ export interface NavLinkItem {
   order: number
 }
 
-// 6 primary links in desktop navbar for a balanced, premium layout
+// 5 primary links in desktop navbar for a balanced, premium layout (Reservations handled by prominent CTA button)
 export const NAV_LINKS: NavLinkItem[] = [
   { id: 'about', label: 'Our Story', href: '/about', order: 1 },
   { id: 'cuisines', label: 'Cuisines', href: '/cuisines', order: 2 },
   { id: 'gallery', label: 'Gallery', href: '/gallery', order: 3 },
   { id: 'menu', label: 'Menu', href: '/menu', order: 4 },
   { id: 'offers', label: 'Offers', href: '/offers', order: 5 },
-  { id: 'contact', label: 'Visit & Reserve', href: '/contact', order: 6 },
 ]
 
-// 7 navigation links for mobile slide-in drawer
+// 6 navigation links for mobile slide-in drawer
 export const MOBILE_NAV_LINKS: NavLinkItem[] = [
   { id: 'about', label: 'Our Story', href: '/about', order: 1 },
   { id: 'cuisines', label: 'Cuisines', href: '/cuisines', order: 2 },
@@ -23,7 +22,6 @@ export const MOBILE_NAV_LINKS: NavLinkItem[] = [
   { id: 'menu', label: 'Menu', href: '/menu', order: 4 },
   { id: 'offers', label: 'Offers', href: '/offers', order: 5 },
   { id: 'reviews', label: 'Reviews', href: '/reviews', order: 6 },
-  { id: 'contact', label: 'Visit & Reserve', href: '/contact', order: 7 },
 ]
 
 export interface RouteLink {
