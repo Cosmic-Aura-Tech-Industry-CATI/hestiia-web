@@ -1,0 +1,280 @@
+/* Cuisines Teaser Styles */
+.cuisines-teaser {
+  position: relative;
+  overflow: hidden;
+  background-color: #191410;
+  border-top: 1px solid rgba(184, 154, 100, 0.12);
+  padding: clamp(56px, 8vw, 88px) 0;
+}
+
+.cuisines-teaser__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.cuisines-teaser__eyebrow {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  fontWeight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.cuisines-teaser__title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 300;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cuisines-teaser__header-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-brass, #B89A64);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.cuisines-teaser__header-link:hover {
+  color: var(--color-brass-light, #D4B88A);
+}
+
+.cuisines-teaser__header-link:hover .cuisines-header-arrow {
+  transform: translateX(4px);
+}
+
+.cuisines-header-arrow {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Desktop Grid */
+.cuisines-teaser__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1200px) and (min-width: 1024px) {
+  .cuisines-teaser__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Card Styling */
+.cuisine-teaser-card {
+  position: relative;
+  background-color: rgba(38, 31, 26, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(184, 154, 100, 0.18);
+  overflow: hidden;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, opacity;
+}
+
+.cuisine-card__img-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 60%;
+  overflow: hidden;
+  background-color: #140F0D;
+}
+
+.cuisine-card__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Glare overlay */
+.cuisine-card__glare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+/* Card content */
+.cuisine-card__content {
+  padding: 22px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cuisine-card__subtitle {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  display: block;
+  margin-bottom: 6px;
+}
+
+.cuisine-card__title {
+  font-family: var(--font-serif);
+  font-size: 21px;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0 0 10px 0;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cuisine-card__desc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(246, 239, 228, 0.72);
+  margin: 0;
+}
+
+/* Explore / Learn more label */
+.cuisine-card__action {
+  margin-top: 18px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-family: var(--font-sans);
+  color: var(--color-brass-light, #D4B88A);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cuisine-card__action-arrow {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Desktop Hover */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .cuisine-teaser-card:hover {
+    border-color: rgba(184, 154, 100, 0.45);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+  }
+
+  .cuisine-teaser-card:hover .cuisine-card__img {
+    transform: scale(1.06);
+  }
+
+  .cuisine-teaser-card:hover .cuisine-card__glare {
+    opacity: 1;
+  }
+
+  .cuisine-teaser-card:hover .cuisine-card__title {
+    transform: translateY(-2px);
+  }
+
+  /* Desktop: Explore label starts hidden, fades and lifts in */
+  .cuisine-card__action {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .cuisine-teaser-card:hover .cuisine-card__action {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .cuisine-teaser-card:hover .cuisine-card__action-arrow {
+    transform: translateX(4px);
+  }
+}
+
+/* Mobile swipe carousel */
+@media (max-width: 1023px) {
+  .cuisines-teaser__grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 10px 16px 20px 16px;
+    margin: 0 -16px;
+    gap: 16px;
+  }
+
+  .cuisines-teaser__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cuisine-teaser-card-wrap {
+    scroll-snap-align: center;
+    flex: 0 0 82%;
+    max-width: 330px;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.3s ease;
+  }
+
+  .cuisine-teaser-card-wrap--center {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .cuisine-teaser-card-wrap--neighbor {
+    transform: scale(0.94);
+    opacity: 0.72;
+  }
+
+  /* On mobile: explore label is always visible */
+  .cuisine-card__action {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Gold Dot Indicators for Mobile Carousel */
+.cuisines-teaser__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.cuisines-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: rgba(184, 154, 100, 0.25);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.3s ease;
+}
+
+.cuisines-dot--active {
+  width: 22px;
+  border-radius: 4px;
+  background-color: var(--color-brass, #B89A64);
+}

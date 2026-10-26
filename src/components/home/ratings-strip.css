@@ -1,0 +1,195 @@
+/* Ratings Strip Styles */
+.ratings-strip {
+  background-color: #17120E;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(184, 154, 100, 0.15);
+  padding: 14px 0;
+}
+
+.ratings-strip__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Badges section (Cert + Location) */
+.ratings-strip__meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+
+.ratings-strip__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ratings-strip__divider {
+  width: 1px;
+  height: 14px;
+  background-color: rgba(184, 154, 100, 0.25);
+}
+
+/* Platform cards wrapper */
+.ratings-strip__cards-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Individual card */
+.ratings-card {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm, 4px);
+  background-color: rgba(38, 31, 26, 0.55);
+  border: 1px solid rgba(184, 154, 100, 0.14);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+              background-color 0.3s ease,
+              border-color 0.3s ease;
+  will-change: transform;
+}
+
+/* Sliding gold underline */
+.ratings-card__underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: var(--color-brass, #B89A64);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* Desktop hover */
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .ratings-card:hover {
+    transform: translateY(-4px);
+    background-color: rgba(38, 31, 26, 0.85);
+    border-color: rgba(184, 154, 100, 0.35);
+  }
+
+  .ratings-card:hover .ratings-card__underline {
+    transform: scaleX(1);
+  }
+
+  .ratings-card:hover .arrow-nudge {
+    transform: translateX(4px);
+  }
+}
+
+/* Arrow nudge icon */
+.arrow-nudge {
+  display: inline-block;
+  vertical-align: middle;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Mobile specific styling */
+@media (max-width: 1023px) {
+  .ratings-strip__container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .ratings-strip__meta {
+    justify-content: center;
+    padding: 0 8px;
+  }
+
+  .ratings-strip__cards-wrap {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 6px 16px 10px 16px;
+    gap: 10px;
+    margin: 0 -16px;
+  }
+
+  .ratings-strip__cards-wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ratings-card {
+    scroll-snap-align: center;
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    /* Scale transition for active/neighbor */
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.25s ease,
+                background-color 0.25s ease;
+  }
+
+  .ratings-card--scale-neighbor {
+    transform: scale(0.94);
+    opacity: 0.85;
+  }
+
+  .ratings-card--scale-center {
+    transform: scale(1);
+    opacity: 1;
+    border-color: rgba(184, 154, 100, 0.35);
+  }
+
+  /* Loop-once arrow nudge on mobile */
+  .ratings-card .arrow-nudge {
+    animation: arrowNudgeOnce 1.2s ease-in-out 0.4s 1 forwards;
+  }
+}
+
+@keyframes arrowNudgeOnce {
+  0% {
+    transform: translateX(0);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  70% {
+    transform: translateX(1px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* All Reviews Link */
+.ratings-strip__all-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  text-decoration: none;
+  white-space: nowrap;
+  padding: 6px 8px;
+  transition: color 0.25s ease;
+  flex-shrink: 0;
+}
+
+.ratings-strip__all-link:hover {
+  color: var(--color-brass-light, #D4B88A);
+}
+
+.ratings-strip__all-link:hover .arrow-nudge {
+  transform: translateX(3px);
+}

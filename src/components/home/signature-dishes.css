@@ -1,0 +1,370 @@
+/* Signature Dishes Teaser Styles */
+.signature-dishes-section {
+  position: relative;
+  background-color: #1F1A16;
+  border-top: 1px solid rgba(184, 154, 100, 0.12);
+  width: 100%;
+}
+
+/* ===================================================
+   DESKTOP PINNED SECTION (min-width: 1024px)
+   =================================================== */
+@media (min-width: 1024px) {
+  .signature-dishes-section {
+    height: 100vh;
+    min-height: 640px;
+    max-height: 900px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .signature-dishes__pinned-layout {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 48px;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--container-pad, clamp(16px, 4vw, 48px));
+    max-width: var(--container-max, 1320px);
+    margin: 0 auto;
+  }
+
+  /* Left Column (Stationary) */
+  .signature-dishes__left-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .signature-dishes__track-container {
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    padding: 24px 0;
+  }
+
+  .signature-dishes__track {
+    display: flex;
+    gap: 28px;
+    will-change: transform;
+    width: max-content;
+  }
+
+  .signature-dish-card-wrap {
+    flex: 0 0 340px;
+    width: 340px;
+  }
+
+  /* Progress Bar on Desktop */
+  .signature-progress {
+    margin-top: 32px;
+    width: 100%;
+    max-width: 240px;
+  }
+
+  .signature-progress__track {
+    width: 100%;
+    height: 2px;
+    background-color: rgba(184, 154, 100, 0.2);
+    border-radius: 1px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .signature-progress__bar {
+    width: 100%;
+    height: 100%;
+    background-color: var(--color-brass, #B89A64);
+    transform: scaleX(0);
+    transform-origin: left center;
+    will-change: transform;
+  }
+}
+
+/* ===================================================
+   MOBILE / TABLET UNPINNED LAYOUT (max-width: 1023px)
+   =================================================== */
+@media (max-width: 1023px) {
+  .signature-dishes-section {
+    padding: clamp(48px, 7vw, 76px) 0;
+  }
+
+  .signature-dishes__pinned-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .signature-dishes__left-col {
+    margin-bottom: 8px;
+  }
+
+  .signature-progress {
+    display: none;
+  }
+
+  .signature-dishes__track-container {
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 16px 20px 16px;
+    margin: 0 -16px;
+  }
+
+  .signature-dishes__track-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .signature-dishes__track {
+    display: flex;
+    gap: 16px;
+    width: max-content;
+  }
+
+  .signature-dish-card-wrap {
+    scroll-snap-align: center;
+    flex: 0 0 290px;
+    width: 290px;
+    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.3s ease;
+  }
+
+  .signature-dish-card-wrap--center {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .signature-dish-card-wrap--neighbor {
+    transform: scale(0.94);
+    opacity: 0.78;
+  }
+}
+
+/* ===================================================
+   SHARED DISH CARD STYLING
+   =================================================== */
+.dish-teaser-card {
+  position: relative;
+  background-color: rgba(38, 31, 26, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(184, 154, 100, 0.18);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .dish-teaser-card:hover {
+    border-color: rgba(184, 154, 100, 0.45);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+    transform: translateY(-4px);
+  }
+
+  .dish-teaser-card:hover .dish-card__img {
+    transform: scale(1.08);
+  }
+
+  .dish-teaser-card:hover .dish-card__price-underline {
+    transform: scaleX(1);
+  }
+}
+
+/* Image Container */
+.dish-card__img-wrap {
+  position: relative;
+  width: 100%;
+  padding-top: 64%;
+  overflow: hidden;
+  background-color: #16120F;
+}
+
+.dish-card__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 115%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+/* Veg Dot Pulse */
+.veg-mark {
+  width: 16px;
+  height: 16px;
+  border: 1.5px solid #2F7D4F;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(31, 26, 22, 0.88);
+}
+
+.veg-mark__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #2F7D4F;
+  animation: vegDotPulse 2.4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes vegDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .veg-mark__dot {
+    animation: none;
+  }
+}
+
+/* Popular Ribbon */
+.popular-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background-color: rgba(31, 26, 22, 0.88);
+  border: 1px solid rgba(184, 154, 100, 0.35);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-brass, #B89A64);
+}
+
+/* Price Badge & Underline */
+.dish-card__price-badge {
+  position: relative;
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background-color: rgba(31, 26, 22, 0.92);
+  border: 1px solid rgba(184, 154, 100, 0.35);
+  color: var(--color-brass, #B89A64);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.dish-card__price-underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background-color: var(--color-brass, #B89A64);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Card Body */
+.dish-card__content {
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.dish-card__name {
+  font-family: var(--font-serif);
+  font-size: 20px;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0 0 6px 0;
+  line-height: 1.25;
+}
+
+.dish-card__desc {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(246, 239, 228, 0.72);
+  margin: 0;
+}
+
+/* Action Button */
+.dish-card__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px solid rgba(184, 154, 100, 0.3);
+  background-color: transparent;
+  color: var(--color-brass, #B89A64);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.25s ease,
+              border-color 0.25s ease,
+              color 0.25s ease;
+}
+
+.dish-card__btn:hover {
+  background-color: var(--color-brass, #B89A64);
+  color: #1F1A16;
+  border-color: var(--color-brass, #B89A64);
+}
+
+.dish-card__btn:hover .dish-btn-arrow {
+  transform: translateX(3px);
+}
+
+.dish-btn-arrow {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Full Menu Button */
+.signature-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: 1px solid var(--color-brass, #B89A64);
+  border-radius: var(--radius-sm, 4px);
+  color: var(--color-brass, #B89A64);
+  background-color: transparent;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
+  width: fit-content;
+  margin-top: 24px;
+}
+
+.signature-menu-btn:hover {
+  background-color: var(--color-brass, #B89A64);
+  color: #1F1A16;
+}
+
+.signature-menu-btn:hover .menu-btn-arrow {
+  transform: translateX(6px);
+}
+
+.menu-btn-arrow {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}

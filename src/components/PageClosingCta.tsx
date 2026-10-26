@@ -1,6 +1,10 @@
 import { Link } from 'react-router-dom'
 import { Phone, MessageSquare, Calendar } from 'lucide-react'
 import { RESTAURANT } from '../content/restaurant'
+import SplitText from './reactbits/SplitText'
+import DrawLine from './reactbits/DrawLine'
+import Magnet from './reactbits/Magnet'
+import ClickSpark from './reactbits/ClickSpark'
 
 interface PageClosingCtaProps {
   title?: string
@@ -45,13 +49,22 @@ export default function PageClosingCta({
             fontSize: 'clamp(28px, 4vw, 44px)',
             fontWeight: 300,
             color: 'var(--color-text-inverse)',
-            margin: '0 auto 16px',
+            margin: '0 auto 12px',
             maxWidth: '650px',
             lineHeight: 1.2,
           }}
         >
-          {title} <em style={{ fontStyle: 'italic', color: 'var(--color-brass-light)' }}>{accentWord}</em>
+          <SplitText as="span">{title}</SplitText>{' '}
+          <em style={{ fontStyle: 'italic', color: 'var(--color-brass-light)' }}>{accentWord}</em>
         </h2>
+
+        <DrawLine
+          color="var(--color-brass, #B89A64)"
+          height="1.5px"
+          origin="center"
+          duration={0.7}
+          style={{ width: '48px', margin: '0 auto 16px auto' }}
+        />
 
         <p
           style={{
@@ -77,76 +90,88 @@ export default function PageClosingCta({
           }}
         >
           {/* Reserve a Table */}
-          <Link
-            to="/contact"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '12px 24px',
-              borderRadius: '6px',
-              backgroundColor: 'var(--color-brass)',
-              color: '#1F1A16',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '13px',
-              fontWeight: 600,
-              letterSpacing: '0.04em',
-              textDecoration: 'none',
-              boxShadow: '0 4px 16px rgba(184, 154, 100, 0.25)',
-              transition: 'background-color 0.2s ease, transform 0.2s ease',
-            }}
-          >
-            <Calendar size={16} />
-            <span>Reserve a Table</span>
-          </Link>
+          <Magnet strength={0.25} padding={20}>
+            <ClickSpark sparkColor="var(--color-brass)">
+              <Link
+                to="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 24px',
+                  borderRadius: '6px',
+                  backgroundColor: 'var(--color-brass)',
+                  color: '#1F1A16',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  textDecoration: 'none',
+                  boxShadow: '0 4px 16px rgba(184, 154, 100, 0.25)',
+                  transition: 'background-color 0.2s ease, transform 0.2s ease',
+                }}
+              >
+                <Calendar size={16} />
+                <span>Reserve a Table</span>
+              </Link>
+            </ClickSpark>
+          </Magnet>
 
           {/* Call Direct */}
-          <a
-            href={`tel:${RESTAURANT.phone.e164}`}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '12px 20px',
-              borderRadius: '6px',
-              backgroundColor: 'rgba(38, 31, 26, 0.8)',
-              border: '1px solid rgba(184, 154, 100, 0.35)',
-              color: 'var(--color-text-inverse)',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '13px',
-              fontWeight: 500,
-              textDecoration: 'none',
-              transition: 'border-color 0.2s ease',
-            }}
-          >
-            <Phone size={15} color="var(--color-brass)" />
-            <span>Call {RESTAURANT.phone.display}</span>
-          </a>
+          <Magnet strength={0.2} padding={16}>
+            <ClickSpark sparkColor="var(--color-brass)">
+              <a
+                href={`tel:${RESTAURANT.phone.e164}`}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 20px',
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(38, 31, 26, 0.8)',
+                  border: '1px solid rgba(184, 154, 100, 0.35)',
+                  color: 'var(--color-text-inverse)',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  transition: 'border-color 0.2s ease',
+                }}
+              >
+                <Phone size={15} color="var(--color-brass)" />
+                <span>Call {RESTAURANT.phone.display}</span>
+              </a>
+            </ClickSpark>
+          </Magnet>
 
           {/* WhatsApp Direct */}
-          <a
-            href={RESTAURANT.whatsapp.chatUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '12px 20px',
-              borderRadius: '6px',
-              backgroundColor: 'rgba(37, 211, 102, 0.12)',
-              border: '1px solid rgba(37, 211, 102, 0.35)',
-              color: '#4ADE80',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '13px',
-              fontWeight: 500,
-              textDecoration: 'none',
-              transition: 'background-color 0.2s ease',
-            }}
-          >
-            <MessageSquare size={15} color="#25D366" />
-            <span>Chat on WhatsApp</span>
-          </a>
+          <Magnet strength={0.2} padding={16}>
+            <ClickSpark sparkColor="#25D366">
+              <a
+                href={RESTAURANT.whatsapp.chatUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 20px',
+                  borderRadius: '6px',
+                  backgroundColor: 'rgba(37, 211, 102, 0.12)',
+                  border: '1px solid rgba(37, 211, 102, 0.35)',
+                  color: '#4ADE80',
+                  fontFamily: 'var(--font-sans)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  textDecoration: 'none',
+                  transition: 'background-color 0.2s ease',
+                }}
+              >
+                <MessageSquare size={15} color="#25D366" />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </ClickSpark>
+          </Magnet>
         </div>
       </div>
     </section>

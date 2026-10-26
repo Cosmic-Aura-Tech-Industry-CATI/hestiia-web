@@ -1,14 +1,52 @@
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ExternalLink, Phone, MessageSquare, Mail, MapPin } from 'lucide-react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useGSAP } from '@gsap/react'
 import ScrollFloat from './reactbits/ScrollFloat'
+import Magnet from './reactbits/Magnet'
+import TapScale from './reactbits/TapScale'
 import { InstagramIcon } from './icons/InstagramIcon'
 import { RESTAURANT } from '../content/restaurant'
+import './footer.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const YEAR = new Date().getFullYear()
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
+
+  useGSAP(
+    () => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (prefersReduced || !gridRef.current) return
+
+      const cols = gridRef.current.children
+      if (!cols.length) return
+
+      gsap.from(cols, {
+        scrollTrigger: {
+          trigger: gridRef.current,
+          start: 'top 88%',
+          once: true,
+        },
+        y: 28,
+        opacity: 0,
+        duration: 0.8,
+        stagger: 0.12,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      })
+    },
+    { scope: footerRef }
+  )
+
   return (
     <footer
+      ref={footerRef}
       className="footer"
       style={{
         backgroundColor: '#140F0C',
@@ -23,6 +61,7 @@ export default function Footer() {
 
       <div className="container" style={{ paddingBottom: '48px' }}>
         <div
+          ref={gridRef}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))',
@@ -36,12 +75,13 @@ export default function Footer() {
           <div>
             <Link
               to="/"
+              className="footer-logo-shine"
               style={{
                 fontFamily: 'var(--font-serif)',
                 fontSize: '26px',
                 fontWeight: 300,
                 color: 'var(--color-text-inverse)',
-                display: 'block',
+                display: 'inline-block',
                 marginBottom: '12px',
                 textDecoration: 'none',
               }}
@@ -114,52 +154,52 @@ export default function Footer() {
               }}
             >
               <li>
-                <Link to="/about" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/about" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Our Story
                 </Link>
               </li>
               <li>
-                <Link to="/cuisines" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/cuisines" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Cuisines & Specialties
                 </Link>
               </li>
               <li>
-                <Link to="/menu" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/menu" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Full Menu (193 Dishes)
                 </Link>
               </li>
               <li>
-                <Link to="/cart" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/cart" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Online Ordering Cart
                 </Link>
               </li>
               <li>
-                <Link to="/gallery" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/gallery" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Ambience & Food Gallery
                 </Link>
               </li>
               <li>
-                <Link to="/about#experience" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/about#experience" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Dining Experience
                 </Link>
               </li>
               <li>
-                <Link to="/offers" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/offers" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Exclusive Offers
                 </Link>
               </li>
               <li>
-                <Link to="/reviews" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/reviews" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Guest Reviews
                 </Link>
               </li>
               <li>
-                <Link to="/party" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/party" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Parties & Private Dining
                 </Link>
               </li>
               <li>
-                <Link to="/contact" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link to="/contact" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Contact & Location
                 </Link>
               </li>
@@ -197,6 +237,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.zomato}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -215,6 +256,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.swiggy}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -233,6 +275,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.googleMaps}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -251,6 +294,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.eazydiner}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -269,6 +313,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.district}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -287,6 +332,7 @@ export default function Footer() {
                   href={RESTAURANT.platforms.justdial}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{
                     fontSize: '13px',
                     color: 'rgba(246, 239, 228, 0.7)',
@@ -331,6 +377,7 @@ export default function Footer() {
                 <Phone size={14} color="var(--color-brass)" style={{ flexShrink: 0 }} />
                 <a
                   href={`tel:${RESTAURANT.phone.e164}`}
+                  className="footer-link-slide"
                   style={{ fontSize: '13px', color: 'var(--color-brass-light)', textDecoration: 'none' }}
                 >
                   {RESTAURANT.phone.display}
@@ -343,6 +390,7 @@ export default function Footer() {
                   href={RESTAURANT.whatsapp.chatUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="footer-link-slide"
                   style={{ fontSize: '13px', color: '#4ADE80', textDecoration: 'none' }}
                 >
                   WhatsApp: {RESTAURANT.whatsapp.display}
@@ -353,6 +401,7 @@ export default function Footer() {
                 <Mail size={14} color="var(--color-brass)" style={{ flexShrink: 0 }} />
                 <a
                   href={`mailto:${RESTAURANT.email}`}
+                  className="footer-link-slide"
                   style={{ fontSize: '13px', color: 'var(--color-brass-light)', textDecoration: 'none' }}
                 >
                   {RESTAURANT.email}
@@ -382,19 +431,19 @@ export default function Footer() {
         >
           {/* Legal Pages */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/terms" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/terms" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
               Terms & Conditions
             </Link>
             <span>·</span>
-            <Link to="/privacy" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/privacy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
               Privacy Policy
             </Link>
             <span>·</span>
-            <Link to="/refund-policy" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/refund-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
               Refund Policy
             </Link>
             <span>·</span>
-            <Link to="/delivery-policy" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/delivery-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
               Delivery Policy
             </Link>
           </div>
@@ -402,35 +451,43 @@ export default function Footer() {
           {/* Social Icons (Instagram, Facebook only if set) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             {RESTAURANT.social.instagram && (
-              <a
-                href={RESTAURANT.social.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Follow Hestiia Restaurant on Instagram"
-                style={{
-                  color: 'var(--color-brass)',
-                  textDecoration: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                }}
-              >
-                <InstagramIcon size={14} />
-                <span>@hestiiarestaurant</span>
-              </a>
+              <Magnet strength={0.3} padding={12}>
+                <TapScale scale={0.94}>
+                  <a
+                    href={RESTAURANT.social.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Follow Hestiia Restaurant on Instagram"
+                    style={{
+                      color: 'var(--color-brass)',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    <InstagramIcon size={14} />
+                    <span>@hestiiarestaurant</span>
+                  </a>
+                </TapScale>
+              </Magnet>
             )}
 
             {/* Facebook is only displayed if set (never when null) */}
             {RESTAURANT.social.facebook && (
-              <a
-                href={RESTAURANT.social.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook Page"
-                style={{ color: 'var(--color-brass)', textDecoration: 'none' }}
-              >
-                Facebook
-              </a>
+              <Magnet strength={0.3} padding={12}>
+                <TapScale scale={0.94}>
+                  <a
+                    href={RESTAURANT.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Facebook Page"
+                    style={{ color: 'var(--color-brass)', textDecoration: 'none' }}
+                  >
+                    Facebook
+                  </a>
+                </TapScale>
+              </Magnet>
             )}
           </div>
         </div>
