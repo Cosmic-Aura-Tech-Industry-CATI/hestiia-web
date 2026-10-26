@@ -1,132 +1,113 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import interiorImg from '../../assets/images/restaurant_interior.jpg'
+import RevealImage from '../reactbits/RevealImage'
+import SplitText from '../reactbits/SplitText'
+import ScrollReveal from '../reactbits/ScrollReveal'
+import DrawLine from '../reactbits/DrawLine'
+import Magnet from '../reactbits/Magnet'
+import ClickSpark from '../reactbits/ClickSpark'
+import './story-teaser.css'
 
 export default function StoryTeaser() {
+  const [isMobile, setIsMobile] = useState<boolean>(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
+
   return (
     <section
-      className="story-teaser section section-dark"
-      style={{
-        padding: 'clamp(56px, 8vw, 88px) 0',
-        backgroundColor: '#1F1A16',
-      }}
+      className="story-teaser section section-dark section-ambient-glow"
+      aria-labelledby="story-teaser-title"
     >
       <div className="container">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 'clamp(32px, 5vw, 64px)',
-            alignItems: 'center',
-          }}
-        >
-          {/* 1 Photo */}
-          <div
-            style={{
-              position: 'relative',
-              borderRadius: '12px',
-              overflow: 'hidden',
-              border: '1px solid rgba(184, 154, 100, 0.25)',
-              boxShadow: '0 16px 36px rgba(0, 0, 0, 0.55)',
-            }}
-          >
-            <img
-              src={interiorImg}
-              alt="Hestiia Restaurant Dining Sanctuary Interior in Shyam Nagar, Kanpur"
-              loading="lazy"
-              decoding="async"
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                aspectRatio: '4/3',
-                objectFit: 'cover',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background: 'linear-gradient(to top, rgba(31, 26, 22, 0.6) 0%, transparent 60%)',
-                pointerEvents: 'none',
-              }}
-            />
+        <div className="story-teaser__grid">
+          {/* Floating Gold Ornament (Drifting slowly on desktop) */}
+          <div className="story-teaser__ornament" aria-hidden="true">
+            <svg
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <circle cx="50" cy="50" r="44" strokeDasharray="3 3" opacity="0.6" />
+              <path d="M50 8 L50 92 M8 50 L92 50" opacity="0.5" />
+              <path d="M50 20 L58 42 L80 50 L58 58 L50 80 L42 58 L20 50 L42 42 Z" fill="currentColor" fillOpacity="0.15" />
+              <circle cx="50" cy="50" r="4" fill="currentColor" />
+            </svg>
           </div>
 
-          {/* 60-word text + button to /about */}
-          <div>
-            <span
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--color-brass)',
-                display: 'block',
-                marginBottom: '12px',
-              }}
+          {/* 1 Photo: RevealImage with clip wipe left-to-right, inner scale settle & desktop parallax */}
+          <div className="story-teaser__image-col">
+            <RevealImage
+              src={interiorImg}
+              alt="Hestiia Restaurant Dining Sanctuary Interior in Shyam Nagar, Kanpur"
+              aspectRatio="4/3"
             >
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(to top, rgba(31, 26, 22, 0.6) 0%, transparent 60%)',
+                  pointerEvents: 'none',
+                }}
+              />
+            </RevealImage>
+          </div>
+
+          {/* 60-word text + Title line reveal + DrawLine + ScrollReveal + Magnet/ClickSpark Button */}
+          <div className="story-teaser__content-col">
+            <span className="story-teaser__eyebrow">
               Our Philosophy · Kanpur
             </span>
 
-            <h2
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(28px, 4vw, 44px)',
-                fontWeight: 300,
-                color: 'var(--color-text-inverse)',
-                margin: '0 0 16px 0',
-                lineHeight: 1.2,
-              }}
+            {/* SplitText Line Reveal for Title */}
+            <SplitText
+              as="h2"
+              className="story-teaser__title"
+              delay={0.1}
+              stagger={0.06}
             >
               A Sanctuary of Pure Vegetarian Heritage.
-            </h2>
+            </SplitText>
 
-            <p
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '15px',
-                fontWeight: 300,
-                lineHeight: 1.75,
-                color: 'rgba(246, 239, 228, 0.78)',
-                marginBottom: '28px',
-              }}
-            >
+            {/* Gold DrawLine under Title */}
+            <DrawLine
+              color="var(--color-brass, #B89A64)"
+              height="2px"
+              origin="left"
+              duration={1.0}
+              style={{ width: '68px', margin: '14px 0 20px 0' }}
+            />
+
+            {/* Existing ScrollReveal word-by-word (import unchanged) */}
+            <ScrollReveal className="story-teaser__body">
               Rooted in Shyam Nagar, Hestiia is a certified pure vegetarian dining sanctuary where slow-simmered culinary traditions meet calm hospitality. Our kitchen honors authentic North Indian recipes, wok-tossed Indo-Chinese specialities, and hand-kneaded tandoori breads, crafted purely with cold-pressed oils, rich dairy, and fresh garden herbs for peaceful family feasts.
-            </p>
+            </ScrollReveal>
 
-            <Link
-              to="/about"
-              className="btn btn-outline"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 24px',
-                border: '1px solid var(--color-brass)',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--color-brass)',
-                fontFamily: 'var(--font-sans)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                transition: 'background-color 0.2s, color 0.2s',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.backgroundColor = 'var(--color-brass)'
-                e.currentTarget.style.color = '#1F1A16'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.backgroundColor = 'transparent'
-                e.currentTarget.style.color = 'var(--color-brass)'
-              }}
-            >
-              <span>Read Our Story</span>
-              <ArrowRight size={14} />
-            </Link>
+            {/* Button: Magnet on desktop + ClickSpark on click */}
+            <div className="story-teaser__btn-wrap">
+              <Magnet disabled={isMobile} strength={0.25} padding={28}>
+                <ClickSpark sparkColor="var(--color-brass, #B89A64)" sparkCount={8}>
+                  <Link
+                    to="/about"
+                    className="btn btn-outline story-teaser__btn"
+                    aria-label="Read our story about Hestiia pure vegetarian restaurant in Kanpur"
+                  >
+                    <span>Read Our Story</span>
+                    <ArrowRight size={14} className="story-btn__arrow" />
+                  </Link>
+                </ClickSpark>
+              </Magnet>
+            </div>
           </div>
         </div>
       </div>
