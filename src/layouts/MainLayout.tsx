@@ -10,6 +10,12 @@ import BlobCursor from '../components/reactbits/BlobCursor'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { CartDrawer } from '../components/cart/CartDrawer'
+import BackToTop from '../components/ui/BackToTop'
+import AutoHideActionBar from '../components/ui/AutoHideActionBar'
+
+if (typeof window !== 'undefined') {
+  ;(window as unknown as { ScrollTrigger?: typeof ScrollTrigger }).ScrollTrigger = ScrollTrigger
+}
 
 export default function MainLayout() {
   const location = useLocation()
@@ -67,8 +73,13 @@ export default function MainLayout() {
       {/* Shared Layout: Footer */}
       <Footer />
 
+      {/* Back to top button */}
+      <BackToTop />
+
       {/* Shared Layout: Mobile Floating Action Bar */}
-      <FloatingActionBar />
+      <AutoHideActionBar>
+        <FloatingActionBar />
+      </AutoHideActionBar>
     </>
   )
 }
