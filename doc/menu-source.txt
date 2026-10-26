@@ -1,0 +1,307 @@
+# HESTIIA Restaurant — Complete Menu
+
+Pure Vegetarian · Kanpur · 193 Dishes
+
+## 1. Sandwiches
+
+| Dish                  | Price |
+| --------------------- | ----- |
+| Veg Sandwich          | ₹119  |
+| Cheese Sandwich       | ₹139  |
+| Cheese Corn Sandwich  | ₹149  |
+| Paneer Tikka Sandwich | ₹169  |
+| O.T.C. Sandwich       | ₹139  |
+
+## 2. Burgers
+
+| Dish                  | Price |
+| --------------------- | ----- |
+| Veg Burger            | ₹89   |
+| Cheese Burger         | ₹109  |
+| Double Daker          | ₹169  |
+| Cottage Cheese Burger | ₹189  |
+
+## 3. Pizza
+
+| Dish               | Price |
+| ------------------ | ----- |
+| Marghrita          | ₹189  |
+| Fresh Veggies      | ₹219  |
+| Cheese Corn        | ₹219  |
+| Farm Fresh         | ₹249  |
+| Paneer Tikka Pizza | ₹279  |
+| Hestiia Special    | ₹339  |
+
+## 4. Pasta
+
+| Dish              | Price |
+| ----------------- | ----- |
+| Red Sauce Pasta   | ₹219  |
+| White Sauce Pasta | ₹249  |
+| Pink Sauce Pasta  | ₹259  |
+
+## 5. Soups
+
+| Dish              | Price |
+| ----------------- | ----- |
+| Cream of Tomato   | ₹119  |
+| Hot N Sour        | ₹119  |
+| Manchow           | ₹119  |
+| Sweet Corn        | ₹119  |
+| Cream of Mushroom | ₹119  |
+| Veg Clear         | ₹119  |
+| Choise On You     | ₹119  |
+
+## 6. Salads & Raita
+
+| Dish            | Price |
+| --------------- | ----- |
+| Onion Salad     | ₹49   |
+| Cucumber Salad  | ₹49   |
+| Green Salad     | ₹69   |
+| Boondi Raita    | ₹99   |
+| Mix Veg Raita   | ₹99   |
+| Pineapple Raita | ₹129  |
+| Fruit Raita     | ₹129  |
+
+## 7. Kebabs & Starters
+
+| Dish          | Price |
+| ------------- | ----- |
+| Haryali Kebab | ₹165  |
+| Dahi Kebab    | ₹165  |
+| Seekh Kebab   | ₹189  |
+| Shami Kebab   | ₹189  |
+
+## 8. Chinese Starters
+
+| Dish                       | Price |
+| -------------------------- | ----- |
+| Honey Chilli Potato        | ₹165  |
+| Crispy Corn                | ₹165  |
+| Gobhi Manchurian Dry       | ₹165  |
+| Spring Roll                | ₹185  |
+| Cheese Cigar Roll          | ₹185  |
+| Creamy Crispy Paneer       | ₹185  |
+| Spinach Corn Salt N Pepper | ₹185  |
+| Chilli Potato              | ₹185  |
+| Crispy Veg                 | ₹189  |
+| Spinach Cheese Corn Roll   | ₹189  |
+| Mushroom Stick             | ₹189  |
+| Chilli Manchurian          | ₹219  |
+| Paneer 65                  | ₹219  |
+| Paneer Manchurian          | ₹219  |
+| Veg Manchurian             | ₹219  |
+| Chilli Mushroom            | ₹219  |
+| Paneer Stick               | ₹275  |
+
+## 9. Chinese Rice & Noodles
+
+| Dish                   | Price |
+| ---------------------- | ----- |
+| Veg Fried Rice         | ₹165  |
+| Hakka Noodles          | ₹165  |
+| Garlic Fried Rice      | ₹175  |
+| Schezwan Fried Rice    | ₹175  |
+| Garlic Noodles         | ₹175  |
+| Schezwan Noodles       | ₹175  |
+| Veg Noodles            | ₹185  |
+| Paneer Fried Rice      | ₹185  |
+| Paneer Noodles         | ₹185  |
+| Hestia Special Noodles | ₹219  |
+| Hestia Special Rice    | ₹219  |
+| Chinese Platter        | ₹389  |
+
+## 10. Paneer
+
+| Dish                 | Price |
+| -------------------- | ----- |
+| Matar Paneer         | ₹275  |
+| Kadhai Paneer        | ₹275  |
+| Handi Paneer         | ₹275  |
+| Paneer Koftahani     | ₹275  |
+| Paneer Rajdhani      | ₹275  |
+| Paneer Jodhpuri      | ₹275  |
+| Paneer Bhujji        | ₹275  |
+| Palak Paneer         | ₹275  |
+| Paneer Ragan Josh    | ₹275  |
+| Paneer Butter Masala | ₹285  |
+| Paneer Makhmali      | ₹285  |
+| Paneer Lababdar      | ₹309  |
+| Paneer Tikka Masala  | ₹309  |
+
+## 11. Veg Main Course
+
+| Dish                              | Price |
+| --------------------------------- | ----- |
+| Pindi Chana Dry                   | ₹169  |
+| Punjabi Chole                     | ₹169  |
+| Aloo Matar Dry                    | ₹169  |
+| Jeera Aloo                        | ₹175  |
+| Dum Aloo                          | ₹219  |
+| Kashmiri Dum Aloo                 | ₹219  |
+| Veg Jal Frezi                     | ₹229  |
+| Bhojpuri Dum Aloo                 | ₹239  |
+| Banarsi Dum Aloo                  | ₹239  |
+| Mushroom Butter Masala            | ₹249  |
+| Mushroom Do Pyaza                 | ₹249  |
+| Matar Mushroom                    | ₹249  |
+| Handi Mushroom                    | ₹249  |
+| Mushroom Rogan Josh               | ₹249  |
+| Mix Veg                           | ₹275  |
+| Chaap Butter Masala               | ₹275  |
+| Chaap Tikka Masala                | ₹285  |
+| Baked Veg                         | ₹299  |
+| Spinach Corn Baked                | ₹309  |
+| Saute Vegetable                   | ₹219  |
+| Grilled Paneer Lemon Butter Sauce | ₹249  |
+
+## 12. Dal
+
+| Dish        | Price |
+| ----------- | ----- |
+| Dal Fry     | ₹189  |
+| Dal Bukhara | ₹209  |
+| Dal Tadka   | ₹199  |
+| Dal Makhani | ₹229  |
+
+## 13. Rice & Biryani
+
+| Dish                | Price |
+| ------------------- | ----- |
+| Steam Rice          | ₹129  |
+| Jeera Rice          | ₹139  |
+| Veg Pulao           | ₹139  |
+| Peas Rice           | ₹139  |
+| Veg Biryani         | ₹189  |
+| Hydabadi Biryani    | ₹209  |
+| Chaap Tikka Biryani | ₹239  |
+
+## 14. Breads
+
+| Dish           | Price |
+| -------------- | ----- |
+| Plain Roti     | ₹30   |
+| Butter Roti    | ₹35   |
+| Plain Naan     | ₹40   |
+| Garlic Naan    | ₹45   |
+| Laccha Paratha | ₹45   |
+| Mirchi Paratha | ₹45   |
+| Pudina Paratha | ₹45   |
+| Missi Roti     | ₹45   |
+| Aloo Kulcha    | ₹55   |
+| Onion Kulcha   | ₹55   |
+| Mix Kulcha     | ₹65   |
+| Butter Naan    | ₹60   |
+| Paneer Kulcha  | ₹75   |
+| Cheese Naan    | ₹70   |
+
+## 15. Tandoori Specials
+
+| Dish                       | Price |
+| -------------------------- | ----- |
+| Mushroom Tikka             | ₹219  |
+| Soya Malai Chaap           | ₹219  |
+| Soya Aloo Kalimirch        | ₹219  |
+| Paneer Tikka               | ₹239  |
+| Soya Angara Tikka          | ₹239  |
+| Achari Paneer Tikka        | ₹249  |
+| Paneer Kali Mirch Tikka    | ₹249  |
+| Stuffed Chaap              | ₹249  |
+| Paneer Malai Tikka         | ₹269  |
+| Mint Paneer Tikka          | ₹269  |
+| Stuffed Paneer Malai Tikka | ₹269  |
+| Tandoori Platter           | ₹389  |
+
+## 16. Sides & Snacks
+
+| Dish          | Price |
+| ------------- | ----- |
+| Papad         | ₹35   |
+| Masala Papad  | ₹49   |
+| French Fries  | ₹89   |
+| Nachos        | ₹89   |
+| Garlic Bread  | ₹89   |
+| Cheese Fries  | ₹119  |
+| Veg Cutlet    | ₹119  |
+| Cheese Nachos | ₹129  |
+| Paneer Pakoda | ₹129  |
+| Cheese Cutlet | ₹165  |
+
+## 17. Juices
+
+| Dish            | Price |
+| --------------- | ----- |
+| Orange Juice    | ₹99   |
+| Litchi Juice    | ₹99   |
+| Mix Fruit Juice | ₹99   |
+| Apple Juice     | ₹99   |
+| Cranberry Juice | ₹99   |
+
+## 18. Shakes
+
+| Dish                       | Price |
+| -------------------------- | ----- |
+| Chocolate Shake            | ₹149  |
+| Vanilla Shake              | ₹149  |
+| Butterscotch Shake         | ₹149  |
+| Pineapple Shake            | ₹149  |
+| Mango Shake                | ₹149  |
+| Strawberry Shake           | ₹149  |
+| Cold Coffee                | ₹149  |
+| Cold Coffee With Ice Cream | ₹149  |
+| Black Currant Shake        | ₹159  |
+| Oreo Shake                 | ₹159  |
+| Kit-Kat Shake              | ₹159  |
+| Cold Coffee With Shake     | ₹169  |
+| Hestia Special Shake       | ₹199  |
+
+## 19. Beverages
+
+| Dish                       | Price |
+| -------------------------- | ----- |
+| Hot Tea                    | ₹49   |
+| Black Tea                  | ₹49   |
+| Mineral Water / Cold Drink | ₹59   |
+| Lassi                      | ₹59   |
+| Desi Chhach                | ₹59   |
+| Masala Cold Drink          | ₹79   |
+| Hot Coffee                 | ₹79   |
+| Black Coffee               | ₹79   |
+| Fresh Lime Soda            | ₹85   |
+| Redbull                    | ₹179  |
+
+## 20. Mocktails
+
+| Dish                    | Price |
+| ----------------------- | ----- |
+| V. Mojito               | ₹149  |
+| Blue Lagoon             | ₹149  |
+| Watermelon              | ₹149  |
+| Green Apple             | ₹149  |
+| Lucy Berry              | ₹149  |
+| Kiwi Blast              | ₹149  |
+| Juice Tank              | ₹179  |
+| Twister                 | ₹179  |
+| Heaven                  | ₹179  |
+| James                   | ₹179  |
+| Hestia Special Mocktail | ₹199  |
+
+## 21. Desserts
+
+| Dish                       | Price |
+| -------------------------- | ----- |
+| Gulab Jamun                | ₹49   |
+| Vanilla Ice Cream          | ₹49   |
+| Strawberry Ice Cream       | ₹49   |
+| Chhena                     | ₹59   |
+| Chocolate Ice Cream        | ₹69   |
+| Butter Scotch Ice Cream    | ₹69   |
+| Hot Chocolate With Brownie | ₹149  |
+| Hot Brownie With Vanilla   | ₹149  |
+
+## 22. Extras
+
+The provided menu lists an Extras category but does not include individual items or prices under it.
+
+HESTIIA / Pure Veg Fine Dining / Phone 6392693457 / Shyam Nagar, Kanpur

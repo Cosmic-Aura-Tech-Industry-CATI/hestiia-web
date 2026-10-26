@@ -1,0 +1,451 @@
+/* ===================================================
+   HESTIIA — CUISINE SECTION STYLES
+   Key tunable variables at the top.
+   =================================================== */
+
+:root {
+  /* Desktop expanding panels */
+  --cuisine-panel-height:     clamp(480px, 70vh, 640px);
+  --cuisine-panel-gap:        12px;
+  --cuisine-panel-radius:     20px;
+  --cuisine-expanded-flex:    3;
+  --cuisine-collapsed-flex:   1;
+  --cuisine-scrim-opacity:    0.72;
+  --cuisine-expanded-img-scale: 1.06;
+
+  /* Mobile stacking cards */
+  --cuisine-stack-offset:     12px;  /* additional offset per card */
+  --cuisine-card-min-height:  70svh;
+  --cuisine-card-max-height:  520px;
+  --cuisine-card-radius:      20px;
+  --cuisine-stack-dim:        0.7;   /* brightness of covered card */
+  --cuisine-stack-scale:      0.94;  /* scale of covered card */
+}
+
+/* ===================================================
+   SECTION WRAPPER
+   =================================================== */
+.cuisine-section {
+  padding: clamp(64px, 8vw, 100px) 0 clamp(48px, 6vw, 80px);
+  overflow: hidden;
+}
+
+/* ===================================================
+   SECTION HEADER
+   =================================================== */
+.cuisine-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 1024px) {
+  .cuisine-header {
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+}
+
+.cuisine-eyebrow {
+  font-family: var(--font-sans);
+  font-size: clamp(0.6875rem, 1.2vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  display: block;
+  margin-bottom: 10px;
+}
+
+.cuisine-heading {
+  font-family: var(--font-serif);
+  font-size: clamp(1.75rem, 4vw, 3.375rem);
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0;
+}
+
+.cuisine-heading-group {
+  flex-shrink: 0;
+}
+
+.cuisine-menu-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  margin-top: 16px;
+  flex-shrink: 0;
+  align-self: flex-start;
+  min-height: 44px;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .cuisine-menu-link {
+    margin-top: 0;
+    align-self: flex-end;
+  }
+}
+
+.cuisine-menu-link:hover {
+  opacity: 0.75;
+}
+
+.cuisine-menu-link:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+/* ===================================================
+   DESKTOP: EXPANDING PANELS (min-width 1024px)
+   =================================================== */
+.cuisine-panels {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .cuisine-panels {
+    display: flex;
+    gap: var(--cuisine-panel-gap);
+    height: var(--cuisine-panel-height);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--container-pad, clamp(16px, 4vw, 48px));
+    list-style: none;
+    contain: layout paint;
+  }
+}
+
+.cuisine-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--cuisine-panel-radius);
+  cursor: pointer;
+  outline: none;
+  /* flex-grow is animated by Motion; default collapsed */
+  flex: var(--cuisine-collapsed-flex);
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.cuisine-panel:focus-visible {
+  box-shadow: 0 0 0 3px var(--color-brass, #B89A64);
+}
+
+.cuisine-panel__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: filter 0.4s ease;
+  will-change: transform, filter;
+}
+
+.cuisine-panel--collapsed .cuisine-panel__img {
+  filter: brightness(0.78);
+}
+
+.cuisine-panel--expanded .cuisine-panel__img {
+  filter: brightness(1);
+}
+
+/* Bottom gradient scrim */
+.cuisine-panel__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 10, 6, var(--cuisine-scrim-opacity)) 0%,
+    rgba(15, 10, 6, 0.30) 50%,
+    rgba(15, 10, 6, 0.12) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Number badge */
+.cuisine-panel__number {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--color-brass, #B89A64);
+  background: rgba(15, 10, 6, 0.55);
+  border: 1px solid rgba(184, 154, 100, 0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+  backdrop-filter: blur(4px);
+}
+
+/* Content area pinned at bottom */
+.cuisine-panel__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cuisine-panel__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1rem, 1.8vw, 1.5rem);
+  font-weight: 400;
+  color: #F6EFE4;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cuisine-panel__expanded-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cuisine-panel__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(246, 239, 228, 0.85);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  margin: 0;
+  max-width: 38ch;
+}
+
+.cuisine-panel__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  text-decoration: none;
+  min-height: 44px;
+  width: fit-content;
+  transition: opacity 0.2s ease;
+}
+
+.cuisine-panel__explore:hover {
+  opacity: 0.8;
+}
+
+.cuisine-panel__explore:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 2px;
+}
+
+/* Collapsed panel vertical title */
+.cuisine-panel__title-vertical {
+  position: absolute;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+.cuisine-panel__title-vertical span {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-family: var(--font-serif);
+  font-size: clamp(0.875rem, 1.4vw, 1.125rem);
+  font-weight: 400;
+  color: #F6EFE4;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+/* Spotlight glow layer (desktop mouse-only) */
+.cuisine-panel__spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.cuisine-panel:hover .cuisine-panel__spotlight {
+  opacity: 1;
+}
+
+/* ===================================================
+   MOBILE / TABLET: STACKING CARDS (under 1024px)
+   =================================================== */
+.cuisine-cards {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding-bottom: 48px;
+  /* Cards will be siblings. Spacing for the sticky stack. */
+}
+
+@media (min-width: 1024px) {
+  .cuisine-cards {
+    display: none;
+  }
+}
+
+/* Each card sticky "layer" */
+.cuisine-card-sticky {
+  position: sticky;
+  /* Top is set inline per card: header height + 16px + index * stack offset */
+  margin: 0 20px;
+  margin-bottom: 24px;
+}
+
+/* Inner scale target for GSAP */
+.cuisine-card-inner {
+  border-radius: var(--cuisine-card-radius);
+  overflow: hidden;
+  position: relative;
+  min-height: var(--cuisine-card-min-height);
+  max-height: var(--cuisine-card-max-height);
+  will-change: transform;
+}
+
+.cuisine-card-inner img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Mobile card scrim */
+.cuisine-card__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15, 10, 6, 0.88) 0%,
+    rgba(15, 10, 6, 0.45) 45%,
+    rgba(15, 10, 6, 0.15) 100%
+  );
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Mobile card number */
+.cuisine-card__number {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  z-index: 3;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--color-brass, #B89A64);
+  background: rgba(15, 10, 6, 0.55);
+  border: 1px solid rgba(184, 154, 100, 0.3);
+  border-radius: 20px;
+  padding: 4px 10px;
+  backdrop-filter: blur(4px);
+}
+
+/* Mobile card content */
+.cuisine-card__content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 3;
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cuisine-card__title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  font-weight: 400;
+  color: #F6EFE4;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  margin: 0;
+}
+
+.cuisine-card__desc {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(246, 239, 228, 0.8);
+  text-shadow: 0 1px 8px rgba(0,0,0,0.45);
+  margin: 0;
+  max-width: 36ch;
+}
+
+.cuisine-card__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  text-decoration: none;
+  min-height: 44px;
+  width: fit-content;
+  margin-top: 2px;
+  transition: opacity 0.2s ease;
+}
+
+.cuisine-card__explore:hover {
+  opacity: 0.8;
+}
+
+.cuisine-card__explore:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 2px;
+}
+
+/* ===================================================
+   REDUCED MOTION OVERRIDES
+   =================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .cuisine-panel__img {
+    transition: none !important;
+  }
+  .cuisine-panel__spotlight {
+    display: none !important;
+  }
+  .cuisine-card-inner {
+    will-change: auto !important;
+  }
+}

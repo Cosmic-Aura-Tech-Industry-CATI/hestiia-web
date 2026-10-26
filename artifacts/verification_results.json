@@ -1,0 +1,987 @@
+[
+  {
+    "width": 320,
+    "height": 568,
+    "scrollWidth": 320,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 187.625,
+        "bottom": 226,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 38.375,
+        "visible": true
+      },
+      "title": {
+        "top": 238,
+        "bottom": 286,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 48,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 300,
+        "bottom": 348,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 372,
+        "bottom": 424,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 436,
+        "bottom": 488,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 500,
+        "bottom": 544,
+        "left": 20,
+        "right": 300,
+        "width": 280,
+        "height": 44,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-mobile.mp4"
+    },
+    "viewport": {
+      "name": "320x568_iphone_se",
+      "width": 320,
+      "height": 568,
+      "label": "320x568 (iPhone SE 1st gen)"
+    },
+    "screenshot": "artifacts/hero_screenshots/320x568_iphone_se.png"
+  },
+  {
+    "width": 360,
+    "height": 640,
+    "scrollWidth": 360,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 221.21875,
+        "bottom": 259.59375,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 38.375,
+        "visible": true
+      },
+      "title": {
+        "top": 271.59375,
+        "bottom": 322,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 50.40625,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 336,
+        "bottom": 384,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 408,
+        "bottom": 460,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 472,
+        "bottom": 524,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 536,
+        "bottom": 580,
+        "left": 20,
+        "right": 340,
+        "width": 320,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 600,
+        "bottom": 616,
+        "left": 145.5625,
+        "right": 214.421875,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-mobile.mp4"
+    },
+    "viewport": {
+      "name": "360x640_android_sm",
+      "width": 360,
+      "height": 640,
+      "label": "360x640 (Android small)"
+    },
+    "screenshot": "artifacts/hero_screenshots/360x640_android_sm.png"
+  },
+  {
+    "width": 375,
+    "height": 667,
+    "scrollWidth": 375,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 265.3125,
+        "bottom": 284.5,
+        "left": 20,
+        "right": 353.796875,
+        "width": 333.796875,
+        "height": 19.1875,
+        "visible": true
+      },
+      "title": {
+        "top": 296.5,
+        "bottom": 349,
+        "left": 20,
+        "right": 355,
+        "width": 335,
+        "height": 52.5,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 363,
+        "bottom": 411,
+        "left": 20,
+        "right": 343,
+        "width": 323,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 435,
+        "bottom": 487,
+        "left": 20,
+        "right": 355,
+        "width": 335,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 499,
+        "bottom": 551,
+        "left": 20,
+        "right": 355,
+        "width": 335,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 563,
+        "bottom": 607,
+        "left": 20,
+        "right": 355,
+        "width": 335,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 627,
+        "bottom": 643,
+        "left": 153.0625,
+        "right": 221.921875,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-mobile.mp4"
+    },
+    "viewport": {
+      "name": "375x667_iphone_8",
+      "width": 375,
+      "height": 667,
+      "label": "375x667 (iPhone 8 / SE2)"
+    },
+    "screenshot": "artifacts/hero_screenshots/375x667_iphone_8.png"
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "scrollWidth": 390,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 440.21875,
+        "bottom": 459.40625,
+        "left": 20,
+        "right": 353.796875,
+        "width": 333.796875,
+        "height": 19.1875,
+        "visible": true
+      },
+      "title": {
+        "top": 471.40625,
+        "bottom": 526,
+        "left": 20,
+        "right": 370,
+        "width": 350,
+        "height": 54.59375,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 540,
+        "bottom": 588,
+        "left": 20,
+        "right": 343,
+        "width": 323,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 612,
+        "bottom": 664,
+        "left": 20,
+        "right": 370,
+        "width": 350,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 676,
+        "bottom": 728,
+        "left": 20,
+        "right": 370,
+        "width": 350,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 740,
+        "bottom": 784,
+        "left": 20,
+        "right": 370,
+        "width": 350,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 804,
+        "bottom": 820,
+        "left": 160.5625,
+        "right": 229.421875,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-mobile.mp4"
+    },
+    "viewport": {
+      "name": "390x844_iphone_12",
+      "width": 390,
+      "height": 844,
+      "label": "390x844 (iPhone 12/13/14)"
+    },
+    "screenshot": "artifacts/hero_screenshots/390x844_iphone_12.png"
+  },
+  {
+    "width": 412,
+    "height": 915,
+    "scrollWidth": 412,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 508.125,
+        "bottom": 527.3125,
+        "left": 20,
+        "right": 353.796875,
+        "width": 333.796875,
+        "height": 19.1875,
+        "visible": true
+      },
+      "title": {
+        "top": 539.3125,
+        "bottom": 597,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 57.6875,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 611,
+        "bottom": 659,
+        "left": 20,
+        "right": 343,
+        "width": 323,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 683,
+        "bottom": 735,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 747,
+        "bottom": 799,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 811,
+        "bottom": 855,
+        "left": 20,
+        "right": 392,
+        "width": 372,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 875,
+        "bottom": 891,
+        "left": 171.5625,
+        "right": 240.421875,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-mobile.mp4"
+    },
+    "viewport": {
+      "name": "412x915_android_lg",
+      "width": 412,
+      "height": 915,
+      "label": "412x915 (Android large)"
+    },
+    "screenshot": "artifacts/hero_screenshots/412x915_android_lg.png"
+  },
+  {
+    "width": 768,
+    "height": 1024,
+    "scrollWidth": 768,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 370.65625,
+        "bottom": 415.4375,
+        "left": 48,
+        "right": 397.4375,
+        "width": 349.4375,
+        "height": 44.78125,
+        "visible": true
+      },
+      "title": {
+        "top": 427.4375,
+        "bottom": 490.15625,
+        "left": 48,
+        "right": 397.4375,
+        "width": 349.4375,
+        "height": 62.71875,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 510.15625,
+        "bottom": 558.15625,
+        "left": 48,
+        "right": 397.4375,
+        "width": 349.4375,
+        "height": 48,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 590.15625,
+        "bottom": 642.15625,
+        "left": 48,
+        "right": 186.53125,
+        "width": 138.53125,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 590.15625,
+        "bottom": 642.15625,
+        "left": 202.53125,
+        "right": 308.453125,
+        "width": 105.921875,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 594.15625,
+        "bottom": 638.15625,
+        "left": 324.453125,
+        "right": 407.09375,
+        "width": 82.640625,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 678.15625,
+        "bottom": 694.15625,
+        "left": 48,
+        "right": 116.859375,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "768x1024_ipad_port",
+      "width": 768,
+      "height": 1024,
+      "label": "768x1024 (iPad Portrait)"
+    },
+    "screenshot": "artifacts/hero_screenshots/768x1024_ipad_port.png"
+  },
+  {
+    "width": 1024,
+    "height": 768,
+    "scrollWidth": 1024,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 261.640625,
+        "bottom": 284.03125,
+        "left": 48,
+        "right": 435.09375,
+        "width": 387.09375,
+        "height": 22.390625,
+        "visible": true
+      },
+      "title": {
+        "top": 296.03125,
+        "bottom": 376.3125,
+        "left": 48,
+        "right": 530.546875,
+        "width": 482.546875,
+        "height": 80.28125,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 396.3125,
+        "bottom": 423.96875,
+        "left": 48,
+        "right": 530.546875,
+        "width": 482.546875,
+        "height": 27.65625,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 455.96875,
+        "bottom": 507.96875,
+        "left": 48,
+        "right": 249.859375,
+        "width": 201.859375,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 455.96875,
+        "bottom": 507.96875,
+        "left": 265.859375,
+        "right": 413.265625,
+        "width": 147.40625,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 459.96875,
+        "bottom": 503.96875,
+        "left": 429.265625,
+        "right": 530.546875,
+        "width": 101.28125,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 543.96875,
+        "bottom": 559.96875,
+        "left": 48,
+        "right": 116.859375,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "1024x768_ipad_land",
+      "width": 1024,
+      "height": 768,
+      "label": "1024x768 (iPad Landscape)"
+    },
+    "screenshot": "artifacts/hero_screenshots/1024x768_ipad_land.png"
+  },
+  {
+    "width": 1280,
+    "height": 720,
+    "scrollWidth": 1280,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 227.625,
+        "bottom": 250.015625,
+        "left": 48,
+        "right": 435.09375,
+        "width": 387.09375,
+        "height": 22.390625,
+        "visible": true
+      },
+      "title": {
+        "top": 262.015625,
+        "bottom": 362.359375,
+        "left": 48,
+        "right": 663.671875,
+        "width": 615.671875,
+        "height": 100.34375,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 382.359375,
+        "bottom": 412.359375,
+        "left": 48,
+        "right": 603.15625,
+        "width": 555.15625,
+        "height": 30,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 444.359375,
+        "bottom": 496.359375,
+        "left": 48,
+        "right": 258.796875,
+        "width": 210.796875,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 444.359375,
+        "bottom": 496.359375,
+        "left": 274.796875,
+        "right": 428.078125,
+        "width": 153.28125,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 448.359375,
+        "bottom": 492.359375,
+        "left": 444.078125,
+        "right": 549.921875,
+        "width": 105.84375,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 532.359375,
+        "bottom": 548.359375,
+        "left": 48,
+        "right": 116.859375,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "1280x720_desktop_std",
+      "width": 1280,
+      "height": 720,
+      "label": "1280x720 (Desktop standard)"
+    },
+    "screenshot": "artifacts/hero_screenshots/1280x720_desktop_std.png"
+  },
+  {
+    "width": 1440,
+    "height": 900,
+    "scrollWidth": 1440,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 306.859375,
+        "bottom": 329.25,
+        "left": 128,
+        "right": 515.09375,
+        "width": 387.09375,
+        "height": 22.390625,
+        "visible": true
+      },
+      "title": {
+        "top": 341.25,
+        "bottom": 454.140625,
+        "left": 128,
+        "right": 743.671875,
+        "width": 615.671875,
+        "height": 112.890625,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 474.140625,
+        "bottom": 504.140625,
+        "left": 128,
+        "right": 683.15625,
+        "width": 555.15625,
+        "height": 30,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 536.140625,
+        "bottom": 588.140625,
+        "left": 128,
+        "right": 338.796875,
+        "width": 210.796875,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 536.140625,
+        "bottom": 588.140625,
+        "left": 354.796875,
+        "right": 508.078125,
+        "width": 153.28125,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 540.140625,
+        "bottom": 584.140625,
+        "left": 524.078125,
+        "right": 629.921875,
+        "width": 105.84375,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 624.140625,
+        "bottom": 640.140625,
+        "left": 128,
+        "right": 196.859375,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "1440x900_desktop_hi",
+      "width": 1440,
+      "height": 900,
+      "label": "1440x900 (Desktop high)"
+    },
+    "screenshot": "artifacts/hero_screenshots/1440x900_desktop_hi.png"
+  },
+  {
+    "width": 1920,
+    "height": 1080,
+    "scrollWidth": 1920,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [],
+    "boxes": {
+      "eyebrow": {
+        "top": 386.078125,
+        "bottom": 408.46875,
+        "left": 368,
+        "right": 755.09375,
+        "width": 387.09375,
+        "height": 22.390625,
+        "visible": true
+      },
+      "title": {
+        "top": 420.46875,
+        "bottom": 545.90625,
+        "left": 368,
+        "right": 983.671875,
+        "width": 615.671875,
+        "height": 125.4375,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 565.90625,
+        "bottom": 595.90625,
+        "left": 368,
+        "right": 923.15625,
+        "width": 555.15625,
+        "height": 30,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 627.90625,
+        "bottom": 679.90625,
+        "left": 368,
+        "right": 578.796875,
+        "width": 210.796875,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 627.90625,
+        "bottom": 679.90625,
+        "left": 594.796875,
+        "right": 748.078125,
+        "width": 153.28125,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 631.90625,
+        "bottom": 675.90625,
+        "left": 764.078125,
+        "right": 869.921875,
+        "width": 105.84375,
+        "height": 44,
+        "visible": true
+      },
+      "scrollCue": {
+        "top": 715.90625,
+        "bottom": 731.90625,
+        "left": 368,
+        "right": 436.859375,
+        "width": 68.859375,
+        "height": 16,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "1920x1080_desktop_fhd",
+      "width": 1920,
+      "height": 1080,
+      "label": "1920x1080 (Desktop full HD)"
+    },
+    "screenshot": "artifacts/hero_screenshots/1920x1080_desktop_fhd.png"
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "scrollWidth": 844,
+    "hasHorizontalScroll": false,
+    "collisions": [],
+    "clippings": [],
+    "headerOverlaps": [
+      "eyebrow sits above header bottom (top: 110.71875, headerBottom: 129)"
+    ],
+    "boxes": {
+      "eyebrow": {
+        "top": 110.71875,
+        "bottom": 133.109375,
+        "left": 48,
+        "right": 435.09375,
+        "width": 387.09375,
+        "height": 22.390625,
+        "visible": true
+      },
+      "title": {
+        "top": 145.109375,
+        "bottom": 211.265625,
+        "left": 48,
+        "right": 436.953125,
+        "width": 388.953125,
+        "height": 66.15625,
+        "visible": true
+      },
+      "subtitle": {
+        "top": 231.265625,
+        "bottom": 255.265625,
+        "left": 48,
+        "right": 436.953125,
+        "width": 388.953125,
+        "height": 24,
+        "visible": true
+      },
+      "reserveBtn": {
+        "top": 287.265625,
+        "bottom": 339.265625,
+        "left": 48,
+        "right": 204.65625,
+        "width": 156.65625,
+        "height": 52,
+        "visible": true
+      },
+      "menuBtn": {
+        "top": 287.265625,
+        "bottom": 339.265625,
+        "left": 220.65625,
+        "right": 338.3125,
+        "width": 117.65625,
+        "height": 52,
+        "visible": true
+      },
+      "callBtn": {
+        "top": 291.265625,
+        "bottom": 335.265625,
+        "left": 354.3125,
+        "right": 436.953125,
+        "width": 82.640625,
+        "height": 44,
+        "visible": true
+      }
+    },
+    "videoAttrs": {
+      "autoplay": true,
+      "muted": true,
+      "loop": true,
+      "playsinline": true,
+      "preload": "metadata",
+      "ariaHidden": "true",
+      "disablePictureInPicture": true,
+      "currentSrc": "http://localhost:5173/video/hero-desktop.mp4"
+    },
+    "viewport": {
+      "name": "844x390_phone_land",
+      "width": 844,
+      "height": 390,
+      "label": "844x390 (Landscape Phone)"
+    },
+    "screenshot": "artifacts/hero_screenshots/844x390_phone_land.png"
+  }
+]

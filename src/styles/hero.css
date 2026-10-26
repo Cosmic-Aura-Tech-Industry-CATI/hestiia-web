@@ -1,0 +1,405 @@
+/* ===================================================
+   HESTIIA RESTAURANT — HERO STYLES
+   Tuning parameters for hero layout, video, and scrim
+   =================================================== */
+
+:root {
+  /* Tunable parameters */
+  --header-h: 72px;  /* desktop — keep in sync with --header-height in tokens.css */
+  --action-bar-h: 0px; /* 0px because floating bar is hidden while hero is in view */
+  --hero-overlay-dim: 0.12; /* 10-15% subtle global dim */
+  --hero-video-pos-mobile: center 40%;
+  --hero-video-pos-desktop: center center;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --header-h: 64px;  /* mobile — keep in sync with 640px breakpoint in global.css */
+    --action-bar-h: 0px;
+  }
+}
+
+/* ===================================================
+   HERO CONTAINER
+   =================================================== */
+.hero {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding-top: calc(var(--header-h) + 16px);
+  padding-bottom: calc(var(--action-bar-h) + env(safe-area-inset-bottom, 0px) + 24px);
+  padding-left: 0;
+  padding-right: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+  background-color: #0F0A06;
+}
+
+@media (min-width: 768px) {
+  .hero {
+    justify-content: center;
+    padding-bottom: clamp(32px, 5vh, 64px);
+  }
+}
+
+/* ===================================================
+   LAYER 0: MEDIA (Video & Poster)
+   =================================================== */
+.hero__media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero__poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.hero__poster-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-video-pos-mobile);
+}
+
+@media (min-width: 768px) {
+  .hero__poster-img {
+    object-position: var(--hero-video-pos-desktop);
+  }
+}
+
+.hero__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: var(--hero-video-pos-mobile);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  will-change: opacity, transform;
+}
+
+@media (min-width: 768px) {
+  .hero__video {
+    object-position: var(--hero-video-pos-desktop);
+  }
+}
+
+.hero__video--playing {
+  opacity: 1;
+}
+
+/* ===================================================
+   LAYER 1: OVERLAY (Contrast Scrim)
+   =================================================== */
+.hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Base subtle global dim */
+.hero__overlay-dim {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(15, 10, 6, var(--hero-overlay-dim));
+}
+
+/* Top header protection band */
+.hero__overlay-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--header-h) + 40px);
+  background: linear-gradient(180deg, rgba(15, 10, 6, 0.75) 0%, rgba(15, 10, 6, 0.4) 60%, transparent 100%);
+}
+
+/* Mobile directional gradient */
+.hero__overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 10, 6, 0.25) 0%,
+    rgba(15, 10, 6, 0.55) 50%,
+    rgba(15, 10, 6, 0.85) 100%
+  );
+}
+
+/* Desktop directional gradient: left to right */
+@media (min-width: 768px) {
+  .hero__overlay-gradient {
+    background: linear-gradient(
+      90deg,
+      rgba(15, 10, 6, 0.82) 0%,
+      rgba(15, 10, 6, 0.65) 30%,
+      rgba(15, 10, 6, 0.35) 55%,
+      transparent 100%
+    );
+  }
+}
+
+/* ===================================================
+   LAYER 2: CONTENT (Normal Flow, No Overlaps)
+   =================================================== */
+.hero__content-wrap {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 768px) {
+  .hero__content-wrap {
+    padding: 0 48px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.hero__text-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .hero__text-block {
+    max-width: 52%;
+    flex-shrink: 0;
+  }
+}
+
+/* Eyebrow */
+.hero__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #F6EFE4;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+  margin-bottom: 12px;
+  width: fit-content;
+}
+
+.hero__eyebrow-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-veg, #2F7D4F);
+  flex-shrink: 0;
+}
+
+/* Main H1 Headline */
+.hero__title {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 14vw, 4.5rem);
+  font-weight: 400;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: #F6EFE4;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+  margin: 0 0 14px 0;
+  padding: 0;
+  white-space: nowrap;
+  overflow: visible;
+}
+
+@media (min-width: 768px) {
+  .hero__title {
+    font-size: clamp(4rem, 8vw, 8rem);
+    line-height: 0.98;
+    margin-bottom: 20px;
+  }
+}
+
+/* Subtitle */
+.hero__subtitle {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #F6EFE4;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
+  max-width: 32ch;
+  margin: 0 0 24px 0;
+}
+
+@media (min-width: 768px) {
+  .hero__subtitle {
+    max-width: 44ch;
+    margin-bottom: 32px;
+  }
+}
+
+/* ===================================================
+   CTAS
+   =================================================== */
+.hero__ctas {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .hero__ctas {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    width: auto;
+  }
+}
+
+.hero__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-sizing: border-box;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-radius: var(--radius-sm, 4px);
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
+  height: 52px;
+  min-height: 52px;
+  width: 100%;
+  touch-action: manipulation;
+}
+
+.hero__btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+@media (min-width: 768px) {
+  .hero__btn {
+    width: auto;
+  }
+}
+
+/* Primary Button */
+.hero__btn--primary {
+  background-color: var(--color-brass, #B89A64);
+  color: #1F1A16;
+  border: 1px solid var(--color-brass, #B89A64);
+  padding: 0 32px;
+}
+
+.hero__btn--primary:hover {
+  background-color: var(--color-brass-light, #D4B88A);
+  border-color: var(--color-brass-light, #D4B88A);
+  transform: translateY(-1px);
+}
+
+/* Secondary Button */
+.hero__btn--secondary {
+  background-color: transparent;
+  color: #F6EFE4;
+  border: 1px solid rgba(246, 239, 228, 0.45);
+  padding: 0 28px;
+}
+
+.hero__btn--secondary:hover {
+  border-color: var(--color-brass, #B89A64);
+  color: var(--color-brass, #B89A64);
+  background-color: rgba(246, 239, 228, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Tertiary Button (Call Us) */
+.hero__btn--tertiary {
+  background-color: transparent;
+  color: #F6EFE4;
+  border: none;
+  padding: 0 16px;
+  height: 44px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+.hero__btn--tertiary:hover {
+  color: var(--color-brass-light, #D4B88A);
+}
+
+/* ===================================================
+   SCROLL CUE
+   =================================================== */
+.hero__scroll-cue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 20px;
+  color: rgba(246, 239, 228, 0.7);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  pointer-events: none;
+  align-self: center;
+}
+
+@media (min-width: 768px) {
+  .hero__scroll-cue {
+    align-self: flex-start;
+    margin-top: 36px;
+  }
+}
+
+/* Hide scroll cue on viewports with height under 640px */
+@media (max-height: 639px) {
+  .hero__scroll-cue {
+    display: none !important;
+  }
+}
+
+/* ===================================================
+   PREFERS-REDUCED-MOTION OVERRIDES
+   =================================================== */
+@media (prefers-reduced-motion: reduce) {
+  .hero__video {
+    display: none !important;
+  }
+  .hero__poster-img {
+    opacity: 1 !important;
+  }
+}
