@@ -26,8 +26,8 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0 var(--container-pad, clamp(16px, 4vw, 48px));
-    max-width: var(--container-max, 1320px);
+    padding: 0 var(--container-pad, clamp(20px, 4vw, 40px));
+    max-width: var(--container-max, 1240px);
     margin: 0 auto;
   }
 
@@ -335,30 +335,50 @@
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.dish-card__btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 2px;
+}
+
 /* Full Menu Button */
 .signature-menu-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 28px;
   border: 1px solid var(--color-brass, #B89A64);
   border-radius: var(--radius-sm, 4px);
   color: var(--color-brass, #B89A64);
   background-color: transparent;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: background-color 0.25s ease, color 0.25s ease;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
   width: fit-content;
-  margin-top: 24px;
+  cursor: pointer;
+}
+
+.signature-menu-btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.signature-menu-btn:active {
+  transform: translateY(0);
 }
 
 .signature-menu-btn:hover {
   background-color: var(--color-brass, #B89A64);
   color: #1F1A16;
+  transform: translateY(-1px);
 }
 
 .signature-menu-btn:hover .menu-btn-arrow {
@@ -367,4 +387,13 @@
 
 .menu-btn-arrow {
   transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (max-width: 767px) {
+  .signature-menu-btn {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 12px;
+  }
 }

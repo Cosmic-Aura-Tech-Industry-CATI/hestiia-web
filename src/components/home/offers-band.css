@@ -98,16 +98,23 @@
   transition: all 0.25s ease;
 }
 
-.offers-copy-btn:hover {
-  border-color: var(--color-brass, #B89A64);
-  background-color: rgba(184, 154, 100, 0.15);
+.offers-copy-btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 2px;
+}
+
+.offers-copy-btn:active {
+  transform: scale(0.98);
 }
 
 .offers-view-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 9px 18px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 20px;
   background-color: var(--color-brass, #B89A64);
   color: #1F1A16;
   border-radius: var(--radius-sm, 4px);
@@ -115,13 +122,25 @@
   font-family: var(--font-sans);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
   transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.offers-view-btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.offers-view-btn:active {
+  transform: translateY(0);
 }
 
 .offers-view-btn:hover {
   background-color: var(--color-brass-light, #D4B88A);
+  transform: translateY(-1px);
 }
 
 .offers-view-btn:hover .offers-arrow {

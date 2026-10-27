@@ -240,8 +240,11 @@ export default function Navbar() {
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
+                    justifyContent: 'center',
                     gap: '8px',
-                    padding: '12px 22px',
+                    height: '44px',
+                    minHeight: '44px',
+                    padding: '0 22px',
                     backgroundColor: 'var(--color-brass)',
                     color: '#1F1A16',
                     fontFamily: 'var(--font-sans)',
@@ -251,6 +254,7 @@ export default function Navbar() {
                     textTransform: 'uppercase',
                     borderRadius: 'var(--radius-sm)',
                     textDecoration: 'none',
+                    whiteSpace: 'nowrap',
                     transition: 'background-color 0.2s ease, transform 0.2s ease',
                   }}
                 >

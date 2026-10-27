@@ -1,622 +1,502 @@
-import { useEffect, useRef, useState } from 'react'
-import {
-  Volume2,
-  VolumeX,
-  X,
-  Play,
-  ChevronUp,
-  ChevronDown,
-  ArrowUpRight,
-} from 'lucide-react'
-import { InstagramIcon } from '../icons/InstagramIcon'
-import { REELS, instagramProfileUrl, type ReelItem } from '../../content/reels'
-import SplitText from '../reactbits/SplitText'
-import DrawLine from '../reactbits/DrawLine'
-import Magnet from '../reactbits/Magnet'
-import ClickSpark from '../reactbits/ClickSpark'
-import TapScale from '../reactbits/TapScale'
-import { AnimatePresence, motion } from 'framer-motion'
+import { useEffect, useRef, useState, useCallback } from 'react'
+import { Play, Pause, ArrowUpRight } from 'lucide-react'
+import { motion, useSpring } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+import { reels, instagramProfileUrl, type Reel } from '../../data/reels'
+import { InstagramIcon } from '../icons/InstagramIcon'
+import SplitText from '../reactbits/SplitText'
+import ShinyText from '../reactbits/ShinyText'
+import Magnet from '../reactbits/Magnet'
+
 import './reels-section.css'
 
+// Register ScrollTrigger once
 gsap.registerPlugin(ScrollTrigger)
 
+/**
+ * REELS CONTINUOUS MARQUEE SPEED SETTING
+ * Duration in seconds for one full seamless loop (-50% track translate).
+ * 35-50s creates a slow, elegant motion (~40-60 px/sec).
+ * - Decrease to make it move faster (e.g. 30)
+ * - Increase to make it move slower (e.g. 50)
+ */
+export const REELS_LOOP_DURATION = 42
+
+// Check reduced motion or data saver
+const isReducedMotion = () => {
+  if (typeof window === 'undefined') return false
+  return (
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+    (navigator as unknown as { connection?: { saveData?: boolean } }).connection?.saveData === true
+  )
+}
+
+/* ===================================================
+   INDIVIDUAL REEL CARD COMPONENT
+   =================================================== */
+interface ReelCardProps {
+  reel: Reel
+  isDesktop: boolean
+  isDuplicate?: boolean
+}
+
+function ReelCard({ reel, isDesktop, isDuplicate = false }: ReelCardProps) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  // Spotlight coordinates
+  const [spotlightPos, setSpotlightPos] = useState({ x: 0, y: 0 })
+  const [videoError, setVideoError] = useState(false)
+
+  // 3D Tilt springs
+  const springConfig = { damping: 20, stiffness: 220 }
+  const tiltX = useSpring(0, springConfig)
+  const tiltY = useSpring(0, springConfig)
+
+  // Mouse move for spotlight & subtle 3D tilt on desktop
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!cardRef.current || !isDesktop || isReducedMotion()) return
+    const rect = cardRef.current.getBoundingClientRect()
+    const x = e.clientX - rect.left
+    const y = e.clientY - rect.top
+
+    setSpotlightPos({ x, y })
+
+    // Subtle 3D tilt (max 4 degrees)
+    const centerX = rect.width / 2
+    const centerY = rect.height / 2
+    const rotX = ((y - centerY) / centerY) * -4
+    const rotY = ((x - centerX) / centerX) * 4
+    tiltX.set(rotX)
+    tiltY.set(rotY)
+  }
+
+  const handleMouseLeave = () => {
+    tiltX.set(0)
+    tiltY.set(0)
+  }
+
+  return (
+    <div
+      style={{
+        perspective: '1000px',
+        width: '100%',
+        height: '100%',
+        aspectRatio: '9 / 16',
+        display: 'block',
+      }}
+    >
+      <motion.div
+        ref={cardRef}
+        style={{
+          rotateX: isDesktop && !isReducedMotion() ? tiltX : 0,
+          rotateY: isDesktop && !isReducedMotion() ? tiltY : 0,
+          transformStyle: 'preserve-3d',
+        }}
+        whileHover={{ y: -6, scale: 1.02 }}
+        transition={{ duration: 0.35, ease: 'easeOut' }}
+        className="hz-reels-card"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {/* Spotlight dynamic cursor shine layer */}
+        <div
+          className="hz-reels-spotlight-layer"
+          style={{
+            background: `radial-gradient(420px circle at ${spotlightPos.x}px ${spotlightPos.y}px, rgba(184, 154, 100, 0.22), transparent 75%)`,
+          }}
+        />
+
+        {/* Fallback background layer (dark brown + gold styling if video fails) */}
+        <div className="hz-reels-card-fallback-bg" aria-hidden="true" />
+
+        {/* Video Player: Strictly muted, defaultMuted, loop, autoPlay, playsInline */}
+        {!videoError && (
+          <video
+            ref={(el) => {
+              videoRef.current = el
+              if (el) {
+                el.muted = true
+                el.defaultMuted = true
+              }
+            }}
+            src={reel.video}
+            poster={reel.poster}
+            muted
+            loop
+            autoPlay
+            playsInline
+            preload="metadata"
+            disablePictureInPicture
+            controlsList="nodownload noremoteplayback"
+            className="hz-reels-video"
+            onError={() => {
+              if (import.meta.env.DEV) {
+                console.warn(`[Reels] Video failed to load: ${reel.video}`)
+              }
+              setVideoError(true)
+            }}
+          />
+        )}
+
+        {/* Optional Poster Image */}
+        {reel.poster && !videoError && (
+          <img
+            src={reel.poster}
+            alt=""
+            aria-hidden="true"
+            loading="lazy"
+            className="hz-reels-poster"
+            onError={(e) => {
+              ;(e.currentTarget as HTMLElement).style.display = 'none'
+            }}
+          />
+        )}
+
+        {/* TOP BAR: Direct link to Instagram reel */}
+        <div className="hz-reels-card-top">
+          <a
+            href={reel.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={isDuplicate ? -1 : 0}
+            className="hz-reels-ig-link"
+            aria-label={`Open reel "${reel.title}" on Instagram`}
+            title="Open reel on Instagram"
+          >
+            <InstagramIcon size={17} />
+          </a>
+        </div>
+
+        {/* BOTTOM SCRIM & "Watch on Instagram ↗" PILL BUTTON */}
+        <div className="hz-reels-card-bottom">
+          <h3 className="hz-reels-card-title">{reel.title}</h3>
+
+          <a
+            href={reel.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            tabIndex={isDuplicate ? -1 : 0}
+            className="hz-reels-pill-btn"
+            aria-label={`Watch ${reel.title} on Instagram`}
+          >
+            <span>Watch on Instagram</span>
+            <ArrowUpRight size={14} />
+          </a>
+        </div>
+      </motion.div>
+    </div>
+  )
+}
+
+/* ===================================================
+   MAIN REELS SECTION (Continuous Seamless Loop Marquee)
+   =================================================== */
 export default function ReelsSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
+  const marqueeTweenRef = useRef<gsap.core.Tween | null>(null)
 
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-  const [activePreviewId, setActivePreviewId] = useState<string | null>(null)
-  const [mobileCenteredIndex, setMobileCenteredIndex] = useState<number>(0)
-  const [videoNearViewport, setVideoNearViewport] = useState<boolean>(false)
-  const [missingVideoIds, setMissingVideoIds] = useState<Set<string>>(new Set())
+  const [isDesktop, setIsDesktop] = useState<boolean>(true)
+  const [isUserPaused, setIsUserPaused] = useState<boolean>(() => isReducedMotion())
+  const isSectionInViewRef = useRef<boolean>(false)
 
-  // Fullscreen viewer state
-  const [fullscreenIndex, setFullscreenIndex] = useState<number | null>(null)
-  const [isMuted, setIsMuted] = useState<boolean>(true)
-  const [isPlaying, setIsPlaying] = useState<boolean>(true)
-  const [playbackProgress, setPlaybackProgress] = useState<number>(0)
-  const fullscreenVideoRef = useRef<HTMLVideoElement>(null)
-
-  // Track viewport size
+  // Viewport breakpoint detection
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024)
+    const checkWidth = () => {
+      setIsDesktop(window.innerWidth >= 1024)
     }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
+    checkWidth()
+    window.addEventListener('resize', checkWidth, { passive: true })
+    return () => window.removeEventListener('resize', checkWidth)
   }, [])
 
-  // Lazy-load videos only when within 1 viewport of view
+  // Helper to play all videos in the section (muted)
+  const playAllVideos = useCallback(() => {
+    if (!sectionRef.current) return
+    const videos = sectionRef.current.querySelectorAll<HTMLVideoElement>('video')
+    videos.forEach((video) => {
+      video.muted = true
+      video.defaultMuted = true
+      const playPromise = video.play()
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay policy or aborted
+        })
+      }
+    })
+  }, [])
+
+  // Helper to pause all videos in the section
+  const pauseAllVideos = useCallback(() => {
+    if (!sectionRef.current) return
+    const videos = sectionRef.current.querySelectorAll<HTMLVideoElement>('video')
+    videos.forEach((video) => {
+      video.pause()
+    })
+  }, [])
+
+  // Tab visibility management: pause when hidden, resume when visible
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pauseAllVideos()
+        marqueeTweenRef.current?.pause()
+      } else if (isSectionInViewRef.current && !isUserPaused && !isReducedMotion()) {
+        playAllVideos()
+        marqueeTweenRef.current?.play()
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [pauseAllVideos, playAllVideos, isUserPaused])
+
+  // GSAP Infinite Marquee & Header Reveal Setup
+  useEffect(() => {
+    const section = sectionRef.current
+    const track = trackRef.current
+    if (!section || !track || !reels.length) return
+
+    const reduced = isReducedMotion()
+    if (reduced) {
+      return
+    }
+
+    const ctx = gsap.context(() => {
+      const header = section.querySelector('.hz-reels-header')
+
+      // 1. Header entrance animation
+      if (header) {
+        gsap.fromTo(
+          header,
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: 'power3.out',
+            scrollTrigger: {
+              trigger: section,
+              start: 'top 85%',
+              once: true,
+            },
+          }
+        )
+      }
+
+      // 2. Infinite Continuous Marquee Tween: moves seamlessly to -50%
+      const tween = gsap.to(track, {
+        xPercent: -50,
+        ease: 'none',
+        duration: REELS_LOOP_DURATION,
+        repeat: -1,
+      })
+      marqueeTweenRef.current = tween
+
+      // Initially paused until section enters viewport
+      tween.pause()
+    }, section)
+
+    // Safety fallback: ensure cards are visible after 1.5s
+    const fallbackTimer = setTimeout(() => {
+      const cards = section.querySelectorAll<HTMLElement>('.hz-reels-item')
+      cards.forEach((card) => {
+        if (window.getComputedStyle(card).opacity === '0') {
+          card.style.opacity = '1'
+        }
+      })
+    }, 1500)
+
+    return () => {
+      ctx.revert()
+      clearTimeout(fallbackTimer)
+    }
+  }, [])
+
+  // IntersectionObserver: play/pause based on section viewport entry
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        isSectionInViewRef.current = entry.isIntersecting
         if (entry.isIntersecting) {
-          setVideoNearViewport(true)
-          observer.disconnect()
+          if (!isUserPaused && !isReducedMotion()) {
+            marqueeTweenRef.current?.play()
+            playAllVideos()
+          }
+        } else {
+          marqueeTweenRef.current?.pause()
+          pauseAllVideos()
         }
       },
-      { rootMargin: '100% 0px' }
+      {
+        rootMargin: '100px 0px',
+        threshold: 0.1,
+      }
     )
 
     observer.observe(section)
     return () => observer.disconnect()
-  }, [])
+  }, [isUserPaused, playAllVideos, pauseAllVideos])
 
-  // Pause all preview videos when document tab is hidden
-  useEffect(() => {
-    const handleVisibility = () => {
-      if (document.hidden) {
-        setActivePreviewId(null)
+  // Handle accessible Pause / Play toggle
+  const handleToggleUserPause = () => {
+    setIsUserPaused((prev) => {
+      const next = !prev
+      if (next) {
+        marqueeTweenRef.current?.pause()
+        pauseAllVideos()
+      } else {
+        if (isSectionInViewRef.current) {
+          marqueeTweenRef.current?.play()
+          playAllVideos()
+        }
       }
-    }
-    document.addEventListener('visibilitychange', handleVisibility)
-    return () => document.removeEventListener('visibilitychange', handleVisibility)
-  }, [])
-
-  // Check data-saver or reduced motion
-  const isReducedMotionOrDataSaver = () => {
-    if (typeof window === 'undefined') return false
-    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const isSaveData = (navigator as any).connection?.saveData === true
-    return isReduced || isSaveData
-  }
-
-  // Desktop fan-in entrance animation
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const isReduced = isReducedMotionOrDataSaver()
-    const cards = section.querySelectorAll<HTMLElement>('.reel-card-wrap')
-    const header = section.querySelector('.reels-header')
-
-    if (isReduced) {
-      gsap.set([header, cards], { opacity: 1, y: 0, rotate: 0 })
-      return
-    }
-
-    const mm = gsap.matchMedia()
-
-    mm.add('(min-width: 1024px)', () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: section,
-          start: 'top 80%',
-          once: true,
-        },
-      })
-
-      tl.from(header, {
-        opacity: 0,
-        y: 20,
-        duration: 0.7,
-        ease: 'power3.out',
-      }).from(
-        cards,
-        {
-          opacity: 0,
-          y: 36,
-          // Fan in rotation: left tilts -4deg, right tilts +4deg
-          rotate: (i) => (i - (cards.length - 1) / 2) * 2.5,
-          stagger: 0.08,
-          duration: 0.9,
-          ease: 'power3.out',
-        },
-        '-=0.4'
-      )
+      return next
     })
+  }
 
-    return () => mm.revert()
-  }, [])
-
-  // Mobile centered reel auto-play (threshold 0.6)
-  useEffect(() => {
-    if (!isMobile || !trackRef.current) return
-    if (isReducedMotionOrDataSaver()) return
-
-    const container = trackRef.current
-    const cards = container.querySelectorAll<HTMLElement>('.reel-card-wrap')
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const cardId = entry.target.getAttribute('data-reel-id')
-            const cardIdx = Number(entry.target.getAttribute('data-reel-index'))
-            if (cardId && !missingVideoIds.has(cardId)) {
-              setActivePreviewId(cardId)
-              setMobileCenteredIndex(cardIdx)
-            }
-          }
-        })
-      },
-      {
-        root: container,
-        threshold: 0.6,
-      }
-    )
-
-    cards.forEach((card) => observer.observe(card))
-    return () => observer.disconnect()
-  }, [isMobile, missingVideoIds])
-
-  // Desktop hover play preview
-  const handleCardMouseEnter = (reel: ReelItem) => {
-    if (isMobile || isReducedMotionOrDataSaver()) return
-    if (reel.video && !missingVideoIds.has(reel.id)) {
-      setActivePreviewId(reel.id)
+  // Desktop Hover: smoothly slow down or pause marquee so user can click
+  const handleMouseEnter = () => {
+    if (marqueeTweenRef.current && !isUserPaused && !isReducedMotion()) {
+      gsap.to(marqueeTweenRef.current, { timeScale: 0, duration: 0.4, ease: 'power1.out' })
     }
   }
 
-  const handleCardMouseLeave = () => {
-    if (isMobile) return
-    setActivePreviewId(null)
-  }
-
-  // Open Fullscreen Viewer
-  const openFullscreen = (index: number) => {
-    const item = REELS[index]
-    // If no video file available, open instagramUrl in new tab
-    if (!item.video || missingVideoIds.has(item.id)) {
-      window.open(item.instagramUrl, '_blank', 'noopener,noreferrer')
-      return
-    }
-
-    setFullscreenIndex(index)
-    setIsPlaying(true)
-    setIsMuted(false)
-  }
-
-  const closeFullscreen = () => {
-    setFullscreenIndex(null)
-    setPlaybackProgress(0)
-  }
-
-  // Body scroll lock effect
-  useEffect(() => {
-    if (fullscreenIndex !== null) {
-      document.body.style.overflow = 'hidden'
-      return () => {
-        document.body.style.overflow = ''
-      }
-    }
-  }, [fullscreenIndex])
-
-  const nextFullscreen = () => {
-    setFullscreenIndex((prev) => (prev !== null ? (prev + 1) % REELS.length : null))
-    setPlaybackProgress(0)
-  }
-
-  const prevFullscreen = () => {
-    setFullscreenIndex((prev) => (prev !== null ? (prev - 1 + REELS.length) % REELS.length : null))
-    setPlaybackProgress(0)
-  }
-
-  // Esc key closes fullscreen
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (fullscreenIndex === null) return
-      if (e.key === 'Escape') closeFullscreen()
-      if (e.key === 'ArrowUp') prevFullscreen()
-      if (e.key === 'ArrowDown') nextFullscreen()
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [fullscreenIndex])
-
-  const toggleFullscreenPlay = () => {
-    const vid = fullscreenVideoRef.current
-    if (!vid) return
-    if (vid.paused) {
-      vid.play()
-      setIsPlaying(true)
-    } else {
-      vid.pause()
-      setIsPlaying(false)
+  const handleMouseLeave = () => {
+    if (marqueeTweenRef.current && !isUserPaused && !isReducedMotion() && isSectionInViewRef.current) {
+      gsap.to(marqueeTweenRef.current, { timeScale: 1, duration: 0.4, ease: 'power1.out' })
     }
   }
 
-  const handleVideoTimeUpdate = () => {
-    const vid = fullscreenVideoRef.current
-    if (!vid || !vid.duration) return
-    setPlaybackProgress((vid.currentTime / vid.duration) * 100)
+  // Mobile Touch-and-hold to pause
+  const handleTouchStart = () => {
+    if (marqueeTweenRef.current && !isUserPaused && !isReducedMotion()) {
+      gsap.to(marqueeTweenRef.current, { timeScale: 0, duration: 0.2, ease: 'power1.out' })
+    }
   }
 
-  const activeFullscreenItem = fullscreenIndex !== null ? REELS[fullscreenIndex] : null
-
-  // Circle progress calculation (circumference = 2 * PI * r = 2 * PI * 32 = ~201)
-  const ringCircumference = 2 * Math.PI * 32
-  const ringOffset = ringCircumference - (playbackProgress / 100) * ringCircumference
-
-  // Empty list guard: render nothing and warn in dev
-  if (!REELS || REELS.length === 0) {
-    if (import.meta.env.DEV) {
-      console.warn('[ReelsSection] No reels configured in src/content/reels.ts')
+  const handleTouchEnd = () => {
+    if (marqueeTweenRef.current && !isUserPaused && !isReducedMotion() && isSectionInViewRef.current) {
+      gsap.to(marqueeTweenRef.current, { timeScale: 1, duration: 0.3, ease: 'power1.out' })
     }
+  }
+
+  // Safety check: if no reels exist, render nothing
+  if (!reels || reels.length === 0) {
     return null
   }
 
+  // Ensure items fill at least 2x viewport width on 1920px+ displays before duplicating
+  const baseReels = reels.length < 8 ? [...reels, ...reels] : reels
+
   return (
     <section
+      id="reels"
       ref={sectionRef}
-      className="reels-section section-dark"
+      className="hz-reels-section"
       aria-labelledby="reels-heading"
     >
-      <div className="container">
-        {/* Header */}
-        <div className="reels-header">
-          <div>
-            <span className="reels-eyebrow">
-              Reels
+      <div className="hz-reels-container">
+        {/* SECTION HEADER */}
+        <div className="hz-reels-header">
+          <div className="hz-reels-header-left">
+            <span className="hz-reels-eyebrow">
+              <span className="hz-reels-eyebrow-line" aria-hidden="true" />
+              <ShinyText text="OUR REELS" speed={3.5} />
             </span>
 
-            {/* SplitText Title with Italics */}
-            <h2 id="reels-heading" className="reels-title">
-              <SplitText as="span">Hestiia,</SplitText>{' '}
-              <em>in motion</em>
-            </h2>
+            <SplitText as="h2" className="hz-reels-title">
+              Moments from the Kitchen.
+            </SplitText>
 
-            {/* Gold DrawLine under title */}
-            <DrawLine
-              color="var(--color-brass, #B89A64)"
-              height="2px"
-              origin="left"
-              duration={0.9}
-              style={{ width: '56px', margin: '10px 0 14px 0' }}
-            />
-
-            <p className="reels-intro">
-              A window into our slow-simmered sanctuary, sizzling woks, and handcrafted dining moments.
+            <p className="hz-reels-subtitle">
+              A window into our slow-simmered heritage, sizzling wok artistry, and pure vegetarian craftsmanship.
             </p>
           </div>
 
-          {/* Follow on Instagram Button with Magnet + ClickSpark */}
-          <div>
-            <Magnet disabled={isMobile} strength={0.25} padding={24}>
-              <ClickSpark sparkColor="var(--color-brass, #B89A64)" sparkCount={8}>
-                <a
-                  href={instagramProfileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="reels-follow-btn"
-                  aria-label="Follow Hestiia Restaurant on Instagram"
-                >
-                  <InstagramIcon size={15} />
-                  <span>Follow on Instagram</span>
-                </a>
-              </ClickSpark>
+          <div className="hz-reels-header-right">
+            {/* Follow on Instagram CTA with Magnet */}
+            <Magnet disabled={!isDesktop} strength={0.25} padding={20}>
+              <a
+                href={instagramProfileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hz-reels-follow-btn"
+                aria-label="Follow Hestiia Restaurant on Instagram (opens in new tab)"
+              >
+                <InstagramIcon size={16} />
+                <span>Follow on Instagram</span>
+              </a>
+            </Magnet>
+
+            {/* Accessibility Play / Pause Toggle Button */}
+            <Magnet disabled={!isDesktop} strength={0.25} padding={16}>
+              <button
+                type="button"
+                className="hz-reels-toggle-btn"
+                onClick={handleToggleUserPause}
+                aria-pressed={isUserPaused}
+                aria-label={isUserPaused ? 'Play reels marquee and videos' : 'Pause reels marquee and videos'}
+                title={isUserPaused ? 'Play animation' : 'Pause animation'}
+              >
+                {isUserPaused ? <Play size={14} fill="currentColor" /> : <Pause size={14} />}
+                <span>{isUserPaused ? 'Play' : 'Pause'}</span>
+              </button>
             </Magnet>
           </div>
         </div>
 
-        {/* Reels Track: Desktop Center-Emphasized Row vs Mobile Swipe Carousel */}
+        {/* CONTINUOUS MARQUEE REGION (Full bleed with soft edge gradient fades) */}
         <div
-          ref={trackRef}
-          className={`reels-track ${activePreviewId && !isMobile ? 'reels-track--dimmed' : ''}`}
+          className="hz-reels-carousel-region"
+          role="region"
+          aria-label="Hestiia Moments Video Reels Marquee"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
         >
-          {REELS.map((item, idx) => {
-            const hasVideo = Boolean(item.video && !missingVideoIds.has(item.id))
-            const isPlayingThis = hasVideo && activePreviewId === item.id
-            const isCenterCard = !isMobile && idx === Math.floor(REELS.length / 2)
-            const isMobileCenter = isMobile && idx === mobileCenteredIndex
-
-            const cardClasses = [
-              'reel-card-wrap',
-              isCenterCard ? 'reel-card-wrap--center' : '',
-              isMobileCenter ? 'reel-card-wrap--center' : 'reel-card-wrap--neighbor',
-            ]
-              .filter(Boolean)
-              .join(' ')
-
-            return (
+          <div ref={trackRef} className="hz-reels-track">
+            {/* SET 1: Primary Interactive Set */}
+            {baseReels.map((reel, idx) => (
               <div
-                key={item.id}
-                className={cardClasses}
-                data-reel-id={item.id}
+                key={`primary-${reel.id}-${idx}`}
+                className="hz-reels-item"
+                data-reel-id={reel.id}
                 data-reel-index={idx}
-                onMouseEnter={() => handleCardMouseEnter(item)}
-                onMouseLeave={handleCardMouseLeave}
               >
-                <TapScale scale={0.97} style={{ width: '100%', height: '100%' }}>
-                  <div
-                    className="reel-card"
-                    onClick={() => openFullscreen(idx)}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={`Watch reel: ${item.title}`}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault()
-                        openFullscreen(idx)
-                      }
-                    }}
-                  >
-                    {/* Video Element (rendered when near viewport and has video) */}
-                    {hasVideo && videoNearViewport && (
-                      <video
-                        src={isPlayingThis ? item.video : undefined}
-                        poster={item.poster}
-                        muted
-                        playsInline
-                        loop
-                        preload="none"
-                        className="reel-card__video"
-                        onError={() => {
-                          setMissingVideoIds((prev) => new Set(prev).add(item.id))
-                        }}
-                        ref={(el) => {
-                          if (el) {
-                            if (isPlayingThis) {
-                              el.play().catch(() => {})
-                            } else {
-                              el.pause()
-                            }
-                          }
-                        }}
-                      />
-                    )}
-
-                    {/* Poster Image fallback */}
-                    <img
-                      src={item.poster}
-                      alt={item.title}
-                      loading="lazy"
-                      className="reel-card__poster"
-                      onError={(e) => {
-                        // Fallback placeholder gradient if poster is missing
-                        ;(e.currentTarget as HTMLElement).style.backgroundColor = '#261F1A'
-                      }}
-                    />
-
-                    {/* Top Bar: Instagram Badge + Play / External Link Indicator */}
-                    <div className="reel-card__top-bar">
-                      <div className="reel-card__ig-badge" aria-hidden="true">
-                        <InstagramIcon size={14} />
-                      </div>
-
-                      {hasVideo ? (
-                        <div className="reel-card__play-badge" aria-hidden="true">
-                          <Play size={10} fill="currentColor" />
-                          <span>Watch</span>
-                        </div>
-                      ) : (
-                        <div className="reel-card__play-badge" aria-hidden="true">
-                          <ArrowUpRight size={11} />
-                          <span>Instagram</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Bottom Scrim & Caption */}
-                    <div className="reel-card__scrim">
-                      <h3 className="reel-card__title">{item.title}</h3>
-                      <p className="reel-card__caption">{item.caption}</p>
-                    </div>
-                  </div>
-                </TapScale>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* Mobile Dot Indicators */}
-        {isMobile && (
-          <div className="reels-dots" aria-hidden="true">
-            {REELS.map((item, idx) => (
-              <button
-                key={item.id}
-                type="button"
-                className={`reels-dot ${idx === mobileCenteredIndex ? 'reels-dot--active' : ''}`}
-                onClick={() => {
-                  const cards = trackRef.current?.querySelectorAll<HTMLElement>('.reel-card-wrap')
-                  if (cards && cards[idx]) {
-                    cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
-                    setMobileCenteredIndex(idx)
-                  }
-                }}
-                aria-label={`Go to reel ${idx + 1}`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ===================================================
-          FULLSCREEN REEL VIEWER MODAL
-          =================================================== */}
-      <AnimatePresence>
-        {activeFullscreenItem && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="reel-viewer-overlay"
-            onClick={closeFullscreen}
-            role="dialog"
-            aria-modal="true"
-            aria-label={`Watching ${activeFullscreenItem.title}`}
-          >
-            {/* Modal Container */}
-            <motion.div
-              layoutId={activeFullscreenItem.id}
-              className="reel-viewer-container"
-              onClick={(e) => {
-                e.stopPropagation()
-                toggleFullscreenPlay()
-              }}
-              drag="y"
-              dragConstraints={{ top: 0, bottom: 0 }}
-              onDragEnd={(_, info) => {
-                if (info.offset.y < -50) nextFullscreen()
-                else if (info.offset.y > 50) prevFullscreen()
-              }}
-            >
-              {/* Progress Bar at top */}
-              <div className="reel-viewer-progress-bar">
-                <div
-                  className="reel-viewer-progress-fill"
-                  style={{ width: `${playbackProgress}%` }}
+                <ReelCard
+                  reel={reel}
+                  isDesktop={isDesktop}
+                  isDuplicate={false}
                 />
               </div>
+            ))}
 
-              {/* Video Player */}
-              <video
-                ref={fullscreenVideoRef}
-                src={activeFullscreenItem.video}
-                poster={activeFullscreenItem.poster}
-                autoPlay
-                playsInline
-                loop
-                muted={isMuted}
-                className="reel-viewer-video"
-                onTimeUpdate={handleVideoTimeUpdate}
-              />
-
-              {/* Top Controls: Sound Toggle & Close Button */}
-              <div className="reel-viewer-top" onClick={(e) => e.stopPropagation()}>
-                <button
-                  type="button"
-                  className="reel-viewer-ctrl-btn"
-                  onClick={() => setIsMuted((prev) => !prev)}
-                  aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-                >
-                  {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-                </button>
-
-                <button
-                  type="button"
-                  className="reel-viewer-ctrl-btn"
-                  onClick={closeFullscreen}
-                  aria-label="Close reel viewer"
-                >
-                  <X size={20} />
-                </button>
-              </div>
-
-              {/* Center Play/Pause morph with circular progress ring */}
-              <AnimatePresence>
-                {!isPlaying && (
-                  <motion.div
-                    initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.7, opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="reel-viewer-center-play"
-                  >
-                    <svg className="reel-viewer-progress-ring" viewBox="0 0 72 72">
-                      <circle
-                        cx="36"
-                        cy="36"
-                        r="32"
-                        strokeDasharray={ringCircumference}
-                        strokeDashoffset={ringOffset}
-                      />
-                    </svg>
-                    <Play size={24} fill="currentColor" />
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Bottom Details & Instagram Link */}
-              <div className="reel-viewer-bottom" onClick={(e) => e.stopPropagation()}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    color: 'var(--color-brass, #B89A64)',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    display: 'block',
-                    marginBottom: '4px',
-                  }}
-                >
-                  Hestiia Sanctuary Reel
-                </span>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: '22px',
-                    color: 'var(--color-text-inverse, #F6EFE4)',
-                    margin: '0 0 6px 0',
-                  }}
-                >
-                  {activeFullscreenItem.title}
-                </h3>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '13px',
-                    lineHeight: 1.5,
-                    color: 'rgba(246, 239, 228, 0.8)',
-                    margin: '0 0 14px 0',
-                  }}
-                >
-                  {activeFullscreenItem.caption}
-                </p>
-
-                <a
-                  href={activeFullscreenItem.instagramUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="reels-follow-btn"
-                  style={{ display: 'inline-flex' }}
-                >
-                  <InstagramIcon size={14} />
-                  <span>Open on Instagram</span>
-                </a>
-              </div>
-            </motion.div>
-
-            {/* Desktop Vertical Next / Prev Chevrons */}
-            <div className="reel-nav-btn" onClick={(e) => e.stopPropagation()}>
-              <button
-                type="button"
-                className="reel-viewer-ctrl-btn"
-                onClick={prevFullscreen}
-                aria-label="Previous reel"
+            {/* SET 2: Duplicate Set for Seamless Loop (-50% loop point) */}
+            {baseReels.map((reel, idx) => (
+              <div
+                key={`duplicate-${reel.id}-${idx}`}
+                className="hz-reels-item"
+                aria-hidden="true"
+                data-reel-id={reel.id}
+                data-reel-index={idx + baseReels.length}
               >
-                <ChevronUp size={20} />
-              </button>
-              <button
-                type="button"
-                className="reel-viewer-ctrl-btn"
-                onClick={nextFullscreen}
-                aria-label="Next reel"
-              >
-                <ChevronDown size={20} />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <ReelCard
+                  reel={reel}
+                  isDesktop={isDesktop}
+                  isDuplicate={true}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
   )
 }
