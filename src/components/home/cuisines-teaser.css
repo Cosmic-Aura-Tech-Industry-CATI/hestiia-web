@@ -18,8 +18,8 @@
 
 .cuisines-teaser__eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
-  fontWeight: 600;
+  font-size: 12px;
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-brass, #B89A64);
@@ -29,25 +29,28 @@
 
 .cuisines-teaser__title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 4vw, 42px);
-  font-weight: 300;
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 400;
   color: var(--color-text-inverse, #F6EFE4);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .cuisines-teaser__header-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   color: var(--color-brass, #B89A64);
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
+  padding: 8px 0;
   transition: color 0.25s ease;
+  line-height: 1;
 }
 
 .cuisines-teaser__header-link:hover {
@@ -62,21 +65,34 @@
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Desktop Grid */
+/* Grid: 4-col desktop, 2-col tablet, 1-col mobile. Equal height cards */
 .cuisines-teaser__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 24px;
+  align-items: stretch;
 }
 
-@media (max-width: 1200px) and (min-width: 1024px) {
+@media (max-width: 1023px) and (min-width: 641px) {
   .cuisines-teaser__grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
   }
 }
 
-/* Card Styling */
-.cuisine-teaser-card {
+@media (max-width: 640px) {
+  .cuisines-teaser__grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+.cuisine-teaser-card-wrap {
+  height: 100%;
+}
+
+/* Card Styling: Image top, content below */
+.cuisines-teaser-card {
   position: relative;
   background-color: rgba(38, 31, 26, 0.75);
   border-radius: 12px;
@@ -86,195 +102,134 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
   will-change: transform, opacity;
 }
 
-.cuisine-card__img-wrap {
-  position: relative;
-  width: 100%;
-  padding-top: 60%;
-  overflow: hidden;
-  background-color: #140F0D;
+.cuisines-teaser-card:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
 }
 
-.cuisine-card__img {
-  position: absolute;
-  top: 0;
-  left: 0;
+/* Top Image: Fixed 4/3 aspect ratio, clean crop */
+.cuisines-teaser-card__img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: #140F0D;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.cuisines-teaser-card__img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
 /* Glare overlay */
-.cuisine-card__glare {
+.cuisines-teaser-card__glare {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.4s ease;
   pointer-events: none;
 }
 
-/* Card content */
-.cuisine-card__content {
-  padding: 22px;
+/* Content area BELOW image */
+.cuisines-teaser-card__content {
+  padding: 24px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 16px;
+  box-sizing: border-box;
+  background: transparent;
 }
 
-.cuisine-card__subtitle {
+.cuisines-teaser-card__subtitle {
   font-family: var(--font-sans);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--color-brass, #B89A64);
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
-.cuisine-card__title {
+.cuisines-teaser-card__title {
   font-family: var(--font-serif);
-  font-size: 21px;
+  font-size: 22px;
+  font-weight: 500;
   color: var(--color-text-inverse, #F6EFE4);
   margin: 0 0 10px 0;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  line-height: 1.2;
+  transition: color 0.3s ease;
 }
 
-.cuisine-card__desc {
+.cuisines-teaser-card__desc {
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.6;
-  color: rgba(246, 239, 228, 0.72);
+  color: rgba(246, 239, 228, 0.75);
   margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
 }
 
-/* Explore / Learn more label */
-.cuisine-card__action {
-  margin-top: 18px;
-  display: flex;
+/* Explore link */
+.cuisines-teaser-card__action {
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-family: var(--font-sans);
   color: var(--color-brass-light, #D4B88A);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  transition: opacity 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  letter-spacing: 0.1em;
+  padding-top: 8px;
+  transition: color 0.25s ease, transform 0.25s ease;
 }
 
-.cuisine-card__action-arrow {
+.cuisines-card__action-arrow {
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Desktop Hover */
+/* Hover effects */
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .cuisine-teaser-card:hover {
+  .cuisines-teaser-card:hover {
     border-color: rgba(184, 154, 100, 0.45);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
   }
 
-  .cuisine-teaser-card:hover .cuisine-card__img {
+  .cuisines-teaser-card:hover .cuisines-teaser-card__img {
     transform: scale(1.06);
   }
 
-  .cuisine-teaser-card:hover .cuisine-card__glare {
+  .cuisines-teaser-card:hover .cuisines-teaser-card__glare {
     opacity: 1;
   }
 
-  .cuisine-teaser-card:hover .cuisine-card__title {
-    transform: translateY(-2px);
+  .cuisines-teaser-card:hover .cuisines-teaser-card__title {
+    color: var(--color-brass-light, #D4B88A);
   }
 
-  /* Desktop: Explore label starts hidden, fades and lifts in */
-  .cuisine-card__action {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-
-  .cuisine-teaser-card:hover .cuisine-card__action {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .cuisine-teaser-card:hover .cuisine-card__action-arrow {
+  .cuisines-teaser-card:hover .cuisines-card__action-arrow {
     transform: translateX(4px);
   }
-}
-
-/* Mobile swipe carousel */
-@media (max-width: 1023px) {
-  .cuisines-teaser__grid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 10px 16px 20px 16px;
-    margin: 0 -16px;
-    gap: 16px;
-  }
-
-  .cuisines-teaser__grid::-webkit-scrollbar {
-    display: none;
-  }
-
-  .cuisine-teaser-card-wrap {
-    scroll-snap-align: center;
-    flex: 0 0 82%;
-    max-width: 330px;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.3s ease;
-  }
-
-  .cuisine-teaser-card-wrap--center {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  .cuisine-teaser-card-wrap--neighbor {
-    transform: scale(0.94);
-    opacity: 0.72;
-  }
-
-  /* On mobile: explore label is always visible */
-  .cuisine-card__action {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-}
-
-/* Gold Dot Indicators for Mobile Carousel */
-.cuisines-teaser__dots {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.cuisines-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: rgba(184, 154, 100, 0.25);
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-              background-color 0.3s ease;
-}
-
-.cuisines-dot--active {
-  width: 22px;
-  border-radius: 4px;
-  background-color: var(--color-brass, #B89A64);
 }

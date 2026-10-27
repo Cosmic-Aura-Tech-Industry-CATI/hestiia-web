@@ -128,7 +128,7 @@
   left: 0;
   right: 0;
   height: calc(var(--header-h) + 40px);
-  background: linear-gradient(180deg, rgba(15, 10, 6, 0.75) 0%, rgba(15, 10, 6, 0.4) 60%, transparent 100%);
+  background: linear-gradient(180deg, rgba(15, 10, 6, 0.8) 0%, rgba(15, 10, 6, 0.45) 60%, transparent 100%);
 }
 
 /* Mobile directional gradient */
@@ -137,9 +137,9 @@
   inset: 0;
   background: linear-gradient(
     180deg,
-    rgba(15, 10, 6, 0.25) 0%,
-    rgba(15, 10, 6, 0.55) 50%,
-    rgba(15, 10, 6, 0.85) 100%
+    rgba(15, 10, 6, 0.35) 0%,
+    rgba(15, 10, 6, 0.72) 45%,
+    rgba(15, 10, 6, 0.92) 100%
   );
 }
 
@@ -148,32 +148,32 @@
   .hero__overlay-gradient {
     background: linear-gradient(
       90deg,
-      rgba(15, 10, 6, 0.82) 0%,
-      rgba(15, 10, 6, 0.65) 30%,
-      rgba(15, 10, 6, 0.35) 55%,
+      rgba(15, 10, 6, 0.9) 0%,
+      rgba(15, 10, 6, 0.76) 32%,
+      rgba(15, 10, 6, 0.45) 58%,
       transparent 100%
     );
   }
 }
 
 /* ===================================================
-   LAYER 2: CONTENT (Normal Flow, No Overlaps)
+   LAYER 2: CONTENT (Aligned to Global Container)
    =================================================== */
 .hero__content-wrap {
   position: relative;
   z-index: 2;
   width: 100%;
-  max-width: 1280px;
+  max-width: var(--container-max, 1240px);
   margin: 0 auto;
   box-sizing: border-box;
-  padding: 0 20px;
+  padding: 0 var(--container-pad, clamp(20px, 4vw, 40px));
   display: flex;
   flex-direction: column;
 }
 
 @media (min-width: 768px) {
   .hero__content-wrap {
-    padding: 0 48px;
+    padding: 0 var(--container-pad, clamp(20px, 4vw, 40px));
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
@@ -189,24 +189,24 @@
 
 @media (min-width: 768px) {
   .hero__text-block {
-    max-width: 52%;
+    max-width: 600px;
     flex-shrink: 0;
   }
 }
 
-/* Eyebrow */
+/* Eyebrow: 12-13px, uppercase, letter-spacing 0.2em, gold, weight 500 */
 .hero__eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   font-family: var(--font-sans);
-  font-size: clamp(0.75rem, 2vw, 0.875rem);
+  font-size: var(--font-size-eyebrow, clamp(12px, 1.2vw, 13px));
   font-weight: 500;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: #F6EFE4;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
-  margin-bottom: 12px;
+  color: var(--color-brass, #B89A64);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  margin-bottom: 16px; /* 16px rhythm */
   width: fit-content;
 }
 
@@ -218,50 +218,37 @@
   flex-shrink: 0;
 }
 
-/* Main H1 Headline */
+/* Main Display Title (hero "Hestiia"): serif, clamp(3.5rem, 8vw, 7rem), line-height 1 */
 .hero__title {
   font-family: var(--font-serif);
-  font-size: clamp(3rem, 14vw, 4.5rem);
+  font-size: var(--font-size-display, clamp(3.5rem, 8vw, 7rem));
   font-weight: 400;
   line-height: 1.0;
   letter-spacing: -0.025em;
   color: #F6EFE4;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
-  margin: 0 0 14px 0;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  margin: 0 0 24px 0; /* 24px rhythm */
   padding: 0;
   white-space: nowrap;
   overflow: visible;
+  text-wrap: balance;
 }
 
-@media (min-width: 768px) {
-  .hero__title {
-    font-size: clamp(4rem, 8vw, 8rem);
-    line-height: 0.98;
-    margin-bottom: 20px;
-  }
-}
-
-/* Subtitle */
+/* Subtitle / Lead: sans, clamp(1.05rem, 1.6vw, 1.35rem), line-height 1.6, max-width ~60ch */
 .hero__subtitle {
   font-family: var(--font-sans);
-  font-size: clamp(1rem, 1.8vw, 1.25rem);
+  font-size: var(--font-size-lead, clamp(1.05rem, 1.6vw, 1.35rem));
   font-weight: 400;
-  line-height: 1.5;
-  color: #F6EFE4;
-  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
-  max-width: 32ch;
-  margin: 0 0 24px 0;
-}
-
-@media (min-width: 768px) {
-  .hero__subtitle {
-    max-width: 44ch;
-    margin-bottom: 32px;
-  }
+  line-height: 1.6;
+  color: rgba(246, 239, 228, 0.9);
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.6);
+  max-width: 60ch;
+  margin: 0 0 40px 0; /* 40px rhythm */
+  text-wrap: pretty;
 }
 
 /* ===================================================
-   CTAS
+   CTAS (3 Harmonious Variants, Equal 48px/44px Height)
    =================================================== */
 .hero__ctas {
   display: flex;
@@ -288,17 +275,32 @@
   box-sizing: border-box;
   text-decoration: none;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   border-radius: var(--radius-sm, 4px);
   cursor: pointer;
-  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, color 0.2s ease;
-  height: 52px;
-  min-height: 52px;
+  transition: background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.25s ease;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 26px;
+  white-space: nowrap;
   width: 100%;
   touch-action: manipulation;
+}
+
+@media (max-width: 767px) {
+  .hero__btn {
+    height: 44px;
+    min-height: 44px;
+    font-size: 12px;
+    padding: 0 20px;
+  }
 }
 
 .hero__btn:focus-visible {
@@ -312,51 +314,48 @@
   }
 }
 
-/* Primary Button */
+/* Primary Button (Filled Gold) */
 .hero__btn--primary {
   background-color: var(--color-brass, #B89A64);
   color: #1F1A16;
   border: 1px solid var(--color-brass, #B89A64);
-  padding: 0 32px;
+  box-shadow: 0 2px 12px rgba(184, 154, 100, 0.25);
 }
 
 .hero__btn--primary:hover {
   background-color: var(--color-brass-light, #D4B88A);
   border-color: var(--color-brass-light, #D4B88A);
+  color: #1F1A16;
   transform: translateY(-1px);
+  box-shadow: 0 4px 18px rgba(184, 154, 100, 0.38);
 }
 
-/* Secondary Button */
+/* Secondary Button (Outlined Gold) */
 .hero__btn--secondary {
   background-color: transparent;
   color: #F6EFE4;
   border: 1px solid rgba(246, 239, 228, 0.45);
-  padding: 0 28px;
 }
 
 .hero__btn--secondary:hover {
   border-color: var(--color-brass, #B89A64);
   color: var(--color-brass, #B89A64);
-  background-color: rgba(246, 239, 228, 0.05);
+  background-color: rgba(246, 239, 228, 0.08);
   transform: translateY(-1px);
 }
 
-/* Tertiary Button (Call Us) */
+/* Tertiary Button (Call Us - Aligned Height & Icon Centered) */
 .hero__btn--tertiary {
   background-color: transparent;
   color: #F6EFE4;
-  border: none;
-  padding: 0 16px;
-  height: 44px;
-  min-height: 44px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: none;
+  border: 1px solid rgba(246, 239, 228, 0.25);
 }
 
 .hero__btn--tertiary:hover {
-  color: var(--color-brass-light, #D4B88A);
+  border-color: var(--color-brass, #B89A64);
+  color: var(--color-brass, #B89A64);
+  background-color: rgba(184, 154, 100, 0.08);
+  transform: translateY(-1px);
 }
 
 /* ===================================================

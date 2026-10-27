@@ -130,6 +130,7 @@ export default function SignatureDishes() {
 
   return (
     <section
+      id="menu"
       ref={sectionRef}
       className="signature-dishes-section section-dark"
       aria-labelledby="signature-dishes-title"
@@ -140,13 +141,13 @@ export default function SignatureDishes() {
           <span
             style={{
               fontFamily: 'var(--font-sans)',
-              fontSize: '11px',
-              fontWeight: 600,
+              fontSize: 'var(--font-size-eyebrow, 12px)',
+              fontWeight: 500,
               letterSpacing: '0.2em',
               textTransform: 'uppercase',
               color: 'var(--color-brass, #B89A64)',
               display: 'block',
-              marginBottom: '10px',
+              marginBottom: '16px',
             }}
           >
             Signatures of Hestiia
@@ -156,11 +157,12 @@ export default function SignatureDishes() {
             id="signature-dishes-title"
             style={{
               fontFamily: 'var(--font-serif)',
-              fontSize: 'clamp(28px, 3.5vw, 42px)',
+              fontSize: 'var(--font-size-h2, clamp(2rem, 4vw, 3.25rem))',
               fontWeight: 300,
               color: 'var(--color-text-inverse, #F6EFE4)',
               margin: '0 0 16px 0',
-              lineHeight: 1.2,
+              lineHeight: 1.1,
+              textWrap: 'balance',
             }}
           >
             Crafted with Heritage Spices.
@@ -169,12 +171,13 @@ export default function SignatureDishes() {
           <p
             style={{
               fontFamily: 'var(--font-sans)',
-              fontSize: '14px',
+              fontSize: 'var(--font-size-body, 16px)',
               fontWeight: 300,
               lineHeight: 1.7,
               color: 'rgba(246, 239, 228, 0.72)',
-              margin: 0,
-              maxWidth: '320px',
+              margin: '0 0 24px 0',
+              maxWidth: '360px',
+              textWrap: 'pretty',
             }}
           >
             Slow-simmered in cold-pressed oils, churned fresh dairy, and hand-ground aromatics for an authentic pure vegetarian feast.

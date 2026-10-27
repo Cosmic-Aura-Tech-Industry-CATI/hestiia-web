@@ -62,31 +62,33 @@
 
 .story-teaser__eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--font-size-eyebrow, 12px);
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-brass, #B89A64);
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 }
 
 .story-teaser__title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 4vw, 44px);
+  font-size: var(--font-size-h2, clamp(2rem, 4vw, 3.25rem));
   font-weight: 300;
   color: var(--color-text-inverse, #F6EFE4);
-  margin: 0 0 12px 0;
-  line-height: 1.2;
+  margin: 0 0 16px 0;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .story-teaser__body {
   font-family: var(--font-sans);
-  font-size: 15px;
+  font-size: var(--font-size-body, 16px);
   font-weight: 300;
-  line-height: 1.75;
+  line-height: 1.7;
   color: rgba(246, 239, 228, 0.78);
-  margin-bottom: 28px;
+  margin-bottom: 32px;
+  text-wrap: pretty;
 }
 
 /* Button & Magnet Wrapper */
@@ -97,23 +99,37 @@
 .story-teaser__btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 24px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 28px;
   border: 1px solid var(--color-brass, #B89A64);
   border-radius: var(--radius-sm, 4px);
   color: var(--color-brass, #B89A64);
   background-color: transparent;
   font-family: var(--font-sans);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
   transition: background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
               color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
               border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
               transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-teaser__btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.story-teaser__btn:active {
+  transform: translateY(0);
 }
 
 .story-teaser__btn .story-btn__arrow {
@@ -124,10 +140,20 @@
   .story-teaser__btn:hover {
     background-color: var(--color-brass, #B89A64);
     color: #1F1A16;
+    transform: translateY(-1px);
   }
 
   .story-teaser__btn:hover .story-btn__arrow {
     transform: translateX(4px);
+  }
+}
+
+@media (max-width: 767px) {
+  .story-teaser__btn {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 12px;
   }
 }
 
