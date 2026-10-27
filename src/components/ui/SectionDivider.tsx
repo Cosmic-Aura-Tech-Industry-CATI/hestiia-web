@@ -17,25 +17,12 @@ export default function SectionDivider({ className = '' }: { className?: string 
       <div
         style={{
           width: '100%',
-          maxWidth: '1200px',
+          maxWidth: 'var(--container-max, 1240px)',
           height: '1px',
           background: 'linear-gradient(90deg, transparent 0%, rgba(184, 154, 100, 0.22) 50%, transparent 100%)',
           position: 'relative',
         }}
-      >
-        <span
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%) rotate(45deg)',
-            width: '5px',
-            height: '5px',
-            backgroundColor: 'var(--color-brass, #B89A64)',
-            opacity: 0.6,
-          }}
-        />
-      </div>
+      />
     </div>
   )
 }

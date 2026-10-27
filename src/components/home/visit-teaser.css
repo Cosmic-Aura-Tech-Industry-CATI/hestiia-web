@@ -17,22 +17,23 @@
 
 .visit-teaser__eyebrow {
   font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
+  font-size: var(--font-size-eyebrow, 12px);
+  font-weight: 500;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-brass, #B89A64);
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .visit-teaser__title {
   font-family: var(--font-serif);
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: var(--font-size-h2, clamp(2rem, 4vw, 3.25rem));
   font-weight: 300;
   color: var(--color-text-inverse, #F6EFE4);
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
+  text-wrap: balance;
 }
 
 .visit-teaser__header-link {
@@ -43,10 +44,15 @@
   font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
   transition: color 0.25s ease;
+}
+
+.visit-teaser__header-link:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
 }
 
 .visit-teaser__header-link:hover {
@@ -161,45 +167,87 @@
 .visit-btn-primary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 22px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 24px;
   background-color: var(--color-brass, #B89A64);
   color: #1F1A16;
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: var(--font-sans);
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.visit-btn-primary:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.visit-btn-primary:active {
+  transform: translateY(0);
 }
 
 .visit-btn-primary:hover {
   background-color: var(--color-brass-light, #D4B88A);
+  transform: translateY(-1px);
 }
 
 .visit-btn-secondary {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 12px 18px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 20px;
   background-color: rgba(38, 31, 26, 0.8);
   border: 1px solid rgba(184, 154, 100, 0.25);
   color: var(--color-text-inverse, #F6EFE4);
   border-radius: 4px;
-  font-size: 12px;
+  font-size: 13px;
   font-family: var(--font-sans);
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: border-color 0.25s ease, background-color 0.25s ease;
+  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
+}
+
+.visit-btn-secondary:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.visit-btn-secondary:active {
+  transform: translateY(0);
 }
 
 .visit-btn-secondary:hover {
   border-color: var(--color-brass, #B89A64);
   background-color: rgba(48, 39, 33, 0.9);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 767px) {
+  .visit-btn-primary,
+  .visit-btn-secondary {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 12px;
+  }
 }
 
 /* Icon wiggle on desktop hover */

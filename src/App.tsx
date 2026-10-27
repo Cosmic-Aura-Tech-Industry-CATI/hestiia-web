@@ -17,7 +17,6 @@ import Menu from './pages/Menu'
 import DishDetail from './pages/DishDetail'
 import Offers from './pages/Offers'
 import Reviews from './pages/Reviews'
-import Party from './pages/Party'
 import Contact from './pages/Contact'
 import Cart from './pages/Cart'
 import Checkout from './pages/Checkout'
@@ -75,7 +74,8 @@ export default function App() {
                 <Route path="/menu/:slug" element={<DishDetail />} />
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/reviews" element={<Reviews />} />
-                <Route path="/party" element={<Party />} />
+                {/* Redirect legacy /party to unified /contact?type=party */}
+                <Route path="/party" element={<Navigate to="/contact?type=party" replace />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/checkout" element={<Checkout />} />

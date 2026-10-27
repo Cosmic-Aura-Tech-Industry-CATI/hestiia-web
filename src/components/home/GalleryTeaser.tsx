@@ -203,9 +203,24 @@ export default function GalleryTeaser() {
 
   const currentItem: GalleryItem | null = lightboxIndex !== null ? GALLERY_ITEMS[lightboxIndex] : null
 
+  // Fallback handler for missing/broken image paths
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>, src: string) => {
+    if (import.meta.env.DEV) {
+      console.warn(`[Gallery] Failed to load image: ${src}`)
+    }
+    const img = e.currentTarget
+    img.style.display = 'none'
+    const parent = img.parentElement
+    if (parent) {
+      parent.style.backgroundColor = '#1F1A16'
+      parent.style.border = '1px solid rgba(184, 154, 100, 0.4)'
+    }
+  }, [])
+
   return (
     <section
       ref={sectionRef}
+      id="gallery"
       className="gallery-teaser section section-dark"
       aria-labelledby="gallery-teaser-title"
     >
@@ -248,8 +263,11 @@ export default function GalleryTeaser() {
                 <img
                   src={item.src}
                   alt={item.alt}
-                  loading="lazy"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
                   decoding="async"
+                  width={item.width}
+                  height={item.height}
+                  onError={(e) => handleImageError(e, item.src)}
                   className="gallery-card__img"
                 />
                 <div className="gallery-card__caption">
@@ -275,8 +293,11 @@ export default function GalleryTeaser() {
                 <img
                   src={item.src}
                   alt={item.alt}
-                  loading="lazy"
+                  loading={idx === 0 ? 'eager' : 'lazy'}
                   decoding="async"
+                  width={item.width}
+                  height={item.height}
+                  onError={(e) => handleImageError(e, item.src)}
                   className="gallery-card__img"
                 />
                 <div className="gallery-card__caption">
@@ -345,6 +366,10 @@ export default function GalleryTeaser() {
               <img
                 src={currentItem.src}
                 alt={currentItem.alt}
+                width={currentItem.width}
+                height={currentItem.height}
+                decoding="async"
+                onError={(e) => handleImageError(e, currentItem.src)}
                 className="gallery-lightbox-img"
               />
               <div className="gallery-lightbox-meta">

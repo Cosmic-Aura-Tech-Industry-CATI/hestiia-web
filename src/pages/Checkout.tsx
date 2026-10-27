@@ -10,6 +10,9 @@ import {
   Banknote,
   QrCode,
   AlertCircle,
+  Copy,
+  Check,
+  Smartphone,
 } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import PageClosingCta from '../components/PageClosingCta'
@@ -42,13 +45,16 @@ export default function Checkout() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const [pendingUpiOrder, setPendingUpiOrder] = useState<any | null>(null)
+  const [isUpiModalOpen, setIsUpiModalOpen] = useState(false)
+  const [copiedUpi, setCopiedUpi] = useState(false)
 
   // Redirect if cart is empty
   useEffect(() => {
-    if (items.length === 0) {
+    if (items.length === 0 && !isUpiModalOpen) {
       navigate('/menu')
     }
-  }, [items, navigate])
+  }, [items, navigate, isUpiModalOpen])
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -92,8 +98,21 @@ export default function Checkout() {
       const res = await ordersService.createOrder(payload)
 
       if (res.success && res.order) {
+        // Resilient session storage for order tracking
+        try {
+          sessionStorage.setItem(`last_placed_order_${res.order.orderNumber}`, JSON.stringify(res.order))
+        } catch {
+          // storage error ignored
+        }
+
         clearCart()
-        navigate(`/order-success/${res.order.orderNumber}`)
+
+        if (formData.paymentMethod === 'upi') {
+          setPendingUpiOrder(res.order)
+          setIsUpiModalOpen(true)
+        } else {
+          navigate(`/order-success/${res.order.orderNumber}`)
+        }
       } else {
         setErrorMessage(res.message || 'Failed to place order. Please check connection and try again.')
       }
@@ -492,6 +511,156 @@ export default function Checkout() {
           </div>
         </div>
       </section>
+
+      {/* UPI QR Payment Modal */}
+      {isUpiModalOpen && pendingUpiOrder && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 999999,
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(6px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px',
+          }}
+        >
+          <div
+            style={{
+              backgroundColor: '#191410',
+              border: '1.5px solid var(--color-brass)',
+              borderRadius: '16px',
+              padding: '32px 28px',
+              maxWidth: '460px',
+              width: '100%',
+              textAlign: 'center',
+              boxShadow: '0 24px 60px rgba(0, 0, 0, 0.7)',
+              position: 'relative',
+            }}
+          >
+            <div style={{ display: 'inline-flex', padding: '10px', borderRadius: '50%', backgroundColor: 'rgba(184, 154, 100, 0.15)', marginBottom: '12px' }}>
+              <QrCode size={36} color="var(--color-brass)" />
+            </div>
+
+            <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '24px', color: '#F6EFE4', margin: '0 0 6px' }}>
+              Scan & Pay with Any UPI
+            </h3>
+            <p style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.75)', margin: '0 0 16px' }}>
+              Order <strong style={{ color: 'var(--color-brass)' }}>#{pendingUpiOrder.orderNumber}</strong> has been registered with our kitchen.
+            </p>
+
+            <div style={{ backgroundColor: '#fff', padding: '12px', borderRadius: '12px', display: 'inline-block', margin: '0 auto 16px', boxShadow: '0 4px 16px rgba(0,0,0,0.4)' }}>
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=6&data=${encodeURIComponent(
+                  `upi://pay?pa=7880840622@upi&pn=Hestiia+Restaurant&am=${pendingUpiOrder.grandTotal}&cu=INR&tn=Order+${pendingUpiOrder.orderNumber}`
+                )}`}
+                alt="Scan to pay via UPI"
+                style={{ width: '200px', height: '200px', display: 'block' }}
+              />
+            </div>
+
+            <div style={{ fontSize: '18px', fontWeight: 700, color: 'var(--color-brass)', marginBottom: '12px' }}>
+              Amount: ₹{pendingUpiOrder.grandTotal}
+            </div>
+
+            {/* UPI ID Copy Box */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '8px 14px',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                border: '1px solid rgba(184, 154, 100, 0.25)',
+                borderRadius: '8px',
+                marginBottom: '16px',
+                fontSize: '13px',
+              }}
+            >
+              <span style={{ color: 'rgba(246, 239, 228, 0.85)' }}>UPI ID: <strong>7880840622@upi</strong></span>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText('7880840622@upi')
+                  setCopiedUpi(true)
+                  setTimeout(() => setCopiedUpi(false), 2000)
+                }}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: copiedUpi ? '#4ADE80' : 'var(--color-brass)',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                }}
+              >
+                {copiedUpi ? <Check size={14} /> : <Copy size={14} />}
+                <span>{copiedUpi ? 'Copied' : 'Copy'}</span>
+              </button>
+            </div>
+
+            {/* 1-Click Pay for Mobile Devices */}
+            <a
+              href={`upi://pay?pa=7880840622@upi&pn=Hestiia+Restaurant&am=${pendingUpiOrder.grandTotal}&cu=INR&tn=Order+${pendingUpiOrder.orderNumber}`}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                width: '100%',
+                padding: '12px',
+                borderRadius: '8px',
+                backgroundColor: 'rgba(184, 154, 100, 0.15)',
+                border: '1px solid var(--color-brass)',
+                color: 'var(--color-brass)',
+                fontSize: '13px',
+                fontWeight: 700,
+                textDecoration: 'none',
+                marginBottom: '14px',
+                boxSizing: 'border-box',
+              }}
+            >
+              <Smartphone size={16} />
+              <span>Open Google Pay / PhonePe / Paytm</span>
+            </a>
+
+            {/* Track Order Confirmation */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsUpiModalOpen(false)
+                navigate(`/order-success/${pendingUpiOrder.orderNumber}`)
+              }}
+              style={{
+                width: '100%',
+                padding: '14px',
+                borderRadius: '8px',
+                background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-light))',
+                border: 'none',
+                color: '#16110E',
+                fontSize: '13px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                boxShadow: '0 4px 16px rgba(184, 154, 100, 0.3)',
+              }}
+            >
+              <span>I Have Paid · Track Order</span>
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        </div>
+      )}
 
       <PageClosingCta />
     </>

@@ -167,6 +167,7 @@ export default function VisitTeaser() {
 
   return (
     <section
+      id="visit"
       ref={sectionRef}
       className="visit-teaser section section-dark section-ambient-glow"
       aria-labelledby="visit-teaser-title"

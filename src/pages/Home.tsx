@@ -33,7 +33,6 @@ export default function Home({ isReady }: HomeProps) {
 
       {/* 3. Ratings Strip (new highlights bar) */}
       <RatingsStrip />
-      <SectionDivider />
 
       {/* 4. Story Teaser (1 photo + 60 words + link to /about) */}
       <StoryTeaser />

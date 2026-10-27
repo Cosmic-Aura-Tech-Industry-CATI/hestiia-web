@@ -23,17 +23,37 @@ export default function OrderSuccess() {
   const fetchOrder = (num: string) => {
     setLoading(true)
     setError(null)
+
+    // Fallback: Check local session storage for recent order
+    try {
+      const cached = sessionStorage.getItem(`last_placed_order_${num}`)
+      if (cached) {
+        const parsed = JSON.parse(cached)
+        setOrder(parsed)
+        setLoading(false)
+      }
+    } catch {
+      // Storage unavailable
+    }
+
     ordersService
       .getOrder(num)
       .then((res) => {
         if (res.success && res.order) {
           setOrder(res.order)
+          setError(null)
         } else {
-          setError('Order not found. Please check your order reference number.')
+          setOrder((prev) => {
+            if (!prev) setError('Order not found. Please check your order reference number.')
+            return prev
+          })
         }
       })
       .catch((err) => {
-        setError(err.message || 'Unable to fetch order status. Please verify your connection.')
+        setOrder((prev) => {
+          if (!prev) setError(err.message || 'Unable to fetch order status. Please verify your connection.')
+          return prev
+        })
       })
       .finally(() => setLoading(false))
   }

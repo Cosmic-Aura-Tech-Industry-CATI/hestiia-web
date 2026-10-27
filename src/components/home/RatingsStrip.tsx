@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef } from 'react'
 import { RATINGS } from '../../content/ratings'
 import { Star, ShieldCheck, MapPin, ArrowRight, ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
@@ -14,41 +14,6 @@ gsap.registerPlugin(ScrollTrigger)
 export default function RatingsStrip() {
   const sectionRef = useRef<HTMLElement>(null)
   const cardsWrapRef = useRef<HTMLDivElement>(null)
-  const [centeredIndex, setCenteredIndex] = useState<number>(0)
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-
-  // Detect mobile width for scroll-snap scale logic
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
-
-  // Calculate centered card on mobile scroll-snap
-  const handleScroll = useCallback(() => {
-    if (!isMobile || !cardsWrapRef.current) return
-
-    const container = cardsWrapRef.current
-    const containerCenter = container.scrollLeft + container.clientWidth / 2
-    const cards = container.querySelectorAll<HTMLElement>('.ratings-card')
-
-    let closestIdx = 0
-    let minDistance = Infinity
-
-    cards.forEach((card, idx) => {
-      const cardCenter = card.offsetLeft + card.offsetWidth / 2
-      const dist = Math.abs(containerCenter - cardCenter)
-      if (dist < minDistance) {
-        minDistance = dist
-        closestIdx = idx
-      }
-    })
-
-    setCenteredIndex(closestIdx)
-  }, [isMobile])
 
   // Scroll entrance with GSAP matchMedia
   useEffect(() => {
@@ -123,58 +88,33 @@ export default function RatingsStrip() {
       aria-label="Guest Ratings & Certifications"
     >
       {/* Top gold line draws across */}
-      <DrawLine color="rgba(184, 154, 100, 0.4)" height="1px" origin="left" duration={1.2} />
+      <DrawLine color="rgba(184, 154, 100, 0.35)" height="1px" origin="left" duration={1.2} />
 
-      <div className="container" style={{ paddingTop: '8px', paddingBottom: '4px' }}>
+      <div className="container">
         <div className="ratings-strip__container">
-          {/* Certification & City Badge */}
+          {/* Left Group: Certification & Location */}
           <div className="ratings-strip__meta">
             <div className="ratings-strip__badge">
-              <ShieldCheck size={16} color="#2F7D4F" />
-              <span
-                style={{
-                  fontFamily: 'var(--font-sans)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  color: 'var(--color-veg, #2F7D4F)',
-                  letterSpacing: '0.04em',
-                  textTransform: 'uppercase',
-                }}
-              >
+              <ShieldCheck size={16} color="#2F7D4F" aria-hidden="true" />
+              <span className="ratings-strip__badge-text">
                 100% Pure Vegetarian
               </span>
             </div>
 
-            <div className="ratings-strip__divider" />
+            <div className="ratings-strip__divider" aria-hidden="true" />
 
             <div className="ratings-strip__badge">
-              <MapPin size={14} color="var(--color-brass, #B89A64)" />
-              <span
-                style={{
-                  fontSize: '12px',
-                  color: 'rgba(246, 239, 228, 0.7)',
-                  fontFamily: 'var(--font-sans)',
-                }}
-              >
+              <MapPin size={14} color="var(--color-brass, #B89A64)" aria-hidden="true" />
+              <span className="ratings-strip__badge-location">
                 Shyam Nagar, Kanpur
               </span>
             </div>
           </div>
 
-          {/* Platform Scores & Links */}
-          <div
-            ref={cardsWrapRef}
-            className="ratings-strip__cards-wrap"
-            onScroll={handleScroll}
-          >
-            {RATINGS.map((item, idx) => {
+          {/* Right Group: Platform Chips */}
+          <div ref={cardsWrapRef} className="ratings-strip__chips">
+            {RATINGS.map((item) => {
               const hasScore = item.score !== null
-              const isCentered = isMobile && centeredIndex === idx
-              const scaleClass = isMobile
-                ? isCentered
-                  ? 'ratings-card--scale-center'
-                  : 'ratings-card--scale-neighbor'
-                : ''
 
               if (hasScore) {
                 return (
@@ -183,80 +123,63 @@ export default function RatingsStrip() {
                     href={item.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`ratings-card ${scaleClass}`}
-                    aria-label={`${item.platform} rating: ${item.score?.toFixed(1)} out of 5`}
+                    className="ratings-chip ratings-card"
+                    aria-label={`${item.platform} rating: ${item.score?.toFixed(1)} out of 5 based on ${item.count} reviews`}
                   >
-                    <Star size={13} fill="var(--color-brass, #B89A64)" stroke="var(--color-brass, #B89A64)" />
-                    <span
-                      style={{
-                        fontSize: '13px',
-                        fontWeight: 700,
-                        color: 'var(--color-text-inverse, #F6EFE4)',
-                        fontFamily: 'var(--font-sans)',
-                      }}
-                    >
+                    <Star
+                      size={13}
+                      fill="var(--color-brass, #B89A64)"
+                      stroke="var(--color-brass, #B89A64)"
+                      aria-hidden="true"
+                    />
+                    <span className="ratings-chip__score">
                       <CountUp to={item.score!} decimals={1} duration={1.2} />
                     </span>
-                    <span style={{ fontSize: '12px', fontWeight: 500 }}>
+                    <span className="ratings-chip__platform">
                       <ShinyText text={item.platform} />
                     </span>
                     {item.count && (
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          color: 'rgba(184, 154, 100, 0.75)',
-                          fontFamily: 'var(--font-sans)',
-                        }}
-                      >
+                      <span className="ratings-chip__count">
                         (<CountUp to={item.count} decimals={0} duration={1.4} />)
                       </span>
                     )}
-                    <span className="ratings-card__underline" />
+                    <span className="ratings-chip__underline" aria-hidden="true" />
                   </a>
                 )
               }
 
-              // Platform with null score: "View rating" link with arrow nudge
+              // Platform with null score: consistent chip with "Platform · View rating" and icon
               return (
                 <a
                   key={item.platform}
                   href={item.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`ratings-card ${scaleClass}`}
+                  className="ratings-chip ratings-card ratings-chip--link"
                   aria-label={`View rating on ${item.platform}`}
                 >
-                  <span style={{ fontSize: '12px', fontWeight: 500 }}>
+                  <span className="ratings-chip__platform">
                     <ShinyText text={item.platform} />
                   </span>
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      color: 'var(--color-brass, #B89A64)',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      fontFamily: 'var(--font-sans)',
-                      fontWeight: 600,
-                      letterSpacing: '0.04em',
-                    }}
-                  >
+                  <span className="ratings-chip__dot" aria-hidden="true">·</span>
+                  <span className="ratings-chip__view-action">
                     View rating
-                    <ExternalLink size={11} className="arrow-nudge" />
+                    <ExternalLink size={12} className="arrow-nudge" aria-hidden="true" />
                   </span>
-                  <span className="ratings-card__underline" />
+                  <span className="ratings-chip__underline" aria-hidden="true" />
                 </a>
               )
             })}
 
-            {/* Link to All Reviews */}
+            {/* Action Chip: All Reviews */}
             <Link
               to="/reviews"
-              className="ratings-strip__all-link"
+              className="ratings-chip ratings-card ratings-chip--all"
               aria-label="View all guest reviews"
             >
               <span>All Reviews</span>
-              <ArrowRight size={12} className="arrow-nudge" />
+              <ArrowRight size={13} className="arrow-nudge" aria-hidden="true" />
+              <span className="ratings-chip__underline" aria-hidden="true" />
             </Link>
           </div>
         </div>

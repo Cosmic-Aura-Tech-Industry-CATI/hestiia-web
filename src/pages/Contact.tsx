@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import {
   MapPin,
   Phone,
@@ -9,6 +10,9 @@ import {
   ExternalLink,
   CheckCircle2,
   AlertCircle,
+  Send,
+  UtensilsCrossed,
+  PartyPopper,
 } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import PageClosingCta from '../components/PageClosingCta'
@@ -16,7 +20,8 @@ import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { RESTAURANT } from '../content/restaurant'
 import { InstagramIcon } from '../components/icons/InstagramIcon'
 import { bookingsService } from '../services/bookings.service'
-import type { CreateBookingDto, BookingConfirmationDetails } from '../types/api'
+import { partyService } from '../services/party.service'
+import type { CreateBookingDto, BookingConfirmationDetails, CreatePartyInquiryDto } from '../types/api'
 import { BookingPassModal } from '../components/BookingPassModal'
 
 export default function Contact() {
@@ -25,6 +30,17 @@ export default function Contact() {
     'Reserve a table at Hestiia Restaurant in Shyam Nagar, Kanpur. Direct online table booking, directions, operating hours 11 AM to 11 PM, and party dining assistance.'
   )
 
+  const [searchParams] = useSearchParams()
+  const initialMode = searchParams.get('type') === 'party' ? 'party' : 'table'
+  const [bookingMode, setBookingMode] = useState<'table' | 'party'>(initialMode)
+
+  useEffect(() => {
+    if (searchParams.get('type') === 'party' || window.location.hash === '#party-form') {
+      setBookingMode('party')
+    }
+  }, [searchParams])
+
+  // 1. Table Reservation State
   const [formData, setFormData] = useState<CreateBookingDto>({
     customerName: '',
     phone: '',
@@ -41,6 +57,21 @@ export default function Contact() {
   const [activePass, setActivePass] = useState<BookingConfirmationDetails | null>(null)
   const [isPassModalOpen, setIsPassModalOpen] = useState(false)
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
+
+  // 2. Party & Banquet Inquiry State
+  const [partyFormData, setPartyFormData] = useState<CreatePartyInquiryDto>({
+    customerName: '',
+    phone: '',
+    email: '',
+    eventType: 'birthday',
+    preferredDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
+    guestCount: 25,
+    budgetRange: '₹500 – ₹750 per guest',
+    specialRequirements: '',
+  })
+  const [isPartySubmitting, setIsPartySubmitting] = useState(false)
+  const [submittedPartyInquiry, setSubmittedPartyInquiry] = useState<any | null>(null)
+  const [partyErrorMsg, setPartyErrorMsg] = useState<string | null>(null)
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -93,6 +124,30 @@ export default function Contact() {
     }
   }
 
+  const handlePartySubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setPartyErrorMsg(null)
+
+    if (!partyFormData.customerName.trim() || !partyFormData.phone.trim()) {
+      setPartyErrorMsg('Please enter your full name and contact number.')
+      return
+    }
+
+    try {
+      setIsPartySubmitting(true)
+      const res = await partyService.createInquiry(partyFormData)
+      if (res.success && res.inquiry) {
+        setSubmittedPartyInquiry(res.inquiry)
+      } else {
+        setPartyErrorMsg(res.message || 'Unable to register celebration inquiry. Please call our desk directly.')
+      }
+    } catch (err: any) {
+      setPartyErrorMsg(err.message || 'Network error occurred. Please call banquet desk directly or chat on WhatsApp.')
+    } finally {
+      setIsPartySubmitting(false)
+    }
+  }
+
   // Map embed URL with address query (no API key required)
   const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(
     'Hestiia Restaurant, 1-B, Ram Puram, Shyam Nagar, Kanpur, Uttar Pradesh 208013'
@@ -134,36 +189,110 @@ export default function Contact() {
                 boxShadow: '0 20px 48px rgba(0, 0, 0, 0.4)',
               }}
             >
-              <div style={{ marginBottom: '24px' }}>
-                <span
+              {/* Segmented Switcher: Table Reservation vs Party & Banquets */}
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '8px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  padding: '6px',
+                  borderRadius: '12px',
+                  border: '1px solid rgba(184, 154, 100, 0.25)',
+                  marginBottom: '26px',
+                }}
+              >
+                <button
+                  type="button"
+                  onClick={() => setBookingMode('table')}
                   style={{
-                    display: 'block',
-                    fontSize: '11px',
-                    fontFamily: 'var(--font-sans)',
-                    fontWeight: 600,
-                    letterSpacing: '0.15em',
-                    textTransform: 'uppercase',
-                    color: 'var(--color-brass)',
-                    marginBottom: '8px',
+                    padding: '12px 14px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    fontSize: '13px',
+                    fontWeight: bookingMode === 'table' ? 700 : 500,
+                    letterSpacing: '0.03em',
+                    transition: 'all 0.25s ease',
+                    background:
+                      bookingMode === 'table'
+                        ? 'linear-gradient(135deg, var(--color-brass), var(--color-brass-light))'
+                        : 'transparent',
+                    color: bookingMode === 'table' ? '#16110E' : 'rgba(246, 239, 228, 0.75)',
+                    boxShadow:
+                      bookingMode === 'table' ? '0 4px 14px rgba(184, 154, 100, 0.3)' : 'none',
                   }}
                 >
-                  Online Table Booking
-                </span>
-                <h2
+                  <UtensilsCrossed size={16} />
+                  <span>Table Dining (1–8)</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setBookingMode('party')}
                   style={{
-                    fontFamily: 'var(--font-serif)',
-                    fontSize: 'clamp(26px, 3.5vw, 36px)',
-                    fontWeight: 300,
-                    color: 'var(--color-text-inverse)',
-                    margin: '0 0 10px',
+                    padding: '12px 14px',
+                    borderRadius: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    fontSize: '13px',
+                    fontWeight: bookingMode === 'party' ? 700 : 500,
+                    letterSpacing: '0.03em',
+                    transition: 'all 0.25s ease',
+                    background:
+                      bookingMode === 'party'
+                        ? 'linear-gradient(135deg, var(--color-brass), var(--color-brass-light))'
+                        : 'transparent',
+                    color: bookingMode === 'party' ? '#16110E' : 'rgba(246, 239, 228, 0.75)',
+                    boxShadow:
+                      bookingMode === 'party' ? '0 4px 14px rgba(184, 154, 100, 0.3)' : 'none',
                   }}
                 >
-                  Reserve Your <em style={{ fontStyle: 'italic', color: 'var(--color-brass-light)' }}>Table</em>
-                </h2>
-                <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'rgba(246, 239, 228, 0.75)', margin: 0 }}>
-                  Fill in your details below for prompt seating confirmation by our table host.
-                </p>
+                  <PartyPopper size={16} />
+                  <span>Parties & Banquets (10–200+)</span>
+                </button>
               </div>
+
+              {bookingMode === 'table' ? (
+                <>
+                  <div style={{ marginBottom: '24px' }}>
+                    <span
+                      style={{
+                        display: 'block',
+                        fontSize: '11px',
+                        fontFamily: 'var(--font-sans)',
+                        fontWeight: 600,
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        color: 'var(--color-brass)',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      Instant Table Seating
+                    </span>
+                    <h2
+                      style={{
+                        fontFamily: 'var(--font-serif)',
+                        fontSize: 'clamp(26px, 3.5vw, 36px)',
+                        fontWeight: 300,
+                        color: 'var(--color-text-inverse)',
+                        margin: '0 0 10px',
+                      }}
+                    >
+                      Reserve Your <em style={{ fontStyle: 'italic', color: 'var(--color-brass-light)' }}>Table</em>
+                    </h2>
+                    <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'rgba(246, 239, 228, 0.75)', margin: 0 }}>
+                      Fill in your details below for prompt seating confirmation by our table host.
+                    </p>
+                  </div>
 
               {submittedBooking ? (
                 <div
@@ -474,6 +603,377 @@ export default function Contact() {
                   </button>
                 </form>
               )}
+            </>
+          ) : (
+            <>
+              <div style={{ marginBottom: '24px' }}>
+                <span
+                  style={{
+                    display: 'block',
+                    fontSize: '11px',
+                    fontFamily: 'var(--font-sans)',
+                    fontWeight: 600,
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    color: 'var(--color-brass)',
+                    marginBottom: '8px',
+                  }}
+                >
+                  Banquets & Celebrations
+                </span>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-serif)',
+                    fontSize: 'clamp(26px, 3.5vw, 36px)',
+                    fontWeight: 300,
+                    color: 'var(--color-text-inverse)',
+                    margin: '0 0 10px',
+                  }}
+                >
+                  Plan Your <em style={{ fontStyle: 'italic', color: 'var(--color-brass-light)' }}>Celebration</em>
+                </h2>
+                <p style={{ fontSize: '14px', lineHeight: 1.6, color: 'rgba(246, 239, 228, 0.75)', margin: 0 }}>
+                  Private banquet hall, curated pure vegetarian catering menus, and bespoke event arrangements.
+                </p>
+              </div>
+
+              {submittedPartyInquiry ? (
+                <div
+                  style={{
+                    backgroundColor: 'rgba(52, 168, 83, 0.12)',
+                    border: '1px solid rgba(52, 168, 83, 0.4)',
+                    borderRadius: '12px',
+                    padding: '28px',
+                    textAlign: 'center',
+                  }}
+                >
+                  <CheckCircle2 size={44} color="#4ADE80" style={{ margin: '0 auto 12px' }} />
+                  <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '22px', color: '#F6EFE4', margin: '0 0 8px' }}>
+                    Celebration Inquiry Received!
+                  </h3>
+                  <p style={{ fontSize: '14px', color: 'rgba(246, 239, 228, 0.85)', margin: '0 0 16px', lineHeight: 1.6 }}>
+                    Thank you, <strong>{submittedPartyInquiry.customerName}</strong>. Your banquet request for{' '}
+                    <strong>{submittedPartyInquiry.guestCount} Guests</strong> on{' '}
+                    <strong>{submittedPartyInquiry.preferredDate || 'your selected date'}</strong> has been registered.
+                    Our banquet manager will call you at <strong>{submittedPartyInquiry.phone}</strong> to coordinate your custom menu.
+                  </p>
+                  <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <a
+                      href={`https://wa.me/917880840622?text=${encodeURIComponent(
+                        `Hello Hestiia Banquet Team, I have submitted a celebration inquiry for ${submittedPartyInquiry.customerName} (${submittedPartyInquiry.eventType}, ${submittedPartyInquiry.guestCount} guests). Please share custom banquet menus and packages.`
+                      )}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        background: '#25D366',
+                        color: '#000',
+                        padding: '10px 22px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 700,
+                        textDecoration: 'none',
+                        boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                      }}
+                    >
+                      <MessageSquare size={16} />
+                      Chat on WhatsApp
+                    </a>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubmittedPartyInquiry(null)
+                        setPartyFormData({
+                          customerName: '',
+                          phone: '',
+                          email: '',
+                          eventType: 'birthday',
+                          preferredDate: new Date(Date.now() + 86400000 * 2).toISOString().split('T')[0],
+                          guestCount: 25,
+                          budgetRange: '₹500 – ₹750 per guest',
+                          specialRequirements: '',
+                        })
+                      }}
+                      style={{
+                        background: 'none',
+                        border: '1px solid var(--color-brass)',
+                        color: 'var(--color-brass)',
+                        padding: '10px 20px',
+                        borderRadius: '6px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.06em',
+                      }}
+                    >
+                      Plan Another Event
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <form onSubmit={handlePartySubmit}>
+                  {partyErrorMsg && (
+                    <div
+                      style={{
+                        padding: '12px 14px',
+                        borderRadius: '8px',
+                        backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                        border: '1px solid rgba(239, 68, 68, 0.35)',
+                        color: '#FCA5A5',
+                        fontSize: '13px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '18px',
+                      }}
+                    >
+                      <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                      <span>{partyErrorMsg}</span>
+                    </div>
+                  )}
+
+                  {/* Host Name & Contact Phone */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Host / Organizer Name <span style={{ color: '#F59E0B', fontWeight: 700 }}>* (Required)</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. Priya Sharma"
+                        value={partyFormData.customerName}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, customerName: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Contact Phone Number <span style={{ color: '#F59E0B', fontWeight: 700 }}>* (Required)</span>
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        placeholder="Enter 10-digit mobile number"
+                        value={partyFormData.phone}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, phone: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Email & Event Type */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Email Address <span style={{ color: 'rgba(246, 239, 228, 0.45)', fontSize: '11px' }}>(Optional)</span>
+                      </label>
+                      <input
+                        type="email"
+                        placeholder="your.email@example.com"
+                        value={partyFormData.email}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, email: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Occasion / Event Type
+                      </label>
+                      <select
+                        value={partyFormData.eventType}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, eventType: e.target.value as any })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      >
+                        <option value="birthday" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>🎂 Birthday Party</option>
+                        <option value="anniversary" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>💍 Wedding Anniversary</option>
+                        <option value="corporate" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>💼 Corporate Lunch / Meeting</option>
+                        <option value="family_gathering" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>👨‍👩‍👧‍👦 Family Reunion / Banquet</option>
+                        <option value="other" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>✨ Kitty Party / Celebration</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Preferred Date & Estimated Guests */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Preferred Event Date
+                      </label>
+                      <input
+                        type="date"
+                        value={partyFormData.preferredDate}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, preferredDate: e.target.value })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                        Estimated Guests (10 to 200+)
+                      </label>
+                      <input
+                        type="number"
+                        min={10}
+                        max={250}
+                        value={partyFormData.guestCount}
+                        onChange={(e) => setPartyFormData({ ...partyFormData, guestCount: Number(e.target.value) || 10 })}
+                        style={{
+                          width: '100%',
+                          padding: '11px 14px',
+                          borderRadius: '8px',
+                          backgroundColor: '#16110E',
+                          border: '1px solid rgba(184, 154, 100, 0.35)',
+                          color: '#F6EFE4',
+                          fontSize: '14px',
+                          outline: 'none',
+                          boxSizing: 'border-box',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Package / Budget Preference */}
+                  <div style={{ marginBottom: '16px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                      Catering Package / Per-Plate Budget Range
+                    </label>
+                    <select
+                      value={partyFormData.budgetRange}
+                      onChange={(e) => setPartyFormData({ ...partyFormData, budgetRange: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '11px 14px',
+                        borderRadius: '8px',
+                        backgroundColor: '#16110E',
+                        border: '1px solid rgba(184, 154, 100, 0.35)',
+                        color: '#F6EFE4',
+                        fontSize: '14px',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <option value="₹450 – ₹650 per guest" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>Classic Pure Veg Feast (₹450 – ₹650 / guest)</option>
+                      <option value="₹650 – ₹850 per guest" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>Royal Banquet Spread (₹650 – ₹850 / guest)</option>
+                      <option value="₹850 – ₹1,200+ per guest" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>Grand Luxury Celebration (₹850 – ₹1,200+ / guest)</option>
+                      <option value="Custom Budget / Need Menu Consultation" style={{ backgroundColor: '#1A1410', color: '#F6EFE4' }}>Custom Menu / Discuss with Banquet Manager</option>
+                    </select>
+                  </div>
+
+                  {/* Special Requirements */}
+                  <div style={{ marginBottom: '22px' }}>
+                    <label style={{ display: 'block', fontSize: '12px', color: 'rgba(246, 239, 228, 0.8)', marginBottom: '6px', fontWeight: 500 }}>
+                      Special Notes & Setup Preferences <span style={{ color: 'rgba(246, 239, 228, 0.45)', fontSize: '11px' }}>(Optional)</span>
+                    </label>
+                    <textarea
+                      rows={2}
+                      placeholder="e.g. Paneer tikka starters, balloon decoration setup, audio mic, Jain food options..."
+                      value={partyFormData.specialRequirements}
+                      onChange={(e) => setPartyFormData({ ...partyFormData, specialRequirements: e.target.value })}
+                      style={{
+                        width: '100%',
+                        padding: '11px 14px',
+                        borderRadius: '8px',
+                        backgroundColor: '#16110E',
+                        border: '1px solid rgba(184, 154, 100, 0.35)',
+                        color: '#F6EFE4',
+                        fontSize: '14px',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                        resize: 'vertical',
+                      }}
+                    />
+                  </div>
+
+                  {/* Submit Button */}
+                  <button
+                    type="submit"
+                    disabled={isPartySubmitting}
+                    style={{
+                      width: '100%',
+                      padding: '15px',
+                      borderRadius: '8px',
+                      background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-light))',
+                      border: 'none',
+                      color: '#16110E',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      cursor: isPartySubmitting ? 'not-allowed' : 'pointer',
+                      opacity: isPartySubmitting ? 0.7 : 1,
+                      boxShadow: '0 4px 18px rgba(184, 154, 100, 0.28)',
+                      transition: 'transform 0.2s ease',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '8px',
+                    }}
+                  >
+                    <Send size={16} />
+                    {isPartySubmitting ? 'Sending Request to Banquet Team...' : 'Submit Celebration Inquiry'}
+                  </button>
+                </form>
+              )}
+            </>
+          )}
             </div>
 
             {/* 2. Core Contact & Hours Card */}
