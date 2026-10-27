@@ -1,7 +1,8 @@
 /* ===================================================
    HESTIIA REELS SECTION — SCOPED STYLES
    Prefix: hz-reels-
-   Design tokens: Dark espresso, Satin brass, Cream serif
+   Design tokens: Dark espresso (#17120E), Satin brass (#B89A64), Cream serif (#F6EFE4)
+   Memory & Performance Optimized: 0 per-card blur, max 1 live video, no permanent will-change
    =================================================== */
 
 .hz-reels-section {
@@ -10,7 +11,7 @@
   border-top: 1px solid rgba(184, 154, 100, 0.14);
   border-bottom: 1px solid rgba(184, 154, 100, 0.08);
   padding: clamp(60px, 8vw, 100px) 0;
-  overflow: hidden;
+  overflow-x: clip;
   color: var(--color-text-inverse, #F6EFE4);
   box-sizing: border-box;
 }
@@ -22,9 +23,9 @@
   top: 10%;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(184, 154, 100, 0.07) 0%, transparent 70%);
+  width: 600px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(184, 154, 100, 0.06) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
 }
@@ -47,8 +48,8 @@
   justify-content: space-between;
   align-items: flex-end;
   flex-wrap: wrap;
-  gap: 28px;
-  margin-bottom: clamp(32px, 5vw, 48px);
+  gap: 24px;
+  margin-bottom: clamp(28px, 4vw, 44px);
   position: relative;
   z-index: 2;
 }
@@ -61,12 +62,6 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-eyebrow, 12px);
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-brass, #B89A64);
   margin-bottom: 12px;
 }
 
@@ -79,28 +74,13 @@
 }
 
 .hz-reels-title {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-h2, clamp(2.2rem, 4.2vw, 3.4rem));
-  font-weight: 300;
-  color: var(--color-text-inverse, #F6EFE4);
   margin: 0 0 14px 0;
-  line-height: 1.12;
+  line-height: 1.15;
   letter-spacing: -0.01em;
   text-wrap: balance;
 }
 
-.hz-reels-title em {
-  font-style: italic;
-  font-family: var(--font-serif);
-  color: var(--color-brass-light, #D4B88A);
-}
-
 .hz-reels-subtitle {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-body, 15px);
-  font-weight: 300;
-  line-height: 1.65;
-  color: rgba(246, 239, 228, 0.75);
   margin: 0;
   max-width: 520px;
   text-wrap: pretty;
@@ -109,47 +89,11 @@
 .hz-reels-header-right {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
-/* Follow on Instagram Button */
-.hz-reels-follow-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  height: 48px;
-  min-height: 48px;
-  padding: 0 24px;
-  border-radius: var(--radius-sm, 4px);
-  border: 1px solid var(--color-brass, #B89A64);
-  background: rgba(184, 154, 100, 0.06);
-  color: var(--color-brass, #B89A64);
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  white-space: nowrap;
-  box-sizing: border-box;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hz-reels-follow-btn:hover {
-  background: var(--color-brass, #B89A64);
-  color: #17120E;
-  box-shadow: 0 8px 24px rgba(184, 154, 100, 0.28);
-  transform: translateY(-2px);
-}
-
-.hz-reels-follow-btn:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 3px;
-}
-
-/* Pause / Play Accessible Marquee Toggle Button */
+/* Pause / Play Accessible Marquee Toggle Button (No backdrop-filter, solid rgba) */
 .hz-reels-toggle-btn {
   display: inline-flex;
   align-items: center;
@@ -159,7 +103,7 @@
   padding: 0 18px;
   border-radius: var(--radius-sm, 4px);
   border: 1px solid rgba(184, 154, 100, 0.4);
-  background: rgba(31, 26, 22, 0.7);
+  background: #1F1A16;
   color: var(--color-brass, #B89A64);
   font-family: var(--font-sans);
   font-size: 12px;
@@ -167,7 +111,6 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  backdrop-filter: blur(8px);
   transition: all 0.25s ease;
   box-sizing: border-box;
 }
@@ -185,8 +128,7 @@
 }
 
 /* ===================================================
-   INFINITE MARQUEE CAROUSEL REGION
-   Full viewport bleed with soft edge gradient fades
+   CAROUSEL REGION
    =================================================== */
 .hz-reels-carousel-region {
   position: relative;
@@ -197,62 +139,113 @@
   margin-left: -50vw;
   margin-right: -50vw;
   overflow: hidden;
-  min-height: clamp(400px, 40vw, 540px);
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 7%,
-    black 93%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0%,
-    black 7%,
-    black 93%,
-    transparent 100%
-  );
   padding: 12px 0 24px 0;
   box-sizing: border-box;
   z-index: 2;
 }
 
-/* Marquee Track: Moves continuously via GSAP translate3d */
-.hz-reels-track {
-  display: flex;
-  width: max-content;
-  align-items: stretch;
-  gap: 20px;
-  will-change: transform;
-  user-select: none;
-  box-sizing: border-box;
-  padding: 0 10px;
-}
+/* Desktop Marquee Track (>= 1024px) */
+@media (min-width: 1024px) {
+  .hz-reels-carousel-region {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 6%,
+      black 94%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      black 6%,
+      black 94%,
+      transparent 100%
+    );
+  }
 
-/* Reel Card Flex Item */
-.hz-reels-item {
-  position: relative;
-  flex: 0 0 clamp(220px, 22vw, 300px);
-  width: clamp(220px, 22vw, 300px);
-  aspect-ratio: 9 / 16;
-  height: auto;
-  min-height: clamp(391px, 39vw, 533px);
-  box-sizing: border-box;
-  opacity: 1; /* Guaranteed opacity: 1 so cards are never hidden in CSS */
-  will-change: transform;
-}
+  .hz-reels-track {
+    display: flex;
+    width: max-content;
+    align-items: stretch;
+    gap: 20px;
+    user-select: none;
+    box-sizing: border-box;
+    padding: 0 10px;
+  }
 
-@media (max-width: 1023px) {
   .hz-reels-item {
-    flex: 0 0 clamp(200px, 60vw, 300px);
-    width: clamp(200px, 60vw, 300px);
-    min-height: unset;
+    position: relative;
+    flex: 0 0 clamp(220px, 20vw, 290px);
+    width: clamp(220px, 20vw, 290px);
+    aspect-ratio: 9 / 16;
+    box-sizing: border-box;
+    opacity: 1;
   }
 }
 
-@media (hover: none) {
-  .hz-reels-spotlight-layer {
+/* Mobile & Tablet Native Scroll-Snap Carousel (< 1024px) */
+@media (max-width: 1023px) {
+  .hz-reels-carousel-region {
+    -webkit-mask-image: none;
+    mask-image: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 8px 16px 20px 16px;
+  }
+
+  .hz-reels-carousel-region::-webkit-scrollbar {
     display: none;
+  }
+
+  .hz-reels-track {
+    display: flex;
+    align-items: stretch;
+    gap: 16px;
+    padding: 0 8px;
+    width: max-content;
+  }
+
+  .hz-reels-item {
+    position: relative;
+    flex: 0 0 78vw;
+    width: 78vw;
+    max-width: 320px;
+    aspect-ratio: 9 / 16;
+    scroll-snap-align: center;
+    box-sizing: border-box;
+  }
+}
+
+/* ===================================================
+   SHARED SPOTLIGHT LAYER (Desktop (hover: hover) only)
+   One single overlay element across the entire track
+   =================================================== */
+.hz-reels-shared-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(
+    380px circle at var(--spotlight-x, -500px) var(--spotlight-y, -500px),
+    rgba(184, 154, 100, 0.16),
+    transparent 70%
+  );
+}
+
+@media (min-width: 1024px) and (hover: hover) {
+  .hz-reels-carousel-region:hover .hz-reels-shared-spotlight {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 1023px), (hover: none) {
+  .hz-reels-shared-spotlight {
+    display: none !important;
   }
 }
 
@@ -264,48 +257,29 @@
   width: 100%;
   height: 100%;
   aspect-ratio: 9 / 16;
-  border-radius: 18px;
+  border-radius: 16px;
   overflow: hidden;
-  background: linear-gradient(145deg, #1F1914 0%, #120E0B 100%);
-  border: 1px solid rgba(184, 154, 100, 0.24);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  background: #17120E;
+  border: 1px solid rgba(184, 154, 100, 0.22);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.55);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
 
-.hz-reels-card:hover {
-  border-color: rgba(184, 154, 100, 0.7);
-  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.85), 0 0 30px rgba(184, 154, 100, 0.22);
+@media (hover: hover) {
+  .hz-reels-card:hover {
+    border-color: rgba(184, 154, 100, 0.65);
+    box-shadow: 0 14px 32px rgba(0, 0, 0, 0.75), 0 0 14px rgba(184, 154, 100, 0.18);
+    transform: translateY(-3px);
+  }
 }
 
-/* Spotlight dynamic cursor shine layer */
-.hz-reels-spotlight-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 4;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.hz-reels-card:hover .hz-reels-spotlight-layer {
-  opacity: 1;
-}
-
-/* Fallback background layer (ensures card is never blank) */
-.hz-reels-card-fallback-bg {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(160deg, #241C16 0%, #15100C 60%, #0E0A08 100%);
-  z-index: 0;
-}
-
-/* Media Elements: Never hidden or 0 height */
-.hz-reels-video {
+/* Media Elements: Poster-first rule */
+.hz-reels-poster {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -316,18 +290,56 @@
   pointer-events: none;
 }
 
-.hz-reels-poster {
+/* Active Video Element: Loaded ONLY on active card */
+.hz-reels-video {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  z-index: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Playing indicator badge (soft pulsating green/gold dot) */
+.hz-reels-playing-badge {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  background: rgba(23, 18, 14, 0.88);
+  border: 1px solid rgba(184, 154, 100, 0.35);
+  font-family: var(--font-sans);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  z-index: 4;
+}
+
+.hz-reels-playing-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34D399;
+  box-shadow: 0 0 8px #34D399;
+  animation: hz-pulse-dot 1.6s ease-in-out infinite;
+}
+
+@keyframes hz-pulse-dot {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
 /* ===================================================
    CARD TOP BAR: DIRECT INSTAGRAM LINK BADGE
+   (No backdrop-filter blur; solid rgba)
    =================================================== */
 .hz-reels-card-top {
   position: relative;
@@ -338,7 +350,6 @@
   z-index: 5;
 }
 
-/* Direct Instagram Link Badge */
 .hz-reels-ig-link {
   display: inline-flex;
   align-items: center;
@@ -348,8 +359,7 @@
   min-width: 44px;
   min-height: 44px;
   border-radius: 50%;
-  background: rgba(23, 18, 14, 0.82);
-  backdrop-filter: blur(8px);
+  background: rgba(23, 18, 14, 0.92);
   border: 1px solid rgba(184, 154, 100, 0.38);
   color: var(--color-brass, #B89A64);
   text-decoration: none;
@@ -362,8 +372,7 @@
   background: var(--color-brass, #B89A64);
   color: #17120E;
   border-color: var(--color-brass, #B89A64);
-  transform: scale(1.1);
-  box-shadow: 0 6px 18px rgba(184, 154, 100, 0.4);
+  transform: scale(1.08);
 }
 
 .hz-reels-ig-link:focus-visible {
@@ -373,27 +382,28 @@
 
 /* ===================================================
    CARD BOTTOM SCRIM & PILL BUTTON
+   (Solid rgba gradient, no backdrop-filter blur)
    =================================================== */
 .hz-reels-card-bottom {
   position: relative;
-  padding: 24px 16px 16px 16px;
+  padding: 22px 14px 14px 14px;
   background: linear-gradient(
     to top,
-    rgba(14, 10, 8, 0.98) 0%,
-    rgba(14, 10, 8, 0.78) 55%,
+    rgba(14, 10, 8, 0.96) 0%,
+    rgba(14, 10, 8, 0.75) 50%,
     transparent 100%
   );
-  z-index: 3;
+  z-index: 4;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   box-sizing: border-box;
   margin-top: auto;
 }
 
 .hz-reels-card-title {
   font-family: var(--font-serif);
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   font-weight: 400;
   color: var(--color-text-inverse, #F6EFE4);
   margin: 0;
@@ -404,7 +414,7 @@
   text-overflow: ellipsis;
 }
 
-/* "Watch on Instagram ↗" Pill Button */
+/* "Watch on Instagram ↗" Pill Button (Solid rgba) */
 .hz-reels-pill-btn {
   display: inline-flex;
   align-items: center;
@@ -415,8 +425,7 @@
   min-height: 44px;
   padding: 0 16px;
   border-radius: 9999px;
-  background: rgba(31, 26, 22, 0.88);
-  backdrop-filter: blur(8px);
+  background: rgba(31, 26, 22, 0.95);
   border: 1px solid rgba(184, 154, 100, 0.42);
   color: var(--color-text-inverse, #F6EFE4);
   font-family: var(--font-sans);
@@ -427,20 +436,165 @@
   text-decoration: none;
   cursor: pointer;
   box-sizing: border-box;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s ease;
 }
 
 .hz-reels-pill-btn:hover {
   background: var(--color-brass, #B89A64);
   color: #17120E;
   border-color: var(--color-brass, #B89A64);
-  box-shadow: 0 6px 18px rgba(184, 154, 100, 0.35);
   transform: translateY(-1px);
 }
 
 .hz-reels-pill-btn:focus-visible {
   outline: 2px solid var(--color-brass, #B89A64);
   outline-offset: 2px;
+}
+
+/* ===================================================
+   FULLSCREEN REEL VIEWER MODAL
+   ONE <video> element across the entire viewer.
+   backdrop-filter limited to 6px max on this single element.
+   =================================================== */
+.hz-reels-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(14, 10, 8, 0.92);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+  animation: hz-modal-fade 0.25s ease-out;
+}
+
+@keyframes hz-modal-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hz-reels-modal-container {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  aspect-ratio: 9 / 16;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0E0A08;
+  border: 1px solid rgba(184, 154, 100, 0.35);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.hz-reels-modal-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.hz-reels-modal-top {
+  position: relative;
+  z-index: 5;
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to bottom, rgba(14, 10, 8, 0.85) 0%, transparent 100%);
+}
+
+.hz-reels-modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.hz-reels-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hz-reels-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 50%;
+  background: rgba(23, 18, 14, 0.88);
+  border: 1px solid rgba(184, 154, 100, 0.35);
+  color: var(--color-brass, #B89A64);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hz-reels-modal-btn:hover {
+  background: var(--color-brass, #B89A64);
+  color: #17120E;
+  transform: scale(1.06);
+}
+
+/* Nav arrows on sides */
+.hz-reels-modal-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 6;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(23, 18, 14, 0.85);
+  border: 1px solid rgba(184, 154, 100, 0.4);
+  color: var(--color-brass, #B89A64);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hz-reels-modal-nav:hover {
+  background: var(--color-brass, #B89A64);
+  color: #17120E;
+}
+
+.hz-reels-modal-nav--prev {
+  left: 12px;
+}
+
+.hz-reels-modal-nav--next {
+  right: 12px;
+}
+
+.hz-reels-modal-bottom {
+  position: relative;
+  z-index: 5;
+  padding: 24px 18px 18px 18px;
+  background: linear-gradient(to top, rgba(14, 10, 8, 0.95) 0%, rgba(14, 10, 8, 0.7) 60%, transparent 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hz-reels-modal-caption {
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(246, 239, 228, 0.85);
+  margin: 0;
 }
 
 /* ===================================================
@@ -457,19 +611,18 @@
     transform: none !important;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
-    padding: 0 20px;
+    padding: 0 16px;
   }
   .hz-reels-item {
     scroll-snap-align: start;
     transition: none !important;
   }
   .hz-reels-card,
-  .hz-reels-follow-btn,
   .hz-reels-toggle-btn {
     transition: none !important;
     transform: none !important;
   }
-  .hz-reels-spotlight-layer {
-    display: none;
+  .hz-reels-shared-spotlight {
+    display: none !important;
   }
 }

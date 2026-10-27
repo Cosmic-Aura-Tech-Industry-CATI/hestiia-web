@@ -236,7 +236,8 @@
   inset: 0;
   z-index: 1000;
   background-color: rgba(18, 14, 11, 0.95);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -267,7 +268,7 @@
   border-radius: 12px;
   overflow: hidden;
   border: 1px solid rgba(184, 154, 100, 0.3);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75);
   position: relative;
   background-color: #120E0B;
 }
