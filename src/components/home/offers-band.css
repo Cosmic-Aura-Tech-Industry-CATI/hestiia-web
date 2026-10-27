@@ -1,0 +1,152 @@
+/* Offers Band Styles */
+.offers-band {
+  position: relative;
+  overflow: hidden;
+  background-color: #211A15;
+  padding: 2px 0;
+  will-change: clip-path, opacity;
+}
+
+/* Conic Gradient Animated Borders */
+.offers-band__border-top,
+.offers-band__border-bottom {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-brass, #B89A64) 25%,
+    #FFF8E7 50%,
+    var(--color-brass, #B89A64) 75%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: borderShine 6s linear infinite;
+}
+
+.offers-band__border-top {
+  top: 0;
+}
+
+.offers-band__border-bottom {
+  bottom: 0;
+  animation-direction: reverse;
+}
+
+@keyframes borderShine {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes spinCircleText {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.offers-band__inner {
+  padding: 22px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.offers-band__left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Circular Text Badge: Hidden below 640px */
+.offers-circular-badge {
+  flex-shrink: 0;
+}
+
+@media (max-width: 639px) {
+  .offers-circular-badge {
+    display: none !important;
+  }
+}
+
+/* Copy Button with success micro-animation */
+.offers-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm, 4px);
+  border: 1px dashed rgba(184, 154, 100, 0.45);
+  background-color: rgba(31, 26, 22, 0.7);
+  color: var(--color-brass, #B89A64);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.offers-copy-btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 2px;
+}
+
+.offers-copy-btn:active {
+  transform: scale(0.98);
+}
+
+.offers-view-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0 20px;
+  background-color: var(--color-brass, #B89A64);
+  color: #1F1A16;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 12px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.offers-view-btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.offers-view-btn:active {
+  transform: translateY(0);
+}
+
+.offers-view-btn:hover {
+  background-color: var(--color-brass-light, #D4B88A);
+  transform: translateY(-1px);
+}
+
+.offers-view-btn:hover .offers-arrow {
+  transform: translateX(3px);
+}
+
+.offers-arrow {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}

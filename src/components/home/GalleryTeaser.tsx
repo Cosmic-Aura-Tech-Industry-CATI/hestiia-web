@@ -1,166 +1,392 @@
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, Image as ImageIcon } from 'lucide-react'
-import { GALLERY_ITEMS } from '../../content/gallery'
+import { ArrowRight, Image as ImageIcon, X } from 'lucide-react'
+import { GALLERY_ITEMS, type GalleryItem } from '../../content/gallery'
+import Magnet from '../reactbits/Magnet'
+import { AnimatePresence, motion } from 'framer-motion'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import './gallery-teaser.css'
+
+gsap.registerPlugin(ScrollTrigger)
 
 export default function GalleryTeaser() {
-  const previewItems = GALLERY_ITEMS.slice(0, 6)
+  const sectionRef = useRef<HTMLElement>(null)
+  const row1Ref = useRef<HTMLDivElement>(null)
+  const row2Ref = useRef<HTMLDivElement>(null)
+
+  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  // Split gallery into two sets for opposite rows
+  const row1Items = GALLERY_ITEMS.slice(0, 4)
+  const row2Items = GALLERY_ITEMS.slice(4, 8)
+
+  // Track viewport size
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Infinite GSAP marquee with scroll velocity skewX and speed boost
+  useEffect(() => {
+    const row1 = row1Ref.current
+    const row2 = row2Ref.current
+    if (!row1 || !row2) return
+
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (isReduced) return
+
+    // 1. Row 1 moves left
+    const tween1 = gsap.to(row1, {
+      xPercent: -50,
+      ease: 'none',
+      duration: isMobile ? 22 : 28,
+      repeat: -1,
+    })
+
+    // 2. Row 2 moves right
+    gsap.set(row2, { xPercent: -50 })
+    const tween2 = gsap.to(row2, {
+      xPercent: 0,
+      ease: 'none',
+      duration: isMobile ? 24 : 30,
+      repeat: -1,
+    })
+
+    // Scroll velocity tracking
+    let lastScrollY = window.scrollY
+    let scrollTimeout: any = null
+
+    const handleScrollVelocity = () => {
+      const currentScrollY = window.scrollY
+      const delta = currentScrollY - lastScrollY
+      lastScrollY = currentScrollY
+
+      // Calculate normalized velocity and skew
+      const skew = Math.max(-6, Math.min(6, delta * 0.08))
+      const speedMultiplier = 1 + Math.min(3, Math.abs(delta) * 0.04)
+
+      tween1.timeScale(speedMultiplier)
+      tween2.timeScale(speedMultiplier)
+
+      gsap.to([row1, row2], {
+        skewX: skew,
+        duration: 0.2,
+        ease: 'power2.out',
+        overwrite: 'auto',
+      })
+
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        tween1.timeScale(1)
+        tween2.timeScale(1)
+        gsap.to([row1, row2], {
+          skewX: 0,
+          duration: 0.5,
+          ease: 'power3.out',
+        })
+      }, 100)
+    }
+
+    window.addEventListener('scroll', handleScrollVelocity, { passive: true })
+
+    // Pause on hover (desktop)
+    const handleMouseEnter = () => {
+      if (!isMobile) {
+        tween1.pause()
+        tween2.pause()
+      }
+    }
+    const handleMouseLeave = () => {
+      if (!isMobile) {
+        tween1.play()
+        tween2.play()
+      }
+    }
+
+    // Pause on touch (mobile)
+    const handleTouchStart = () => {
+      tween1.pause()
+      tween2.pause()
+    }
+    const handleTouchEnd = () => {
+      tween1.play()
+      tween2.play()
+    }
+
+    const section = sectionRef.current
+    if (section) {
+      section.addEventListener('mouseenter', handleMouseEnter)
+      section.addEventListener('mouseleave', handleMouseLeave)
+      section.addEventListener('touchstart', handleTouchStart, { passive: true })
+      section.addEventListener('touchend', handleTouchEnd, { passive: true })
+    }
+
+    return () => {
+      window.removeEventListener('scroll', handleScrollVelocity)
+      if (section) {
+        section.removeEventListener('mouseenter', handleMouseEnter)
+        section.removeEventListener('mouseleave', handleMouseLeave)
+        section.removeEventListener('touchstart', handleTouchStart)
+        section.removeEventListener('touchend', handleTouchEnd)
+      }
+      tween1.kill()
+      tween2.kill()
+      clearTimeout(scrollTimeout)
+    }
+  }, [isMobile])
+
+  // Clip-path stagger entrance for gallery images
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const cards = section.querySelectorAll('.gallery-card')
+    const header = section.querySelector('.gallery-teaser__header')
+
+    if (isReduced) {
+      gsap.set([header, cards], { opacity: 1, y: 0 })
+      return
+    }
+
+    gsap.set(cards, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0.2 })
+
+    const trigger = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 80%',
+      once: true,
+      onEnter: () => {
+        gsap.to(header, {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+          ease: 'power3.out',
+        })
+        gsap.to(cards, {
+          clipPath: 'inset(0% 0% 0% 0%)',
+          opacity: 1,
+          duration: 0.9,
+          stagger: 0.05,
+          ease: 'power3.out',
+        })
+      },
+    })
+
+    return () => trigger.kill()
+  }, [])
+
+  // Handle card click (Desktop links or Mobile opens lightbox)
+  const handleCardClick = useCallback((e: React.MouseEvent, itemIndex: number) => {
+    if (isMobile) {
+      e.preventDefault()
+      setLightboxIndex(itemIndex)
+    }
+  }, [isMobile])
+
+  const nextLightbox = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex + 1) % GALLERY_ITEMS.length)
+    }
+  }
+
+  const prevLightbox = () => {
+    if (lightboxIndex !== null) {
+      setLightboxIndex((lightboxIndex - 1 + GALLERY_ITEMS.length) % GALLERY_ITEMS.length)
+    }
+  }
+
+  const currentItem: GalleryItem | null = lightboxIndex !== null ? GALLERY_ITEMS[lightboxIndex] : null
+
+  // Fallback handler for missing/broken image paths
+  const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>, src: string) => {
+    if (import.meta.env.DEV) {
+      console.warn(`[Gallery] Failed to load image: ${src}`)
+    }
+    const img = e.currentTarget
+    img.style.display = 'none'
+    const parent = img.parentElement
+    if (parent) {
+      parent.style.backgroundColor = '#1F1A16'
+      parent.style.border = '1px solid rgba(184, 154, 100, 0.4)'
+    }
+  }, [])
 
   return (
     <section
+      ref={sectionRef}
+      id="gallery"
       className="gallery-teaser section section-dark"
-      style={{
-        padding: 'clamp(56px, 8vw, 88px) 0',
-        backgroundColor: '#17120E',
-        borderTop: '1px solid rgba(184, 154, 100, 0.12)',
-        overflow: 'hidden',
-      }}
+      aria-labelledby="gallery-teaser-title"
     >
       <div className="container">
         {/* Header */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '20px',
-            marginBottom: '32px',
-          }}
-        >
+        <div className="gallery-teaser__header">
           <div>
-            <span
-              style={{
-                fontFamily: 'var(--font-sans)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'var(--color-brass)',
-                display: 'block',
-                marginBottom: '10px',
-              }}
-            >
+            <span className="gallery-teaser__eyebrow">
               Sanctuary Ambience & Plates
             </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-serif)',
-                fontSize: 'clamp(28px, 4vw, 42px)',
-                fontWeight: 300,
-                color: 'var(--color-text-inverse)',
-                margin: 0,
-                lineHeight: 1.2,
-              }}
-            >
+            <h2 id="gallery-teaser-title" className="gallery-teaser__title">
               Glimpses into the Atmosphere.
             </h2>
           </div>
 
           <Link
             to="/gallery"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              color: 'var(--color-brass)',
-              fontFamily: 'var(--font-sans)',
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-            }}
+            className="gallery-teaser__header-link"
+            aria-label="View complete restaurant photo gallery"
           >
             <span>View Full Gallery</span>
-            <ArrowRight size={14} />
+            <ArrowRight size={14} className="gallery-header-arrow" />
           </Link>
         </div>
+      </div>
 
-        {/* Horizontal strip of 6 images */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-            gap: '14px',
-            marginBottom: '28px',
-          }}
-        >
-          {previewItems.map(item => (
-            <Link
-              key={item.id}
-              to="/gallery"
-              style={{
-                position: 'relative',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                aspectRatio: '1/1',
-                border: '1px solid rgba(184, 154, 100, 0.2)',
-                display: 'block',
-                backgroundColor: '#120E0B',
-              }}
-              className="gallery-strip-item"
-            >
-              <img
-                src={item.src}
-                alt={item.alt}
-                loading="lazy"
-                decoding="async"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                  transition: 'transform 0.4s ease',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(to top, rgba(18, 14, 11, 0.8) 0%, transparent 60%)',
-                  opacity: 0.8,
-                  display: 'flex',
-                  alignItems: 'flex-end',
-                  padding: '10px',
-                }}
+      {/* Two Opposite Marquee Rows */}
+      <div className="gallery-marquee-wrap">
+        {/* Row 1: Moves Left */}
+        <div ref={row1Ref} className="gallery-marquee-row">
+          <div className="gallery-marquee-track">
+            {[...row1Items, ...row1Items].map((item, idx) => (
+              <Link
+                key={`r1-${item.id}-${idx}`}
+                to="/gallery"
+                className="gallery-card"
+                onClick={(e) => handleCardClick(e, idx % row1Items.length)}
+                aria-label={`View photo of ${item.title}`}
               >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '11px',
-                    color: 'rgba(246, 239, 228, 0.9)',
-                    fontWeight: 500,
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {item.title}
-                </span>
-              </div>
-            </Link>
-          ))}
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width={item.width}
+                  height={item.height}
+                  onError={(e) => handleImageError(e, item.src)}
+                  className="gallery-card__img"
+                />
+                <div className="gallery-card__caption">
+                  <span className="gallery-card__caption-title">{item.title}</span>
+                  <span className="gallery-card__caption-sub">{item.category}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
         </div>
 
-        <div style={{ textAlign: 'center' }}>
+        {/* Row 2: Moves Right */}
+        <div ref={row2Ref} className="gallery-marquee-row">
+          <div className="gallery-marquee-track">
+            {[...row2Items, ...row2Items].map((item, idx) => (
+              <Link
+                key={`r2-${item.id}-${idx}`}
+                to="/gallery"
+                className="gallery-card"
+                onClick={(e) => handleCardClick(e, 4 + (idx % row2Items.length))}
+                aria-label={`View photo of ${item.title}`}
+              >
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  loading={idx === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                  width={item.width}
+                  height={item.height}
+                  onError={(e) => handleImageError(e, item.src)}
+                  className="gallery-card__img"
+                />
+                <div className="gallery-card__caption">
+                  <span className="gallery-card__caption-title">{item.title}</span>
+                  <span className="gallery-card__caption-sub">{item.category}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom CTA with Magnet on Desktop */}
+      <div className="container" style={{ textAlign: 'center' }}>
+        <Magnet disabled={isMobile} strength={0.25} padding={24}>
           <Link
             to="/gallery"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '12px',
-              fontFamily: 'var(--font-sans)',
-              color: 'var(--color-brass)',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              textDecoration: 'none',
-            }}
+            className="gallery-cta-btn"
+            aria-label="Open Interactive Ambience Lightbox"
           >
             <ImageIcon size={14} />
             <span>Open Interactive Ambience Lightbox →</span>
           </Link>
-        </div>
+        </Magnet>
       </div>
+
+      {/* Mobile Swipe Lightbox Modal */}
+      <AnimatePresence>
+        {currentItem && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
+            className="gallery-lightbox-overlay"
+            onClick={() => setLightboxIndex(null)}
+          >
+            {/* Close Button */}
+            <button
+              type="button"
+              className="gallery-lightbox-close"
+              onClick={(e) => {
+                e.stopPropagation()
+                setLightboxIndex(null)
+              }}
+              aria-label="Close photo preview"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Draggable Card for Swipe */}
+            <motion.div
+              layoutId={currentItem.id}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              onDragEnd={(_, info) => {
+                if (info.offset.x < -40) {
+                  nextLightbox()
+                } else if (info.offset.x > 40) {
+                  prevLightbox()
+                }
+              }}
+              className="gallery-lightbox-card"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={currentItem.src}
+                alt={currentItem.alt}
+                width={currentItem.width}
+                height={currentItem.height}
+                decoding="async"
+                onError={(e) => handleImageError(e, currentItem.src)}
+                className="gallery-lightbox-img"
+              />
+              <div className="gallery-lightbox-meta">
+                <div>
+                  <h3 className="gallery-lightbox-title">{currentItem.title}</h3>
+                  <span style={{ fontSize: '12px', color: 'rgba(246, 239, 228, 0.65)' }}>
+                    Swipe left/right to browse
+                  </span>
+                </div>
+                <span className="gallery-lightbox-count">
+                  0{lightboxIndex! + 1} / 0{GALLERY_ITEMS.length}
+                </span>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }

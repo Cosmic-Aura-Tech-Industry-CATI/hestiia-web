@@ -1,0 +1,193 @@
+/* Story Teaser Styles */
+.story-teaser {
+  position: relative;
+  overflow: hidden;
+  background-color: #1F1A16;
+  padding: clamp(48px, 7vw, 96px) 0;
+}
+
+.story-teaser__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 64px);
+  align-items: center;
+  position: relative;
+}
+
+/* Floating gold ornament - desktop only */
+.story-teaser__ornament {
+  position: absolute;
+  top: -24px;
+  right: 10%;
+  width: 48px;
+  height: 48px;
+  color: var(--color-brass, #B89A64);
+  opacity: 0.35;
+  pointer-events: none;
+  animation: ornamentDrift 10s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes ornamentDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(8px, -16px) rotate(6deg);
+  }
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-teaser__ornament {
+    animation: none;
+  }
+}
+
+/* Image column */
+.story-teaser__image-col {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(184, 154, 100, 0.25);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+}
+
+/* Content column */
+.story-teaser__content-col {
+  position: relative;
+}
+
+.story-teaser__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-eyebrow, 12px);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-brass, #B89A64);
+  display: block;
+  margin-bottom: 16px;
+}
+
+.story-teaser__title {
+  font-family: var(--font-serif);
+  font-size: var(--font-size-h2, clamp(2rem, 4vw, 3.25rem));
+  font-weight: 300;
+  color: var(--color-text-inverse, #F6EFE4);
+  margin: 0 0 16px 0;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.story-teaser__body {
+  font-family: var(--font-sans);
+  font-size: var(--font-size-body, 16px);
+  font-weight: 300;
+  line-height: 1.7;
+  color: rgba(246, 239, 228, 0.78);
+  margin-bottom: 32px;
+  text-wrap: pretty;
+}
+
+/* Button & Magnet Wrapper */
+.story-teaser__btn-wrap {
+  display: inline-block;
+}
+
+.story-teaser__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 48px;
+  min-height: 48px;
+  padding: 0 28px;
+  border: 1px solid var(--color-brass, #B89A64);
+  border-radius: var(--radius-sm, 4px);
+  color: var(--color-brass, #B89A64);
+  background-color: transparent;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.story-teaser__btn:focus-visible {
+  outline: 2px solid var(--color-brass, #B89A64);
+  outline-offset: 3px;
+}
+
+.story-teaser__btn:active {
+  transform: translateY(0);
+}
+
+.story-teaser__btn .story-btn__arrow {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+  .story-teaser__btn:hover {
+    background-color: var(--color-brass, #B89A64);
+    color: #1F1A16;
+    transform: translateY(-1px);
+  }
+
+  .story-teaser__btn:hover .story-btn__arrow {
+    transform: translateX(4px);
+  }
+}
+
+@media (max-width: 767px) {
+  .story-teaser__btn {
+    height: 44px;
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 12px;
+  }
+}
+
+/* Mobile layout: image first, shorter distances */
+@media (max-width: 1023px) {
+  .story-teaser {
+    padding: clamp(40px, 6vw, 64px) 0;
+  }
+
+  .story-teaser__grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  /* Image first on mobile */
+  .story-teaser__image-col {
+    order: -1;
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .story-teaser__ornament {
+    display: none;
+  }
+
+  .story-teaser__title {
+    font-size: clamp(24px, 6vw, 32px);
+    margin-bottom: 10px;
+  }
+
+  .story-teaser__body {
+    font-size: 14px;
+    line-height: 1.65;
+    margin-bottom: 22px;
+  }
+}

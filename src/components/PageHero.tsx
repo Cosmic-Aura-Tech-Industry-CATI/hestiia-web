@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
-import BlurText from './reactbits/BlurText'
+import SplitText from './reactbits/SplitText'
+import DrawLine from './reactbits/DrawLine'
 
 interface PageHeroProps {
   eyebrow?: string
@@ -107,10 +108,10 @@ export default function PageHero({
             fontWeight: 300,
             lineHeight: 1.15,
             color: 'var(--color-text-inverse)',
-            margin: '0 0 12px 0',
+            margin: '0 0 10px 0',
           }}
         >
-          <BlurText text={title} delay={40} animateBy="words" direction="top" />
+          <SplitText as="span">{title}</SplitText>
           {accentWord && (
             <span
               style={{
@@ -124,6 +125,14 @@ export default function PageHero({
             </span>
           )}
         </h1>
+
+        <DrawLine
+          color="var(--color-brass, #B89A64)"
+          height="2px"
+          origin="left"
+          duration={0.8}
+          style={{ width: '48px', margin: '8px 0 14px 0' }}
+        />
 
         {/* One-Line Intro */}
         <p

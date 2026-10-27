@@ -1,0 +1,64 @@
+/* Footer Animations & Styles */
+.footer-link-slide {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.footer-link-slide::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-brass, #B89A64);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.footer-link-slide:hover::after {
+  transform: scaleX(1);
+}
+
+.footer-link-slide:hover {
+  color: var(--color-brass-light, #DFC493) !important;
+}
+
+/* Logo slow shine */
+.footer-logo-shine {
+  background: linear-gradient(
+    120deg,
+    rgba(246, 239, 228, 0.9) 0%,
+    rgba(246, 239, 228, 0.9) 35%,
+    rgba(223, 196, 147, 1) 50%,
+    rgba(246, 239, 228, 0.9) 65%,
+    rgba(246, 239, 228, 0.9) 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: footerLogoShine 6s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes footerLogoShine {
+  0% {
+    background-position: 100% 0;
+  }
+  30%, 100% {
+    background-position: -150% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-logo-shine {
+    animation: none;
+    -webkit-text-fill-color: var(--color-text-inverse);
+  }
+  .footer-link-slide::after {
+    display: none;
+  }
+}
