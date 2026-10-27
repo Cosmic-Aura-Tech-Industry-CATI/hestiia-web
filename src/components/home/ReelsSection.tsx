@@ -9,6 +9,7 @@ import { InstagramIcon } from '../icons/InstagramIcon'
 import SplitText from '../reactbits/SplitText'
 import ShinyText from '../reactbits/ShinyText'
 import Magnet from '../reactbits/Magnet'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 
 import './reels-section.css'
 
@@ -199,21 +200,11 @@ export default function ReelsSection() {
   const trackRef = useRef<HTMLDivElement>(null)
   const marqueeTweenRef = useRef<gsap.core.Tween | null>(null)
 
-  const [isDesktop, setIsDesktop] = useState<boolean>(true)
+  const { isDesktop, isMobile, isTouch } = useDeviceMotion()
   const [isUserPaused, setIsUserPaused] = useState<boolean>(() => isReducedMotion())
   const isSectionInViewRef = useRef<boolean>(false)
 
-  // Viewport breakpoint detection
-  useEffect(() => {
-    const checkWidth = () => {
-      setIsDesktop(window.innerWidth >= 1024)
-    }
-    checkWidth()
-    window.addEventListener('resize', checkWidth, { passive: true })
-    return () => window.removeEventListener('resize', checkWidth)
-  }, [])
-
-  // Helper to play all videos in the section (muted)
+  // Helper to play videos in the section (muted)
   const playAllVideos = useCallback(() => {
     if (!sectionRef.current) return
     const videos = sectionRef.current.querySelectorAll<HTMLVideoElement>('video')
@@ -286,11 +277,11 @@ export default function ReelsSection() {
         )
       }
 
-      // 2. Infinite Continuous Marquee Tween: moves seamlessly to -50%
+      // 2. Infinite Continuous Marquee Tween: moves seamlessly to -50% (slower on mobile: ~54s vs 42s)
       const tween = gsap.to(track, {
         xPercent: -50,
         ease: 'none',
-        duration: REELS_LOOP_DURATION,
+        duration: isMobile ? 54 : REELS_LOOP_DURATION,
         repeat: -1,
       })
       marqueeTweenRef.current = tween
@@ -313,7 +304,7 @@ export default function ReelsSection() {
       ctx.revert()
       clearTimeout(fallbackTimer)
     }
-  }, [])
+  }, [isMobile])
 
   // IntersectionObserver: play/pause based on section viewport entry
   useEffect(() => {
@@ -342,6 +333,33 @@ export default function ReelsSection() {
     observer.observe(section)
     return () => observer.disconnect()
   }, [isUserPaused, playAllVideos, pauseAllVideos])
+
+  // Mobile video throttling: only play videos currently visible in mobile viewport (max 2-3)
+  useEffect(() => {
+    if (!isMobile || !sectionRef.current) return
+
+    const cardObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const video = entry.target.querySelector('video')
+          if (!video) return
+          if (entry.isIntersecting && isSectionInViewRef.current && !isUserPaused) {
+            video.muted = true
+            video.defaultMuted = true
+            video.play().catch(() => {})
+          } else {
+            video.pause()
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+
+    const cards = sectionRef.current.querySelectorAll('.hz-reels-item')
+    cards.forEach((card) => cardObserver.observe(card))
+
+    return () => cardObserver.disconnect()
+  }, [isMobile, isUserPaused])
 
   // Handle accessible Pause / Play toggle
   const handleToggleUserPause = () => {
@@ -421,7 +439,7 @@ export default function ReelsSection() {
 
           <div className="hz-reels-header-right">
             {/* Follow on Instagram CTA with Magnet */}
-            <Magnet disabled={!isDesktop} strength={0.25} padding={20}>
+            <Magnet disabled={!isDesktop || isTouch} strength={0.25} padding={20}>
               <a
                 href={instagramProfileUrl}
                 target="_blank"
@@ -435,7 +453,7 @@ export default function ReelsSection() {
             </Magnet>
 
             {/* Accessibility Play / Pause Toggle Button */}
-            <Magnet disabled={!isDesktop} strength={0.25} padding={16}>
+            <Magnet disabled={!isDesktop || isTouch} strength={0.25} padding={16}>
               <button
                 type="button"
                 className="hz-reels-toggle-btn"

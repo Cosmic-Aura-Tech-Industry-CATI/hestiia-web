@@ -53,8 +53,8 @@
 
   /* Containers & Padding - Single global container aligned across all sections */
   --container-max: 1240px;
-  --container-pad: clamp(20px, 4vw, 40px);
-  --header-height: 72px; /* desktop 72px, mobile 64px (set in hero.css) */
+  --container-pad: 32px;
+  --header-height: 72px; /* desktop 72px, mobile 64px */
 
   /* Transitions & Radii */
   --radius-sm: 4px;
@@ -75,3 +75,18 @@
   --z-floating:  90;
   --z-lightbox:  500;
 }
+
+@media (max-width: 1023px) {
+  :root {
+    --container-pad: 24px;
+    --header-height: 64px;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --container-pad: 16px;
+    --header-height: 64px;
+  }
+}
+

@@ -1,0 +1,332 @@
+/* ===================================================
+   HESTIIA RESTAURANT — HOME SECTIONS DESIGN SYSTEM (Phases 1-4)
+   Standardized layout, card system, trust band, and spacing
+   =================================================== */
+
+/* --- 1. Global Home Section Rhythm --- */
+.home-section {
+  padding-block: clamp(56px, 9vw, 120px);
+  position: relative;
+  width: 100%;
+}
+
+.home-container {
+  width: min(1200px, 100% - (2 * var(--gutter, clamp(16px, 5vw, 48px))));
+  margin-inline: auto;
+  position: relative;
+}
+
+.home-section__header {
+  margin-bottom: clamp(24px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.home-section__header--center {
+  text-align: center;
+  align-items: center;
+}
+
+.home-section__header--row {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .home-section__header--row {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+/* --- 2. Universal Card System (Phase 3) --- */
+.card {
+  background-color: var(--color-surface-dark, #261F1A);
+  border-radius: 14px;
+  border: 1px solid rgba(184, 154, 100, 0.18);
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  box-sizing: border-box;
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  position: relative;
+}
+
+@media (min-width: 1024px) {
+  .card {
+    padding: 24px;
+  }
+}
+
+@media (hover: hover) {
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(184, 154, 100, 0.35);
+    box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.card__img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background-color: rgba(31, 26, 22, 0.8);
+  flex-shrink: 0;
+}
+
+.card__img-wrap--wide {
+  aspect-ratio: 16 / 10;
+}
+
+.card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .card:hover .card__img {
+    transform: scale(1.05);
+  }
+}
+
+.card__body {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  padding-top: 18px;
+}
+
+.card__actions {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Scrim for captions over media (Phase 3 item 2) */
+.card__scrim-bottom {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 32px 18px 16px;
+  background: linear-gradient(to top, rgba(15, 11, 8, 0.9) 0%, rgba(15, 11, 8, 0.5) 60%, transparent 100%);
+  color: var(--color-text-inverse, #F6EFE4);
+  font-size: 15px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+/* --- 3. Button Groups (Phase 2) --- */
+.button-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 639px) {
+  .button-group {
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    margin-inline: auto;
+    gap: 12px;
+  }
+  .button-group > * {
+    width: 100%;
+  }
+}
+
+/* --- 4. Section Grid Presets (Phase 4) --- */
+/* Cuisines: 4 cols >= 1200, 2 cols 640-1199, carousel/stacked below */
+.grid-cuisines {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .grid-cuisines {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .grid-cuisines {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+}
+
+/* Signature dishes, Experience, Reviews: 3 cols >= 1024, 2 cols 640-1023 */
+.grid-three-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .grid-three-col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-three-col {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+}
+
+/* Story & Visit: 2 columns >= 900, stacked below */
+.grid-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .grid-two-col {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 56px;
+  }
+}
+
+/* --- 5. Ratings & Trust Band System (Phase 3 item 5) --- */
+.ratings__trust-band {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  background: var(--color-surface-dark, #261F1A);
+  border: 1px solid rgba(184, 154, 100, 0.18);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+@media (min-width: 1024px) {
+  .ratings__trust-band {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 36px;
+  }
+}
+
+.ratings__left-block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .ratings__left-block {
+    align-items: flex-start;
+    text-align: left;
+    max-width: 280px;
+    flex-shrink: 0;
+  }
+}
+
+.ratings__veg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-veg, #2F7D4F);
+  background: rgba(47, 125, 79, 0.12);
+  border: 1px solid rgba(47, 125, 79, 0.28);
+  padding: 6px 14px;
+  border-radius: 9999px;
+}
+
+.ratings__cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 14px;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .ratings__cards-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 16px;
+    width: auto;
+  }
+}
+
+.ratings__chip {
+  min-width: 140px;
+  flex: 1 1 140px;
+  background: rgba(31, 26, 22, 0.7);
+  border: 1px solid rgba(184, 154, 100, 0.2);
+  border-radius: 12px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  transition: border-color 200ms ease, transform 200ms ease, background-color 200ms ease;
+  box-sizing: border-box;
+}
+
+@media (hover: hover) {
+  .ratings__chip:hover {
+    border-color: var(--color-brass, #B89A64);
+    transform: translateY(-2px);
+    background: rgba(40, 32, 26, 0.9);
+  }
+}
+
+.ratings__platform-name {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(246, 239, 228, 0.75);
+  margin-bottom: 6px;
+}
+
+.ratings__score-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--color-text-inverse, #F6EFE4);
+  line-height: 1;
+}
+
+.ratings__count {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: rgba(246, 239, 228, 0.6);
+  margin-top: 4px;
+}

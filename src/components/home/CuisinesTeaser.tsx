@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { CUISINES } from '../../content/cuisines'
 import TiltedCard from '../reactbits/TiltedCard'
 import TapScale from '../reactbits/TapScale'
+import Button from '../ui/Button'
+import SnapCarousel from './SnapCarousel'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './cuisines-teaser.css'
@@ -12,17 +15,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function CuisinesTeaser() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-
-  // Track viewport width
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+  const { isTouch, isMobile } = useDeviceMotion()
 
   // Entrance animation: stagger + rotateX 8 -> 0 from below
   useEffect(() => {
@@ -40,10 +33,14 @@ export default function CuisinesTeaser() {
 
     const mm = gsap.matchMedia()
 
+    const safetyTimer = setTimeout(() => {
+      gsap.set([header, cards], { opacity: 1, y: 0, rotateX: 0, clearProps: 'transform,opacity' })
+    }, 1500)
+
     mm.add(
       {
-        isDesktop: '(min-width: 1024px)',
-        isMobile: '(max-width: 1023px)',
+        isDesktop: '(min-width: 1024px) and (hover: hover)',
+        isMobile: '(max-width: 1023px), (hover: none)',
       },
       (context) => {
         const { isDesktop } = context.conditions as { isDesktop: boolean; isMobile: boolean }
@@ -65,87 +62,99 @@ export default function CuisinesTeaser() {
           cards,
           {
             opacity: 0,
-            y: isDesktop ? 36 : 22,
-            rotateX: isDesktop ? 8 : 4,
+            y: isDesktop ? 36 : 20,
+            rotateX: isDesktop ? 8 : 0,
             transformOrigin: '50% 100%',
             stagger: isDesktop ? 0.1 : 0.06,
             duration: isDesktop ? 0.9 : 0.6,
             ease: 'power3.out',
+            clearProps: 'transform,opacity',
           },
           '-=0.4'
         )
       }
     )
 
-    return () => mm.revert()
+    return () => {
+      clearTimeout(safetyTimer)
+      mm.revert()
+    }
   }, [])
 
   return (
     <section
       ref={sectionRef}
-      className="cuisines-teaser section section-dark section-ambient-glow"
+      className="cuisines-teaser home-section section-dark section-ambient-glow"
       aria-labelledby="cuisines-teaser-title"
     >
-      <div className="container">
+      <div className="home-container">
         {/* Header */}
         <div className="cuisines-teaser__header">
           <div>
-            <span className="cuisines-teaser__eyebrow">
+            <span className="eyebrow cuisines-teaser__eyebrow">
               Culinary Spectrum
             </span>
-            <h2 id="cuisines-teaser-title" className="cuisines-teaser__title">
-              Four Dedicated Culinary Disciplines.
+            <h2 id="cuisines-teaser-title" className="h-section cuisines-teaser__title">
+              Four Dedicated Culinary <em className="accent">Disciplines</em>.
             </h2>
           </div>
 
-          <Link
+          <Button
             to="/cuisines"
-            className="cuisines-teaser__header-link"
+            variant="secondary"
+            size="md"
+            icon={<ArrowRight size={14} />}
+            iconPosition="right"
             aria-label="Explore all four culinary disciplines at Hestiia"
           >
-            <span>Explore All Cuisines</span>
-            <ArrowRight size={14} className="cuisines-header-arrow" aria-hidden="true" />
-          </Link>
+            Explore All Cuisines
+          </Button>
         </div>
 
-        {/* 4 Cards Grid: 4-col desktop, 2-col tablet, 1-col mobile */}
-        <div className="cuisines-teaser__grid">
+        {/* 4 Cards: Desktop 4-col grid, SnapCarousel below 1024px */}
+        <SnapCarousel
+          itemCount={CUISINES.length}
+          ariaLabel="Culinary Disciplines Carousel"
+          desktopWrapperClassName="cuisines-teaser__grid grid-cuisines"
+        >
           {CUISINES.map((item) => {
+            const description = item.shortDescription || item.description
+
             const cardContent = (
               <Link
                 to="/cuisines"
-                className="cuisines-teaser-card"
+                className="cuisines-teaser-card card"
                 aria-label={`${item.title} cuisine: ${item.subtitle}`}
               >
                 {/* 1. Image area on top with 4/3 fixed aspect ratio */}
-                <div className="cuisines-teaser-card__img-wrap">
+                <div className="cuisines-teaser-card__img-wrap card__img-wrap">
                   <img
                     src={item.image}
                     alt={`${item.title} dish at Hestiia Pure Vegetarian Restaurant Kanpur`}
                     loading="lazy"
                     decoding="async"
-                    className="cuisines-teaser-card__img"
+                    className="cuisines-teaser-card__img card__img"
                   />
                   {/* Subtle glare overlay */}
                   <div className="cuisines-teaser-card__glare" aria-hidden="true" />
                 </div>
 
-                {/* 2. Content area BELOW image */}
-                <div className="cuisines-teaser-card__content">
+                {/* 2. Content area BELOW image on solid card surface */}
+                <div className="cuisines-teaser-card__content card__body">
                   <div>
-                    <span className="cuisines-teaser-card__subtitle">
+                    <span className="eyebrow cuisines-teaser-card__subtitle">
                       {item.subtitle}
                     </span>
-                    <h3 className="cuisines-teaser-card__title">
+                    <h3 className="h-card cuisines-teaser-card__title">
                       {item.title}
                     </h3>
                     <p className="cuisines-teaser-card__desc">
-                      {item.description}
+                      {description}
                     </p>
                   </div>
 
                   <div className="cuisines-teaser-card__action">
-                    <span>Explore</span>
+                    <span>Learn more</span>
                     <ArrowRight size={13} className="cuisines-card__action-arrow" aria-hidden="true" />
                   </div>
                 </div>
@@ -158,7 +167,7 @@ export default function CuisinesTeaser() {
                 className="cuisine-teaser-card-wrap"
                 style={{ height: '100%' }}
               >
-                {!isMobile ? (
+                {!isMobile && !isTouch ? (
                   <TiltedCard maxTilt={6} scale={1.02} className="h-full">
                     {cardContent}
                   </TiltedCard>
@@ -170,7 +179,7 @@ export default function CuisinesTeaser() {
               </div>
             )
           })}
-        </div>
+        </SnapCarousel>
       </div>
     </section>
   )

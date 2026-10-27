@@ -197,8 +197,10 @@ export default function Navbar() {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                width: '40px',
-                height: '40px',
+                width: '44px',
+                height: '44px',
+                minWidth: '44px',
+                minHeight: '44px',
                 borderRadius: '50%',
                 backgroundColor: 'rgba(38, 31, 26, 0.6)',
                 border: '1px solid rgba(184, 154, 100, 0.22)',
@@ -273,10 +275,15 @@ export default function Navbar() {
                 background: 'none',
                 border: 'none',
                 color: 'var(--color-text-inverse)',
-                padding: '8px',
-                cursor: 'pointer',
+                width: '44px',
+                height: '44px',
+                minWidth: '44px',
+                minHeight: '44px',
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                padding: 0,
+                cursor: 'pointer',
               }}
             >
               {mobileOpen ? <X size={26} /> : <Menu size={26} />}
@@ -334,7 +341,9 @@ export default function Navbar() {
                 paddingBottom: 'calc(24px + env(safe-area-inset-bottom, 0px))',
                 paddingLeft: '28px',
                 paddingRight: '28px',
+                maxHeight: '100dvh',
                 overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
               }}
             >
               {/* Drawer Top Bar: Brand & Close Button */}
@@ -376,8 +385,10 @@ export default function Navbar() {
                       background: 'rgba(38, 31, 26, 0.8)',
                       border: '1px solid rgba(184, 154, 100, 0.25)',
                       borderRadius: '50%',
-                      width: '38px',
-                      height: '38px',
+                      width: '44px',
+                      height: '44px',
+                      minWidth: '44px',
+                      minHeight: '44px',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -404,7 +415,7 @@ export default function Navbar() {
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: 0.04 * index, duration: 0.28 }}
-                          style={{ marginBottom: '10px' }}
+                          style={{ marginBottom: '8px' }}
                         >
                           <Link
                             to={link.href}
@@ -420,7 +431,8 @@ export default function Navbar() {
                               display: 'flex',
                               alignItems: 'center',
                               justifyContent: 'space-between',
-                              padding: '4px 0',
+                              minHeight: '44px',
+                              padding: '6px 0',
                               transition: 'color 0.2s ease',
                             }}
                           >
@@ -454,6 +466,7 @@ export default function Navbar() {
                       justifyContent: 'center',
                       gap: '6px',
                       padding: '10px 8px',
+                      minHeight: '44px',
                       backgroundColor: 'rgba(38, 31, 26, 0.8)',
                       border: '1px solid rgba(184, 154, 100, 0.25)',
                       color: 'var(--color-text-inverse)',
@@ -479,6 +492,7 @@ export default function Navbar() {
                       justifyContent: 'center',
                       gap: '6px',
                       padding: '10px 8px',
+                      minHeight: '44px',
                       backgroundColor: 'rgba(38, 31, 26, 0.8)',
                       border: '1px solid rgba(184, 154, 100, 0.25)',
                       color: 'var(--color-text-inverse)',
@@ -506,6 +520,7 @@ export default function Navbar() {
                       justifyContent: 'center',
                       gap: '6px',
                       padding: '10px 8px',
+                      minHeight: '44px',
                       backgroundColor: 'rgba(38, 31, 26, 0.8)',
                       border: '1px solid rgba(184, 154, 100, 0.25)',
                       color: 'var(--color-text-inverse)',
@@ -530,6 +545,7 @@ export default function Navbar() {
                       justifyContent: 'center',
                       gap: '6px',
                       padding: '10px 8px',
+                      minHeight: '44px',
                       backgroundColor: 'var(--color-brass)',
                       color: '#1F1A16',
                       borderRadius: '6px',

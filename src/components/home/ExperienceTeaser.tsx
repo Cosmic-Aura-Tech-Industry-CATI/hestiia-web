@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useRef } from 'react'
 import { ArrowRight, Users, Music, HeartHandshake } from 'lucide-react'
 import SpotlightCard from '../reactbits/SpotlightCard'
 import TapScale from '../reactbits/TapScale'
+import Button from '../ui/Button'
+import SnapCarousel from './SnapCarousel'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './experience-teaser.css'
@@ -11,7 +13,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function ExperienceTeaser() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const { isMobile, isTouch } = useDeviceMotion()
 
   const cards = [
     {
@@ -28,7 +30,7 @@ export default function ExperienceTeaser() {
       title: 'Private Dining Space',
       badge: 'Ask us',
       badgeColor: 'var(--color-brass, #B89A64)',
-      description: 'Dedicated private dining area for birthday banquets, intimate anniversaries, and family get-togethers.',
+      description: 'Dedicated private dining area for birthday banquets, intimate anniversaries, and family get-togethers in Shyam Nagar.',
       icon: Users,
       isPulse: true,
     },
@@ -43,17 +45,7 @@ export default function ExperienceTeaser() {
     },
   ]
 
-  // Track viewport size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  // GSAP: Desktop entrance + Mobile sticky stack scaling and glow sweep
+  // GSAP: Desktop entrance + Mobile reveal
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -70,8 +62,18 @@ export default function ExperienceTeaser() {
 
     const mm = gsap.matchMedia()
 
+    const safetyTimer = setTimeout(() => {
+      gsap.set([header, cardWraps, iconBoxes], {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        rotate: 0,
+        clearProps: 'transform,opacity',
+      })
+    }, 1500)
+
     // 1. Desktop: Stagger entrance + icon rotate-settle
-    mm.add('(min-width: 1024px)', () => {
+    mm.add('(min-width: 1024px) and (hover: hover)', () => {
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -112,97 +114,81 @@ export default function ExperienceTeaser() {
         )
     })
 
-    // 2. Mobile: Sticky stack dim/scale effect as each card is overlapped
-    mm.add('(max-width: 1023px)', () => {
-      cardWraps.forEach((wrap, i) => {
-        // Soft glow sweep on viewport enter
-        const glowLayer = wrap.querySelector('.mobile-glow-sweep')
-        ScrollTrigger.create({
-          trigger: wrap,
-          start: 'top 85%',
+    // 2. Mobile: Simple clean one-time reveal
+    mm.add('(max-width: 1023px), (hover: none)', () => {
+      gsap.from([header, cardWraps], {
+        opacity: 0,
+        y: 24,
+        duration: 0.6,
+        ease: 'power3.out',
+        stagger: 0.08,
+        clearProps: 'transform,opacity',
+        scrollTrigger: {
+          trigger: section,
+          start: 'top 88%',
           once: true,
-          onEnter: () => {
-            if (glowLayer) {
-              glowLayer.classList.add('mobile-glow-sweep--active')
-            }
-          },
-        })
-
-        // Scale & dim previous card when the next card slides over it
-        if (i < cardWraps.length - 1) {
-          const nextCard = cardWraps[i + 1]
-          gsap.to(wrap, {
-            scale: 0.94,
-            opacity: 0.65,
-            ease: 'power2.out',
-            scrollTrigger: {
-              trigger: nextCard,
-              start: 'top 65%',
-              end: 'top 25%',
-              scrub: true,
-            },
-          })
-        }
+        },
       })
     })
 
-    return () => mm.revert()
+    return () => {
+      clearTimeout(safetyTimer)
+      mm.revert()
+    }
   }, [])
 
   return (
     <section
       ref={sectionRef}
-      className="experience-teaser section section-dark"
+      className="experience-teaser home-section section-dark section-ambient-glow"
       aria-labelledby="experience-teaser-title"
     >
-      <div className="container">
+      <div className="home-container">
         {/* Header */}
         <div className="experience-teaser__header">
           <div>
-            <span className="experience-teaser__eyebrow">
-              The Hestiia Experience
+            <span className="eyebrow experience-teaser__eyebrow">
+              Atmosphere & Hospitality
             </span>
-            <h2 id="experience-teaser-title" className="experience-teaser__title">
-              Hospitality Beyond the Plate.
+            <h2 id="experience-teaser-title" className="h-section experience-teaser__title">
+              Crafted for Intimate <em className="accent">Gatherings</em>.
             </h2>
           </div>
 
-          <Link
+          <Button
             to="/about#experience"
-            className="experience-teaser__header-link"
-            aria-label="Explore the dining sanctuary experience"
+            variant="secondary"
+            size="md"
+            icon={<ArrowRight size={14} />}
+            iconPosition="right"
+            aria-label="Explore guest experiences and private dining at Hestiia"
           >
-            <span>Explore The Experience</span>
-            <ArrowRight size={14} className="exp-header-arrow" />
-          </Link>
+            Explore Guest Experiences
+          </Button>
         </div>
 
-        {/* 3 Cards: Desktop SpotlightCard vs Mobile Sticky Stacking */}
-        <div className="experience-teaser__cards-grid">
+        {/* 3 Experience Cards: Desktop 3-col grid, SnapCarousel below 1024px */}
+        <SnapCarousel
+          itemCount={cards.length}
+          ariaLabel="Guest Experiences Carousel"
+          desktopWrapperClassName="experience-teaser__cards-grid grid-three-col"
+        >
           {cards.map((card, idx) => {
             const Icon = card.icon
 
             const cardContent = (
-              <div
-                className="experience-card"
-                style={{
-                  height: '100%',
-                }}
-              >
-                {/* Mobile glow sweep layer */}
-                {isMobile && <div className="mobile-glow-sweep" aria-hidden="true" />}
-
+              <div className="experience-card card">
                 <div>
                   <div
                     style={{
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      marginBottom: '18px',
+                      marginBottom: '20px',
                     }}
                   >
                     <div className="exp-card__icon-box">
-                      <Icon size={20} color="var(--color-brass, #B89A64)" />
+                      <Icon size={20} color="var(--color-brass, #B89A64)" aria-hidden="true" />
                     </div>
 
                     <span
@@ -216,24 +202,26 @@ export default function ExperienceTeaser() {
                     </span>
                   </div>
 
-                  <h3 className="exp-card__title">
+                  <h3 className="h-card exp-card__title">
                     {card.title}
                   </h3>
 
-                  <p className="exp-card__desc">
+                  <p className="exp-card__desc body">
                     {card.description}
                   </p>
                 </div>
 
-                <div style={{ marginTop: '24px' }}>
-                  <Link
+                <div className="card__actions" style={{ marginTop: '24px' }}>
+                  <Button
                     to="/about#experience"
-                    className="exp-card__link"
+                    variant="ghost"
+                    size="md"
+                    icon={<ArrowRight size={13} />}
+                    iconPosition="right"
                     aria-label={`Read details about ${card.title}`}
                   >
-                    <span>Read details</span>
-                    <ArrowRight size={12} className="exp-card__arrow" />
-                  </Link>
+                    Read details
+                  </Button>
                 </div>
               </div>
             )
@@ -244,7 +232,7 @@ export default function ExperienceTeaser() {
                 className="experience-card-wrap"
                 style={{ '--card-index': idx } as React.CSSProperties}
               >
-                {!isMobile ? (
+                {!isMobile && !isTouch ? (
                   <SpotlightCard
                     spotlightColor="rgba(184, 154, 100, 0.18)"
                     className="h-full"
@@ -259,7 +247,7 @@ export default function ExperienceTeaser() {
               </div>
             )
           })}
-        </div>
+        </SnapCarousel>
       </div>
     </section>
   )

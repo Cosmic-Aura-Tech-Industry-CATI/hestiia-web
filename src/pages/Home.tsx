@@ -12,12 +12,14 @@ import ReviewsTeaser from '../components/home/ReviewsTeaser'
 import VisitTeaser from '../components/home/VisitTeaser'
 import SectionDivider from '../components/ui/SectionDivider'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import { useScrollRefresh } from '../components/home/useScrollRefresh'
 
 interface HomeProps {
   isReady: boolean
 }
 
 export default function Home({ isReady }: HomeProps) {
+  useScrollRefresh()
   useDocumentMeta(
     'Hestiia Restaurant — Pure Vegetarian Dining, Kanpur',
     'A pure vegetarian culinary sanctuary in Shyam Nagar, Kanpur. Savor authentic North Indian heritage curries, sizzling Indo-Chinese wok dishes, and warm hospitality.'

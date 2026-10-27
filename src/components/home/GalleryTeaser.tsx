@@ -3,7 +3,9 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Image as ImageIcon, X } from 'lucide-react'
 import { GALLERY_ITEMS, type GalleryItem } from '../../content/gallery'
 import Magnet from '../reactbits/Magnet'
+import Button from '../ui/Button'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import './gallery-teaser.css'
@@ -15,24 +17,14 @@ export default function GalleryTeaser() {
   const row1Ref = useRef<HTMLDivElement>(null)
   const row2Ref = useRef<HTMLDivElement>(null)
 
-  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const { isDesktop, isMobile, isTouch } = useDeviceMotion()
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
 
   // Split gallery into two sets for opposite rows
   const row1Items = GALLERY_ITEMS.slice(0, 4)
   const row2Items = GALLERY_ITEMS.slice(4, 8)
 
-  // Track viewport size
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    handleResize()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
-
-  // Infinite GSAP marquee with scroll velocity skewX and speed boost
+  // Infinite GSAP marquee with scroll velocity skewX on desktop
   useEffect(() => {
     const row1 = row1Ref.current
     const row2 = row2Ref.current
@@ -45,7 +37,7 @@ export default function GalleryTeaser() {
     const tween1 = gsap.to(row1, {
       xPercent: -50,
       ease: 'none',
-      duration: isMobile ? 22 : 28,
+      duration: isMobile ? 24 : 28,
       repeat: -1,
     })
 
@@ -54,11 +46,11 @@ export default function GalleryTeaser() {
     const tween2 = gsap.to(row2, {
       xPercent: 0,
       ease: 'none',
-      duration: isMobile ? 24 : 30,
+      duration: isMobile ? 26 : 30,
       repeat: -1,
     })
 
-    // Scroll velocity tracking
+    // Scroll velocity tracking (desktop only)
     let lastScrollY = window.scrollY
     let scrollTimeout: any = null
 
@@ -67,7 +59,6 @@ export default function GalleryTeaser() {
       const delta = currentScrollY - lastScrollY
       lastScrollY = currentScrollY
 
-      // Calculate normalized velocity and skew
       const skew = Math.max(-6, Math.min(6, delta * 0.08))
       const speedMultiplier = 1 + Math.min(3, Math.abs(delta) * 0.04)
 
@@ -93,17 +84,19 @@ export default function GalleryTeaser() {
       }, 100)
     }
 
-    window.addEventListener('scroll', handleScrollVelocity, { passive: true })
+    if (isDesktop && !isTouch) {
+      window.addEventListener('scroll', handleScrollVelocity, { passive: true })
+    }
 
     // Pause on hover (desktop)
     const handleMouseEnter = () => {
-      if (!isMobile) {
+      if (isDesktop && !isTouch) {
         tween1.pause()
         tween2.pause()
       }
     }
     const handleMouseLeave = () => {
-      if (!isMobile) {
+      if (isDesktop && !isTouch) {
         tween1.play()
         tween2.play()
       }
@@ -121,17 +114,23 @@ export default function GalleryTeaser() {
 
     const section = sectionRef.current
     if (section) {
-      section.addEventListener('mouseenter', handleMouseEnter)
-      section.addEventListener('mouseleave', handleMouseLeave)
-      section.addEventListener('touchstart', handleTouchStart, { passive: true })
-      section.addEventListener('touchend', handleTouchEnd, { passive: true })
+      if (isDesktop && !isTouch) {
+        section.addEventListener('mouseenter', handleMouseEnter)
+        section.addEventListener('mouseleave', handleMouseLeave)
+      } else {
+        section.addEventListener('touchstart', handleTouchStart, { passive: true })
+        section.addEventListener('touchend', handleTouchEnd, { passive: true })
+      }
     }
 
     return () => {
-      window.removeEventListener('scroll', handleScrollVelocity)
-      if (section) {
-        section.removeEventListener('mouseenter', handleMouseEnter)
-        section.removeEventListener('mouseleave', handleMouseLeave)
+      if (isDesktop && !isTouch) {
+        window.removeEventListener('scroll', handleScrollVelocity)
+        if (section) {
+          section.removeEventListener('mouseenter', handleMouseEnter)
+          section.removeEventListener('mouseleave', handleMouseLeave)
+        }
+      } else if (section) {
         section.removeEventListener('touchstart', handleTouchStart)
         section.removeEventListener('touchend', handleTouchEnd)
       }
@@ -139,9 +138,9 @@ export default function GalleryTeaser() {
       tween2.kill()
       clearTimeout(scrollTimeout)
     }
-  }, [isMobile])
+  }, [isDesktop, isMobile, isTouch])
 
-  // Clip-path stagger entrance for gallery images
+  // Clip-path stagger entrance for gallery images with 1.5s safety fallback
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -151,17 +150,24 @@ export default function GalleryTeaser() {
     const header = section.querySelector('.gallery-teaser__header')
 
     if (isReduced) {
-      gsap.set([header, cards], { opacity: 1, y: 0 })
+      gsap.set([header, cards], { opacity: 1, y: 0, clipPath: 'none' })
       return
     }
 
     gsap.set(cards, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0.2 })
+
+    // Safety fallback: guarantee cards are visible after 1.5s
+    const safetyTimer = setTimeout(() => {
+      gsap.set(header, { opacity: 1, y: 0 })
+      gsap.set(cards, { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, clearProps: 'clipPath,transform,opacity' })
+    }, 1500)
 
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top 80%',
       once: true,
       onEnter: () => {
+        clearTimeout(safetyTimer)
         gsap.to(header, {
           opacity: 1,
           y: 0,
@@ -174,11 +180,15 @@ export default function GalleryTeaser() {
           duration: 0.9,
           stagger: 0.05,
           ease: 'power3.out',
+          clearProps: 'clipPath',
         })
       },
     })
 
-    return () => trigger.kill()
+    return () => {
+      clearTimeout(safetyTimer)
+      trigger.kill()
+    }
   }, [])
 
   // Handle card click (Desktop links or Mobile opens lightbox)
@@ -224,26 +234,28 @@ export default function GalleryTeaser() {
       className="gallery-teaser section section-dark"
       aria-labelledby="gallery-teaser-title"
     >
-      <div className="container">
+      <div className="home-container">
         {/* Header */}
         <div className="gallery-teaser__header">
           <div>
-            <span className="gallery-teaser__eyebrow">
+            <span className="eyebrow gallery-teaser__eyebrow">
               Sanctuary Ambience & Plates
             </span>
-            <h2 id="gallery-teaser-title" className="gallery-teaser__title">
-              Glimpses into the Atmosphere.
+            <h2 id="gallery-teaser-title" className="h-section gallery-teaser__title">
+              Glimpses into the <em className="accent">Atmosphere</em>.
             </h2>
           </div>
 
-          <Link
+          <Button
             to="/gallery"
-            className="gallery-teaser__header-link"
+            variant="ghost"
+            size="md"
+            icon={<ArrowRight size={14} />}
+            iconPosition="right"
             aria-label="View complete restaurant photo gallery"
           >
-            <span>View Full Gallery</span>
-            <ArrowRight size={14} className="gallery-header-arrow" />
-          </Link>
+            View Full Gallery
+          </Button>
         </div>
       </div>
 
@@ -311,16 +323,18 @@ export default function GalleryTeaser() {
       </div>
 
       {/* Bottom CTA with Magnet on Desktop */}
-      <div className="container" style={{ textAlign: 'center' }}>
-        <Magnet disabled={isMobile} strength={0.25} padding={24}>
-          <Link
+      <div className="home-container" style={{ textAlign: 'center', marginTop: '16px' }}>
+        <Magnet disabled={isTouch || isMobile} strength={0.25} padding={24}>
+          <Button
             to="/gallery"
-            className="gallery-cta-btn"
+            variant="secondary"
+            size="lg"
+            icon={<ImageIcon size={15} />}
+            iconPosition="left"
             aria-label="Open Interactive Ambience Lightbox"
           >
-            <ImageIcon size={14} />
-            <span>Open Interactive Ambience Lightbox →</span>
-          </Link>
+            Open Interactive Ambience Lightbox
+          </Button>
         </Magnet>
       </div>
 

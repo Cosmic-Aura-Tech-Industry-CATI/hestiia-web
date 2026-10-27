@@ -15,6 +15,8 @@ import AutoHideActionBar from '../components/ui/AutoHideActionBar'
 
 if (typeof window !== 'undefined') {
   ;(window as unknown as { ScrollTrigger?: typeof ScrollTrigger }).ScrollTrigger = ScrollTrigger
+  ScrollTrigger.config({ ignoreMobileResize: true })
+  ScrollTrigger.normalizeScroll(false)
 }
 
 export default function MainLayout() {
@@ -31,8 +33,26 @@ export default function MainLayout() {
       ScrollTrigger.refresh()
     }, 120)
 
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh()
+      })
+    }
+
+    let orientationTimer: ReturnType<typeof setTimeout> | null = null
+    const handleOrientationChange = () => {
+      if (orientationTimer) clearTimeout(orientationTimer)
+      orientationTimer = setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 250)
+    }
+
+    window.addEventListener('orientationchange', handleOrientationChange)
+
     return () => {
       clearTimeout(refreshTimer)
+      if (orientationTimer) clearTimeout(orientationTimer)
+      window.removeEventListener('orientationchange', handleOrientationChange)
     }
   }, [location.pathname])
 

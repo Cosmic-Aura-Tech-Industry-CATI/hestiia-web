@@ -2,20 +2,12 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronUp } from 'lucide-react'
 import { smoothScroller } from '../../lib/lenis'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 
 export default function BackToTop() {
   const [isVisible, setIsVisible] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const { isMobile, isTouch } = useDeviceMotion()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -54,13 +46,13 @@ export default function BackToTop() {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.8, y: 16 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          whileHover={{ scale: 1.08 }}
+          whileHover={!isTouch ? { scale: 1.08 } : undefined}
           whileTap={{ scale: 0.94 }}
           aria-label="Scroll back to top of page"
           style={{
             position: 'fixed',
-            bottom: isMobile ? '82px' : '28px',
-            right: isMobile ? '16px' : '28px',
+            bottom: isMobile ? 'calc(82px + env(safe-area-inset-bottom, 0px))' : 'calc(28px + env(safe-area-inset-bottom, 0px))',
+            right: isMobile ? 'calc(16px + env(safe-area-inset-right, 0px))' : 'calc(28px + env(safe-area-inset-right, 0px))',
             zIndex: 89,
             width: '44px',
             height: '44px',

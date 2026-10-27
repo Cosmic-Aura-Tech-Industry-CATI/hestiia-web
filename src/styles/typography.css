@@ -1,0 +1,107 @@
+/* ===================================================
+   HESTIIA RESTAURANT — TYPOGRAPHY SYSTEM (Phase 1)
+   Standardized typography tokens and utility classes
+   =================================================== */
+
+/* 1. Base Headings & Paragraph Rules */
+h1, h2, h3, h4, h5, h6,
+.h-section, .h-card {
+  text-wrap: balance;
+  -webkit-hyphens: none;
+  hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
+}
+
+p, .lead, .body {
+  text-wrap: pretty;
+  -webkit-hyphens: none;
+  hyphens: none;
+}
+
+/* 2. Eyebrow */
+.eyebrow {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 12px;
+  min-font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-brass, #B89A64);
+  line-height: 1.4;
+  display: block;
+}
+
+/* 3. Section Heading */
+.h-section {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(1.9rem, 4.2vw, 3.25rem);
+  line-height: 1.1;
+  font-weight: 500;
+  color: var(--color-text-inverse, #F6EFE4);
+  letter-spacing: -0.01em;
+}
+
+.h-section em.accent,
+.h-section .accent,
+em.accent {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-style: italic;
+  font-weight: inherit;
+  color: var(--color-brass, #B89A64);
+}
+
+/* 4. Card Heading */
+.h-card {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+  line-height: 1.2;
+  font-weight: 500;
+  color: var(--color-text-inverse, #F6EFE4);
+}
+
+/* 5. Lead Paragraph */
+.lead {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: clamp(1rem, 1.3vw, 1.125rem);
+  line-height: 1.7;
+  color: rgba(246, 239, 228, 0.82); /* Meets WCAG AA on dark espresso */
+  max-width: 60ch;
+  font-weight: 400;
+}
+
+/* 6. Body Paragraph */
+.body {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 15px;
+  line-height: 1.65;
+  font-weight: 400;
+  color: rgba(246, 239, 228, 0.82); /* Meets WCAG AA */
+  max-width: 65ch;
+}
+
+@media (min-width: 1024px) {
+  .body {
+    font-size: 16px;
+  }
+}
+
+/* 7. Small Text (14px minimum; no 10px or 11px anywhere) */
+.small {
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(246, 239, 228, 0.75);
+  font-weight: 400;
+}
+
+/* 8. Tabular Numerals / Stat */
+.stat {
+  font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+  font-variant-numeric: tabular-nums;
+  -webkit-font-feature-settings: "tnum" 1;
+  font-feature-settings: "tnum" 1;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-text-inverse, #F6EFE4);
+}

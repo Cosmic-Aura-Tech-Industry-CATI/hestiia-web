@@ -1,0 +1,133 @@
+/* ===================================================
+   HESTIIA RESTAURANT — SNAP CAROUSEL (Phase 5)
+   Native scroll-snap carousel with auto-advance below 1024px
+   =================================================== */
+
+.snap-carousel {
+  position: relative;
+  width: 100%;
+}
+
+/* Mobile & Tablet Track (< 1024px) */
+@media (max-width: 1023px) {
+  .snap-carousel__track {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    touch-action: pan-y pinch-zoom;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-inline: calc((100% - 80%) / 2);
+    padding-block: 8px 16px;
+  }
+
+  .snap-carousel__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Card Sizing inside Track */
+  .snap-carousel__track > * {
+    flex: 0 0 80%;
+    width: 80%;
+    max-width: 400px;
+    scroll-snap-align: center;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .snap-carousel__track {
+    padding-inline: calc((100% - 48%) / 2);
+  }
+
+  .snap-carousel__track > * {
+    flex: 0 0 48%;
+    width: 48%;
+    max-width: 440px;
+  }
+}
+
+/* Desktop Grid (1024px+) */
+@media (min-width: 1024px) {
+  .snap-carousel__track {
+    display: contents; /* Inherits parent grid without creating a scroll container */
+  }
+
+  .snap-carousel__controls {
+    display: none !important;
+  }
+}
+
+/* Dots Indicator & Accessibility Controls */
+.snap-carousel__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 18px;
+  padding-inline: 16px;
+}
+
+.snap-carousel__dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.snap-carousel__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background-color: rgba(184, 154, 100, 0.28);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: width 250ms ease, background-color 250ms ease;
+  min-width: unset;
+  min-height: unset;
+}
+
+.snap-carousel__dot--active {
+  width: 22px;
+  background-color: var(--color-brass, #B89A64);
+}
+
+.snap-carousel__dot:focus-visible {
+  outline: 2px solid var(--color-focus, #1A5FD0);
+  outline-offset: 2px;
+}
+
+.snap-carousel__pause-btn {
+  background: transparent;
+  border: 1px solid rgba(184, 154, 100, 0.25);
+  border-radius: 9999px;
+  color: rgba(246, 239, 228, 0.7);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  cursor: pointer;
+  touch-action: manipulation;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 150ms ease, border-color 150ms ease;
+  min-height: 28px;
+}
+
+.snap-carousel__pause-btn:hover {
+  color: var(--color-brass-light, #D4B88A);
+  border-color: var(--color-brass, #B89A64);
+}
+
+.snap-carousel__pause-btn:focus-visible {
+  outline: 2px solid var(--color-focus, #1A5FD0);
+  outline-offset: 2px;
+}

@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import interiorImg from '../../assets/images/restaurant_interior.jpg'
 import RevealImage from '../reactbits/RevealImage'
@@ -8,27 +6,20 @@ import ScrollReveal from '../reactbits/ScrollReveal'
 import DrawLine from '../reactbits/DrawLine'
 import Magnet from '../reactbits/Magnet'
 import ClickSpark from '../reactbits/ClickSpark'
+import Button from '../ui/Button'
+import { useDeviceMotion } from '../../hooks/useDeviceMotion'
 import './story-teaser.css'
 
 export default function StoryTeaser() {
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const { isTouch, isMobile } = useDeviceMotion()
 
   return (
     <section
-      className="story-teaser section section-dark section-ambient-glow"
+      className="story-teaser home-section section-dark section-ambient-glow"
       aria-labelledby="story-teaser-title"
     >
-      <div className="container">
-        <div className="story-teaser__grid">
+      <div className="home-container">
+        <div className="story-teaser__grid grid-two-col">
           {/* Floating Gold Ornament (Drifting slowly on desktop) */}
           <div className="story-teaser__ornament" aria-hidden="true">
             <svg
@@ -45,7 +36,7 @@ export default function StoryTeaser() {
             </svg>
           </div>
 
-          {/* 1 Photo: RevealImage with clip wipe left-to-right, inner scale settle & desktop parallax */}
+          {/* 1 Photo: RevealImage with clip wipe left-to-right & desktop parallax */}
           <div className="story-teaser__image-col">
             <RevealImage
               src={interiorImg}
@@ -63,21 +54,23 @@ export default function StoryTeaser() {
             </RevealImage>
           </div>
 
-          {/* 60-word text + Title line reveal + DrawLine + ScrollReveal + Magnet/ClickSpark Button */}
+          {/* 60-word text + Title reveal + DrawLine + ScrollReveal + Button */}
           <div className="story-teaser__content-col">
-            <span className="story-teaser__eyebrow">
+            <span className="eyebrow story-teaser__eyebrow">
               Our Philosophy · Kanpur
             </span>
 
             {/* SplitText Line Reveal for Title */}
-            <SplitText
-              as="h2"
-              className="story-teaser__title"
-              delay={0.1}
-              stagger={0.06}
-            >
-              A Sanctuary of Pure Vegetarian Heritage.
-            </SplitText>
+            <div id="story-teaser-title">
+              <SplitText
+                as="h2"
+                className="h-section story-teaser__title"
+                delay={0.1}
+                stagger={0.06}
+              >
+                A Sanctuary of Pure Vegetarian Heritage.
+              </SplitText>
+            </div>
 
             {/* Gold DrawLine under Title */}
             <DrawLine
@@ -88,23 +81,25 @@ export default function StoryTeaser() {
               style={{ width: '68px', margin: '14px 0 20px 0' }}
             />
 
-            {/* Existing ScrollReveal word-by-word (import unchanged) */}
-            <ScrollReveal className="story-teaser__body">
+            {/* ScrollReveal word-by-word with standardized body typography */}
+            <ScrollReveal className="body story-teaser__body">
               Rooted in Shyam Nagar, Hestiia is a certified pure vegetarian dining sanctuary where slow-simmered culinary traditions meet calm hospitality. Our kitchen honors authentic North Indian recipes, wok-tossed Indo-Chinese specialities, and hand-kneaded tandoori breads, crafted purely with cold-pressed oils, rich dairy, and fresh garden herbs for peaceful family feasts.
             </ScrollReveal>
 
-            {/* Button: Magnet on desktop + ClickSpark on click */}
+            {/* Standardized Button with Magnet on desktop + ClickSpark */}
             <div className="story-teaser__btn-wrap">
-              <Magnet disabled={isMobile} strength={0.25} padding={28}>
+              <Magnet disabled={isTouch || isMobile} strength={0.25} padding={28}>
                 <ClickSpark sparkColor="var(--color-brass, #B89A64)" sparkCount={8}>
-                  <Link
+                  <Button
                     to="/about"
-                    className="btn btn-outline story-teaser__btn"
+                    variant="secondary"
+                    size="md"
+                    icon={<ArrowRight size={14} />}
+                    iconPosition="right"
                     aria-label="Read our story about Hestiia pure vegetarian restaurant in Kanpur"
                   >
-                    <span>Read Our Story</span>
-                    <ArrowRight size={14} className="story-btn__arrow" />
-                  </Link>
+                    Read Our Story
+                  </Button>
                 </ClickSpark>
               </Magnet>
             </div>

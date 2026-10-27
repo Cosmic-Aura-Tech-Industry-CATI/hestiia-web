@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import { OFFERS_CONFIG } from '../../content/offers'
 import { ArrowRight, Copy, Check } from 'lucide-react'
+import Button from '../ui/Button'
 import ShinyText from '../reactbits/ShinyText'
 import RotatingText from '../reactbits/RotatingText'
 import CircularText from '../reactbits/CircularText'
@@ -26,21 +26,30 @@ export default function OffersBand() {
 
     gsap.set(section, { clipPath: 'inset(100% 0% 0% 0%)', opacity: 0.3 })
 
+    const safetyTimer = setTimeout(() => {
+      gsap.set(section, { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, clearProps: 'clipPath,opacity' })
+    }, 1500)
+
     const trigger = ScrollTrigger.create({
       trigger: section,
       start: 'top 90%',
       once: true,
       onEnter: () => {
+        clearTimeout(safetyTimer)
         gsap.to(section, {
           clipPath: 'inset(0% 0% 0% 0%)',
           opacity: 1,
           duration: 0.8,
           ease: 'power3.out',
+          clearProps: 'clipPath',
         })
       },
     })
 
-    return () => trigger.kill()
+    return () => {
+      clearTimeout(safetyTimer)
+      trigger.kill()
+    }
   }, [])
 
   // Render only when offers exist, as now
@@ -69,7 +78,7 @@ export default function OffersBand() {
       <div className="offers-band__border-top" aria-hidden="true" />
       <div className="offers-band__border-bottom" aria-hidden="true" />
 
-      <div className="container">
+      <div className="home-container">
         <div className="offers-band__inner">
           <div className="offers-band__left">
             {/* CircularText badge: Hidden below 640px */}
@@ -85,7 +94,7 @@ export default function OffersBand() {
                   speed={3}
                   style={{
                     fontFamily: 'var(--font-sans)',
-                    fontSize: '11px',
+                    fontSize: '12px',
                     fontWeight: 600,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
@@ -99,7 +108,7 @@ export default function OffersBand() {
                   fontFamily: 'var(--font-serif)',
                   fontSize: 'clamp(18px, 2.5vw, 22px)',
                   color: 'var(--color-text-inverse, #F6EFE4)',
-                  fontWeight: 400,
+                  fontWeight: 500,
                   display: 'flex',
                   alignItems: 'baseline',
                   gap: '8px',
@@ -109,7 +118,7 @@ export default function OffersBand() {
                 <RotatingText texts={offerTitles} interval={3200} />
               </div>
 
-              <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: 'rgba(246, 239, 228, 0.75)' }}>
+              <p style={{ margin: '4px 0 0 0', fontSize: '14px', color: 'rgba(246, 239, 228, 0.82)' }}>
                 {primaryOffer.description}
               </p>
             </div>
@@ -151,14 +160,16 @@ export default function OffersBand() {
               </AnimatePresence>
             </button>
 
-            <Link
+            <Button
               to="/offers"
-              className="offers-view-btn"
+              variant="primary"
+              size="md"
+              icon={<ArrowRight size={13} />}
+              iconPosition="right"
               aria-label="View current dining offers"
             >
-              <span>View Offer</span>
-              <ArrowRight size={13} className="offers-arrow" />
-            </Link>
+              View Offer
+            </Button>
           </div>
         </div>
       </div>

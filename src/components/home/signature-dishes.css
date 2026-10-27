@@ -7,9 +7,9 @@
 }
 
 /* ===================================================
-   DESKTOP PINNED SECTION (min-width: 1024px)
+   DESKTOP PINNED SECTION (min-width: 1024px and min-height: 640px)
    =================================================== */
-@media (min-width: 1024px) {
+@media (min-width: 1024px) and (min-height: 640px) and (hover: hover) {
   .signature-dishes-section {
     height: 100vh;
     min-height: 640px;
@@ -26,12 +26,11 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 0 var(--container-pad, clamp(20px, 4vw, 40px));
+    padding: 0 var(--gutter, clamp(16px, 5vw, 48px));
     max-width: var(--container-max, 1240px);
     margin: 0 auto;
   }
 
-  /* Left Column (Stationary) */
   .signature-dishes__left-col {
     display: flex;
     flex-direction: column;
@@ -58,9 +57,8 @@
     width: 340px;
   }
 
-  /* Progress Bar on Desktop */
   .signature-progress {
-    margin-top: 32px;
+    margin-top: 28px;
     width: 100%;
     max-width: 240px;
   }
@@ -85,17 +83,18 @@
 }
 
 /* ===================================================
-   MOBILE / TABLET UNPINNED LAYOUT (max-width: 1023px)
+   UNPINNED / MOBILE / SHORT VIEWPORTS
    =================================================== */
-@media (max-width: 1023px) {
+@media (max-width: 1023px), (max-height: 639px), (hover: none) {
   .signature-dishes-section {
-    padding: clamp(48px, 7vw, 76px) 0;
+    padding: clamp(56px, 9vw, 96px) 0;
   }
 
   .signature-dishes__pinned-layout {
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 32px;
+    padding: 0 var(--gutter, clamp(16px, 5vw, 48px));
   }
 
   .signature-dishes__left-col {
@@ -107,55 +106,32 @@
   }
 
   .signature-dishes__track-container {
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 8px 16px 20px 16px;
-    margin: 0 -16px;
-  }
-
-  .signature-dishes__track-container::-webkit-scrollbar {
-    display: none;
+    overflow: visible;
   }
 
   .signature-dishes__track {
-    display: flex;
-    gap: 16px;
-    width: max-content;
+    display: contents;
   }
 
   .signature-dish-card-wrap {
-    scroll-snap-align: center;
-    flex: 0 0 290px;
-    width: 290px;
-    transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1),
-                opacity 0.3s ease;
-  }
-
-  .signature-dish-card-wrap--center {
-    transform: scale(1);
-    opacity: 1;
-  }
-
-  .signature-dish-card-wrap--neighbor {
-    transform: scale(0.94);
-    opacity: 0.78;
+    width: 100%;
+    height: 100%;
   }
 }
 
 /* ===================================================
-   SHARED DISH CARD STYLING
+   SHARED DISH CARD STYLING (Phase 3 item 4)
    =================================================== */
 .dish-teaser-card {
   position: relative;
-  background-color: rgba(38, 31, 26, 0.75);
-  border-radius: 12px;
+  background-color: rgba(38, 31, 26, 0.85);
+  border-radius: 14px;
   border: 1px solid rgba(184, 154, 100, 0.18);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   height: 100%;
+  box-sizing: border-box;
   transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -167,28 +143,24 @@
   }
 
   .dish-teaser-card:hover .dish-card__img {
-    transform: scale(1.08);
-  }
-
-  .dish-teaser-card:hover .dish-card__price-underline {
-    transform: scaleX(1);
+    transform: scale(1.06);
   }
 }
 
-/* Image Container */
+/* Image on top (fixed aspect ratio, clean, only Popular ribbon / veg dot) */
 .dish-card__img-wrap {
   position: relative;
   width: 100%;
-  padding-top: 64%;
+  aspect-ratio: 16 / 10;
   overflow: hidden;
   background-color: #16120F;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  flex-shrink: 0;
 }
 
 .dish-card__img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 115%;
+  width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -217,20 +189,12 @@
 }
 
 @keyframes vegDotPulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.35);
-    opacity: 0.7;
-  }
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.7; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .veg-mark__dot {
-    animation: none;
-  }
+  .veg-mark__dot { animation: none; }
 }
 
 /* Popular Ribbon */
@@ -238,162 +202,69 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 8px;
-  border-radius: 12px;
-  background-color: rgba(31, 26, 22, 0.88);
-  border: 1px solid rgba(184, 154, 100, 0.35);
-  font-family: var(--font-sans);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--color-brass, #B89A64);
-}
-
-/* Price Badge & Underline */
-.dish-card__price-badge {
-  position: relative;
-  display: inline-block;
   padding: 4px 10px;
-  border-radius: 4px;
+  border-radius: 9999px;
   background-color: rgba(31, 26, 22, 0.92);
   border: 1px solid rgba(184, 154, 100, 0.35);
-  color: var(--color-brass, #B89A64);
   font-family: var(--font-sans);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 700;
+  color: var(--color-brass, #B89A64);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
-.dish-card__price-underline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1.5px;
-  background-color: var(--color-brass, #B89A64);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Card Body */
+/* Card Body: Name, Price, Short Description, Actions pinned to bottom */
 .dish-card__content {
   padding: 20px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
+}
+
+.dish-card__header-row {
+  display: flex;
+  align-items: flex-start;
   justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
 }
 
 .dish-card__name {
+  margin: 0;
+  flex-grow: 1;
+}
+
+.dish-card__price {
   font-family: var(--font-serif);
   font-size: 20px;
-  color: var(--color-text-inverse, #F6EFE4);
-  margin: 0 0 6px 0;
-  line-height: 1.25;
+  font-weight: 700;
+  color: var(--color-brass, #B89A64);
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .dish-card__desc {
   font-family: var(--font-sans);
-  font-size: 13px;
-  line-height: 1.6;
-  color: rgba(246, 239, 228, 0.72);
-  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: rgba(246, 239, 228, 0.75);
+  margin: 0 0 16px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-wrap: pretty;
 }
 
-/* Action Button */
-.dish-card__btn {
-  display: inline-flex;
+.dish-card__actions {
+  margin-top: auto;
+  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  border-radius: var(--radius-sm, 4px);
-  border: 1px solid rgba(184, 154, 100, 0.3);
-  background-color: transparent;
-  color: var(--color-brass, #B89A64);
-  font-family: var(--font-sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
-  cursor: pointer;
-  transition: background-color 0.25s ease,
-              border-color 0.25s ease,
-              color 0.25s ease;
-}
-
-.dish-card__btn:hover {
-  background-color: var(--color-brass, #B89A64);
-  color: #1F1A16;
-  border-color: var(--color-brass, #B89A64);
-}
-
-.dish-card__btn:hover .dish-btn-arrow {
-  transform: translateX(3px);
-}
-
-.dish-btn-arrow {
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.dish-card__btn:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 2px;
-}
-
-/* Full Menu Button */
-.signature-menu-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 48px;
-  min-height: 48px;
-  padding: 0 28px;
-  border: 1px solid var(--color-brass, #B89A64);
-  border-radius: var(--radius-sm, 4px);
-  color: var(--color-brass, #B89A64);
-  background-color: transparent;
-  font-family: var(--font-sans);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  box-sizing: border-box;
-  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.2s ease;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.signature-menu-btn:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 3px;
-}
-
-.signature-menu-btn:active {
-  transform: translateY(0);
-}
-
-.signature-menu-btn:hover {
-  background-color: var(--color-brass, #B89A64);
-  color: #1F1A16;
-  transform: translateY(-1px);
-}
-
-.signature-menu-btn:hover .menu-btn-arrow {
-  transform: translateX(6px);
-}
-
-.menu-btn-arrow {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@media (max-width: 767px) {
-  .signature-menu-btn {
-    height: 44px;
-    min-height: 44px;
-    padding: 0 20px;
-    font-size: 12px;
-  }
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(184, 154, 100, 0.12);
 }

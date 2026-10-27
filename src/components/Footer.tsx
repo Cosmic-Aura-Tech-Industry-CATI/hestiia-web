@@ -59,7 +59,7 @@ export default function Footer() {
         <ScrollFloat text="HESTIIA" />
       </div>
 
-      <div className="container" style={{ paddingBottom: '48px' }}>
+      <div className="home-container" style={{ paddingBottom: '48px' }}>
         <div
           ref={gridRef}
           style={{
@@ -93,9 +93,9 @@ export default function Footer() {
             </Link>
             <p
               style={{
-                fontSize: '13px',
+                fontSize: '14px',
                 lineHeight: 1.7,
-                color: 'rgba(246, 239, 228, 0.65)',
+                color: 'rgba(246, 239, 228, 0.82)',
                 maxWidth: '280px',
                 marginBottom: '16px',
               }}
@@ -107,7 +107,7 @@ export default function Footer() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '8px',
-                fontSize: '11px',
+                fontSize: '12px',
                 fontFamily: 'var(--font-sans)',
                 color: 'var(--color-veg)',
                 fontWeight: 600,
@@ -130,14 +130,9 @@ export default function Footer() {
           {/* 2. Quick Links (All Key Routes) */}
           <div>
             <span
+              className="eyebrow"
               style={{
                 display: 'block',
-                fontSize: '11px',
-                fontFamily: 'var(--font-sans)',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--color-brass)',
                 marginBottom: '16px',
               }}
             >
@@ -209,14 +204,9 @@ export default function Footer() {
           {/* 3. Verified Platform Links */}
           <div>
             <span
+              className="eyebrow"
               style={{
                 display: 'block',
-                fontSize: '11px',
-                fontFamily: 'var(--font-sans)',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--color-brass)',
                 marginBottom: '16px',
               }}
             >
@@ -352,14 +342,9 @@ export default function Footer() {
           {/* 4. Contact (Phone, WhatsApp, Email, Address) */}
           <div>
             <span
+              className="eyebrow"
               style={{
                 display: 'block',
-                fontSize: '11px',
-                fontFamily: 'var(--font-sans)',
-                fontWeight: 600,
-                letterSpacing: '0.15em',
-                textTransform: 'uppercase',
-                color: 'var(--color-brass)',
                 marginBottom: '16px',
               }}
             >
@@ -408,7 +393,7 @@ export default function Footer() {
                 </a>
               </div>
 
-              <p style={{ fontSize: '12px', color: 'rgba(246, 239, 228, 0.45)', margin: '4px 0 0' }}>
+              <p style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.75)', margin: '4px 0 0' }}>
                 {RESTAURANT.hours.displayText} · {RESTAURANT.priceRange}
               </p>
             </div>
@@ -419,31 +404,31 @@ export default function Footer() {
         <div
           style={{
             paddingTop: '24px',
-            borderTop: '1px solid rgba(184, 154, 100, 0.1)',
+            borderTop: '1px solid rgba(184, 154, 100, 0.12)',
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             flexWrap: 'wrap',
             gap: '16px',
-            fontSize: '12px',
-            color: 'rgba(246, 239, 228, 0.5)',
+            fontSize: '13px',
+            color: 'rgba(246, 239, 228, 0.75)',
           }}
         >
           {/* Legal Pages */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/terms" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/terms" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Terms & Conditions
             </Link>
             <span>·</span>
-            <Link to="/privacy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/privacy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Privacy Policy
             </Link>
             <span>·</span>
-            <Link to="/refund-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/refund-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Refund Policy
             </Link>
             <span>·</span>
-            <Link to="/delivery-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.55)', textDecoration: 'none' }}>
+            <Link to="/delivery-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Delivery Policy
             </Link>
           </div>
@@ -493,7 +478,7 @@ export default function Footer() {
         </div>
 
         {/* Copyright notice */}
-        <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '11px', color: 'rgba(246, 239, 228, 0.35)' }}>
+        <div style={{ marginTop: '16px', textAlign: 'center', fontSize: '12px', color: 'rgba(246, 239, 228, 0.7)' }}>
           © {YEAR} Hestiia Restaurant. All rights reserved. · Pure Vegetarian Dining · Shyam Nagar, Kanpur
         </div>
       </div>

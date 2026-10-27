@@ -1,0 +1,141 @@
+/* ===================================================
+   HESTIIA RESTAURANT — BUTTON SYSTEM (Phase 2)
+   Universal accessible, responsive button components
+   =================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-sans, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  border-radius: 9999px;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: background-color 200ms ease, color 200ms ease, border-color 200ms ease, transform 150ms ease, box-shadow 200ms ease;
+  border: 1.5px solid transparent;
+}
+
+/* Sizes: min-height 48px mobile, 44px desktop */
+.btn--md {
+  min-height: 48px;
+  padding: 0 24px;
+}
+
+@media (min-width: 1024px) {
+  .btn--md {
+    min-height: 44px;
+  }
+}
+
+.btn--lg {
+  min-height: 52px;
+  padding: 0 28px;
+  font-size: 14px;
+}
+
+@media (min-width: 1024px) {
+  .btn--lg {
+    min-height: 48px;
+  }
+}
+
+/* Variant 1: Primary (Gold fill, dark text) */
+.btn--primary {
+  background-color: var(--color-brass, #B89A64);
+  color: #140F0C;
+  border-color: var(--color-brass, #B89A64);
+  box-shadow: 0 4px 14px -2px rgba(184, 154, 100, 0.25);
+}
+
+@media (hover: hover) {
+  .btn--primary:hover {
+    background-color: var(--color-brass-light, #D4B88A);
+    border-color: var(--color-brass-light, #D4B88A);
+    color: #0E0A08;
+    box-shadow: 0 6px 20px -2px rgba(184, 154, 100, 0.4);
+    transform: translateY(-1px);
+  }
+}
+
+/* Variant 2: Secondary (Outline brass) */
+.btn--secondary {
+  background-color: transparent;
+  color: var(--color-brass, #B89A64);
+  border-color: var(--color-brass, #B89A64);
+}
+
+@media (hover: hover) {
+  .btn--secondary:hover {
+    background-color: rgba(184, 154, 100, 0.12);
+    border-color: var(--color-brass-light, #D4B88A);
+    color: var(--color-brass-light, #D4B88A);
+    transform: translateY(-1px);
+  }
+}
+
+/* Variant 3: Ghost / Link (Text + arrow, subtle underline) */
+.btn--ghost,
+.btn--link {
+  background-color: transparent;
+  color: var(--color-brass, #B89A64);
+  border-color: transparent;
+  padding: 0 12px;
+  min-height: 44px;
+}
+
+@media (hover: hover) {
+  .btn--ghost:hover,
+  .btn--link:hover {
+    color: var(--color-brass-light, #D4B88A);
+    background-color: rgba(184, 154, 100, 0.08);
+  }
+}
+
+/* States: Active & Focus */
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-focus, #1A5FD0);
+  outline-offset: 3px;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn--full-width {
+  width: 100%;
+}
+
+/* Icon layout */
+.btn__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  flex-shrink: 0;
+  transition: transform 200ms ease;
+}
+
+@media (hover: hover) {
+  .btn:hover .btn__icon--right {
+    transform: translateX(3px);
+  }
+  .btn:hover .btn__icon--left {
+    transform: translateX(-3px);
+  }
+}

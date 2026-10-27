@@ -12,92 +12,50 @@
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 20px;
-  margin-bottom: 36px;
+  margin-bottom: clamp(28px, 4vw, 40px);
 }
 
 .visit-teaser__eyebrow {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-eyebrow, 12px);
-  font-weight: 500;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-brass, #B89A64);
-  display: block;
   margin-bottom: 12px;
 }
 
 .visit-teaser__title {
-  font-family: var(--font-serif);
-  font-size: var(--font-size-h2, clamp(2rem, 4vw, 3.25rem));
-  font-weight: 300;
-  color: var(--color-text-inverse, #F6EFE4);
   margin: 0;
-  line-height: 1.1;
-  text-wrap: balance;
-}
-
-.visit-teaser__header-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  color: var(--color-brass, #B89A64);
-  font-family: var(--font-sans);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: color 0.25s ease;
-}
-
-.visit-teaser__header-link:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 3px;
-}
-
-.visit-teaser__header-link:hover {
-  color: var(--color-brass-light, #D4B88A);
-}
-
-.visit-teaser__header-link:hover .visit-header-arrow {
-  transform: translateX(4px);
-}
-
-.visit-header-arrow {
-  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Main Card */
 .visit-card {
   position: relative;
-  background-color: rgba(38, 31, 26, 0.75);
-  border-radius: 12px;
-  border: 1px solid rgba(184, 154, 100, 0.22);
+  background-color: rgba(38, 31, 26, 0.85);
+  border-radius: 14px;
+  border: 1px solid rgba(184, 154, 100, 0.18);
   padding: clamp(24px, 4vw, 36px);
   max-width: 920px;
+  margin: 0 auto;
   will-change: clip-path, transform, opacity;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  box-sizing: border-box;
 }
 
-/* Open/Closed Live Badge */
+/* Open/Closed Live Badge (min 12px) */
 .visit-live-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 3px 10px;
-  border-radius: 12px;
-  background: rgba(31, 26, 22, 0.85);
+  gap: 8px;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  background: rgba(31, 26, 22, 0.9);
   border: 1px solid rgba(184, 154, 100, 0.25);
   font-family: var(--font-sans);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.04em;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
 }
 
 .visit-live-dot {
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   animation: liveDotPulse 2s ease-in-out infinite;
   will-change: transform, opacity;
@@ -126,11 +84,11 @@
 
 /* Icon Box */
 .visit-icon-box {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   background-color: rgba(184, 154, 100, 0.12);
-  border: 1px solid rgba(184, 154, 100, 0.2);
+  border: 1px solid rgba(184, 154, 100, 0.25);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +103,7 @@
 /* Address & Info Grid */
 .visit-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 28px;
   margin-bottom: 32px;
 }
@@ -164,114 +122,16 @@
   gap: 12px;
 }
 
-.visit-btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 48px;
-  min-height: 48px;
-  padding: 0 24px;
-  background-color: var(--color-brass, #B89A64);
-  color: #1F1A16;
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.visit-btn-primary:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 3px;
-}
-
-.visit-btn-primary:active {
-  transform: translateY(0);
-}
-
-.visit-btn-primary:hover {
-  background-color: var(--color-brass-light, #D4B88A);
-  transform: translateY(-1px);
-}
-
-.visit-btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 48px;
-  min-height: 48px;
-  padding: 0 20px;
-  background-color: rgba(38, 31, 26, 0.8);
-  border: 1px solid rgba(184, 154, 100, 0.25);
-  color: var(--color-text-inverse, #F6EFE4);
-  border-radius: 4px;
-  font-size: 13px;
-  font-family: var(--font-sans);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  white-space: nowrap;
-  box-sizing: border-box;
-  cursor: pointer;
-  transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s ease;
-}
-
-.visit-btn-secondary:focus-visible {
-  outline: 2px solid var(--color-brass, #B89A64);
-  outline-offset: 3px;
-}
-
-.visit-btn-secondary:active {
-  transform: translateY(0);
-}
-
-.visit-btn-secondary:hover {
-  border-color: var(--color-brass, #B89A64);
-  background-color: rgba(48, 39, 33, 0.9);
-  transform: translateY(-1px);
-}
-
-@media (max-width: 767px) {
-  .visit-btn-primary,
-  .visit-btn-secondary {
-    height: 44px;
-    min-height: 44px;
-    padding: 0 16px;
-    font-size: 12px;
+@media (max-width: 639px) {
+  .visit-actions-row {
+    flex-direction: column;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    gap: 12px;
   }
-}
 
-/* Icon wiggle on desktop hover */
-.visit-btn-icon {
-  display: inline-block;
-  transition: transform 0.2s ease;
-  will-change: transform;
-}
-
-@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
-  .visit-btn-primary:hover .visit-btn-icon,
-  .visit-btn-secondary:hover .visit-btn-icon {
-    animation: iconWiggle 0.45s ease-in-out;
-  }
-}
-
-@keyframes iconWiggle {
-  0%, 100% {
-    transform: rotate(0deg);
-  }
-  25% {
-    transform: rotate(-14deg);
-  }
-  75% {
-    transform: rotate(14deg);
+  .visit-actions-row > * {
+    width: 100%;
   }
 }
