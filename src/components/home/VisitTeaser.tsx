@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { MapPin, Clock, Phone, MessageSquare, Navigation, Calendar, ArrowRight } from 'lucide-react'
 import { RESTAURANT } from '../../content/restaurant'
 import Magnet from '../reactbits/Magnet'
@@ -185,7 +187,7 @@ export default function VisitTeaser() {
           </div>
 
           <Link
-            to="/contact"
+            href="/contact"
             className="visit-teaser__header-link"
             aria-label="View full restaurant location, map, and reservation booking details"
           >
@@ -299,7 +301,7 @@ export default function VisitTeaser() {
             <Magnet disabled={isMobile} strength={0.22} padding={18}>
               <TapScale scale={0.96}>
                 <Link
-                  to="/contact"
+                  href="/contact"
                   className="visit-btn-primary"
                   aria-label="Reserve a dining table at Hestiia"
                 >

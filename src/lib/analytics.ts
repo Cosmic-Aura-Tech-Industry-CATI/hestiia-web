@@ -22,7 +22,7 @@ export function track<K extends keyof AnalyticsEventMap>(
     if (typeof window === 'undefined') return
 
     // Dev logging
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.log(`[Analytics Event] ${eventName}:`, params)
     }
 

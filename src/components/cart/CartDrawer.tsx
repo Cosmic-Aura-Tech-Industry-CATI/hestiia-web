@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Plus, Minus, Trash2, ShoppingBag, ArrowRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { useCart } from '../../context/CartContext';
 import { useRestaurant } from '../../context/RestaurantContext';
 
@@ -19,7 +21,7 @@ export const CartDrawer: React.FC = () => {
     totalItemCount,
   } = useCart();
   const { isStoreOpen } = useRestaurant();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <AnimatePresence>
@@ -165,7 +167,7 @@ export const CartDrawer: React.FC = () => {
                   <button
                     onClick={() => {
                       closeCart();
-                      navigate('/menu');
+                      router.push('/menu');
                     }}
                     style={{
                       background: 'none',
@@ -352,7 +354,7 @@ export const CartDrawer: React.FC = () => {
                   <button
                     onClick={() => {
                       closeCart();
-                      navigate('/cart');
+                      router.push('/cart');
                     }}
                     style={{
                       flex: 1,
@@ -373,7 +375,7 @@ export const CartDrawer: React.FC = () => {
                   <button
                     onClick={() => {
                       closeCart();
-                      navigate('/checkout');
+                      router.push('/checkout');
                     }}
                     disabled={!isStoreOpen}
                     style={{

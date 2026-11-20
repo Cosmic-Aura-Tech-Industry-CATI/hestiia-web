@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import interiorImg from '../../assets/images/restaurant_interior.jpg'
 import RevealImage from '../reactbits/RevealImage'
@@ -48,7 +50,7 @@ export default function StoryTeaser() {
           {/* 1 Photo: RevealImage with clip wipe left-to-right, inner scale settle & desktop parallax */}
           <div className="story-teaser__image-col">
             <RevealImage
-              src={interiorImg}
+              src={interiorImg.src}
               alt="Hestiia Restaurant Dining Sanctuary Interior in Shyam Nagar, Kanpur"
               aspectRatio="4/3"
             >
@@ -98,7 +100,7 @@ export default function StoryTeaser() {
               <Magnet disabled={isMobile} strength={0.25} padding={28}>
                 <ClickSpark sparkColor="var(--color-brass, #B89A64)" sparkCount={8}>
                   <Link
-                    to="/about"
+                    href="/about"
                     className="btn btn-outline story-teaser__btn"
                     aria-label="Read our story about Hestiia pure vegetarian restaurant in Kanpur"
                   >

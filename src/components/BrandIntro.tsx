@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -60,7 +62,7 @@ export default function BrandIntro() {
           >
             <img
               ref={imageRef}
-              src={interiorImg}
+              src={interiorImg.src}
               alt="Celebration and dining hall at Hestiia Restaurant in Shyam Nagar, Kanpur"
               loading="lazy"
               style={{ width: '100%', height: '100%', objectFit: 'cover' }}

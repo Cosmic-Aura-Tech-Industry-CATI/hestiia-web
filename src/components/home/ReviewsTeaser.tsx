@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { Star, ExternalLink, ArrowRight } from 'lucide-react'
 import { RATINGS } from '../../content/ratings'
 import { REVIEW_PLATFORMS } from '../../content/testimonials'
@@ -187,7 +189,7 @@ export default function ReviewsTeaser() {
 
           <ClickSpark sparkColor="var(--color-brass, #B89A64)">
             <Link
-              to="/reviews"
+              href="/reviews"
               className="reviews-teaser__header-link"
               aria-label="Read all verified customer reviews"
             >
