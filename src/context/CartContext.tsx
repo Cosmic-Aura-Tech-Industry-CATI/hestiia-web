@@ -5,6 +5,7 @@ import type { CartItem, ApiFoodItem } from '../types/api';
 
 interface CartContextType {
   items: CartItem[];
+  isHydrated: boolean;
   addToCart: (dish: ApiFoodItem | { id: string; name: string; price: number; image?: string; isVeg?: boolean }, quantity?: number, notes?: string) => void;
   removeFromCart: (dishId: string) => void;
   updateQuantity: (dishId: string, quantity: number) => void;
@@ -32,6 +33,7 @@ const TAX_PERCENT = 5; // 5% GST on Restaurant Dining/Takeaway
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [items, setItems] = useState<CartItem[]>([]);
+  const [isHydrated, setIsHydrated] = useState(false);
   const hasHydratedRef = useRef(false);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -48,6 +50,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Storage unavailable
     } finally {
       hasHydratedRef.current = true;
+      setIsHydrated(true);
     }
   }, []);
 
@@ -74,13 +77,15 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
           return updated;
         }
 
+        const dishImage = typeof dish.image === 'string' ? dish.image : (dish.image as any)?.srcSmall || (dish.image as any)?.src || '';
+
         const newItem: CartItem = {
-          id: `item-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          id: `item-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
           dishId: dish.id,
           name: dish.name,
           price: dish.price,
           quantity,
-          image: dish.image,
+          image: dishImage,
           isVeg: (dish as any).isVeg !== false,
           notes,
         };
@@ -119,53 +124,58 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const getItemQuantity = useCallback(
     (dishId: string) => {
-      const found = items.find((i) => i.dishId === dishId);
+      const found = items.find((item) => item.dishId === dishId);
       return found ? found.quantity : 0;
     },
     [items]
   );
 
   const subtotal = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
   }, [items]);
-
-  const totalItemCount = useMemo(() => {
-    return items.reduce((sum, item) => sum + item.quantity, 0);
-  }, [items]);
-
-  const taxAmount = useMemo(() => {
-    return Math.round((subtotal * TAX_PERCENT) / 100);
-  }, [subtotal]);
-
-  // Delivery fee: ₹40 if subtotal > 0 and < ₹500, free delivery over ₹500
-  const deliveryCharge = useMemo(() => {
-    if (subtotal === 0) return 0;
-    return subtotal >= 500 ? 0 : 40;
-  }, [subtotal]);
 
   const discountAmount = useMemo(() => {
     if (discountPercent <= 0) return 0;
     return Math.round((subtotal * discountPercent) / 100);
   }, [subtotal, discountPercent]);
 
-  const grandTotal = useMemo(() => {
-    return Math.max(0, subtotal + taxAmount + deliveryCharge - discountAmount);
-  }, [subtotal, taxAmount, deliveryCharge, discountAmount]);
+  const taxableAmount = Math.max(0, subtotal - discountAmount);
 
-  const applyPromoCode = useCallback((code: string): boolean => {
-    const clean = code.trim().toUpperCase();
-    if (clean === 'HESTIIYA10' || clean === 'WELCOME10') {
-      setPromoCode(clean);
-      setDiscountPercent(10);
-      return true;
-    }
-    if (clean === 'FEAST20') {
-      setPromoCode(clean);
-      setDiscountPercent(20);
-      return true;
-    }
-    return false;
-  }, []);
+  const taxAmount = useMemo(() => {
+    return Math.round((taxableAmount * TAX_PERCENT) / 100);
+  }, [taxableAmount]);
+
+  const deliveryCharge = useMemo(() => {
+    if (subtotal === 0) return 0;
+    return subtotal >= 499 ? 0 : 40; // Free delivery above Rs. 499
+  }, [subtotal]);
+
+  const grandTotal = useMemo(() => {
+    if (subtotal === 0) return 0;
+    return taxableAmount + taxAmount + deliveryCharge;
+  }, [subtotal, taxableAmount, taxAmount, deliveryCharge]);
+
+  const totalItemCount = useMemo(() => {
+    return items.reduce((acc, item) => acc + item.quantity, 0);
+  }, [items]);
+
+  const applyPromoCode = useCallback(
+    (code: string) => {
+      const clean = code.trim().toUpperCase();
+      if (clean === 'WELCOME10') {
+        setPromoCode('WELCOME10');
+        setDiscountPercent(10);
+        return true;
+      }
+      if (clean === 'FEAST20' && subtotal >= 800) {
+        setPromoCode('FEAST20');
+        setDiscountPercent(20);
+        return true;
+      }
+      return false;
+    },
+    [subtotal]
+  );
 
   const removePromoCode = useCallback(() => {
     setPromoCode('');
@@ -176,6 +186,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     <CartContext.Provider
       value={{
         items,
+        isHydrated,
         addToCart,
         removeFromCart,
         updateQuantity,

@@ -1,5 +1,0 @@
-# Hestiia Restaurant Kanpur robots.txt
-User-agent: *
-Allow: /
-
-Sitemap: https://hestiiarestaurant.com/sitemap.xml

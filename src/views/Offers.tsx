@@ -1,15 +1,31 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Tag, Copy, Check, Clock, Sparkles } from 'lucide-react'
 import PageHero from '../components/PageHero'
 import PageClosingCta from '../components/PageClosingCta'
 import { OFFERS_CONFIG } from '../content/offers'
 import { RESTAURANT } from '../content/restaurant'
 import { InstagramIcon } from '../components/icons/InstagramIcon'
+import { promotionsService } from '../services/promotions.service'
+import type { Promotion } from '../types/api'
 
 export default function Offers() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null)
+  const [promotions, setPromotions] = useState<Promotion[]>([])
+
+  useEffect(() => {
+    promotionsService
+      .getPromotions()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setPromotions(data)
+        }
+      })
+      .catch(() => {
+        // Fallback silently
+      })
+  }, [])
 
   const handleCopy = (code: string) => {
     navigator.clipboard.writeText(code)
@@ -19,7 +35,9 @@ export default function Offers() {
     }, 2000)
   }
 
-  const hasActiveOffers = OFFERS_CONFIG.enabled && OFFERS_CONFIG.items.length > 0
+  // Display either dynamic backend promotions or static items
+  const activeItems = promotions.length > 0 ? promotions : OFFERS_CONFIG.items
+  const hasActiveOffers = (OFFERS_CONFIG.enabled && OFFERS_CONFIG.items.length > 0) || promotions.length > 0
 
   return (
     <>
@@ -143,7 +161,7 @@ export default function Offers() {
                 gap: '28px',
               }}
             >
-              {OFFERS_CONFIG.items.map(offer => (
+              {activeItems.map((offer: any) => (
                 <div
                   key={offer.id}
                   style={{
@@ -174,10 +192,10 @@ export default function Offers() {
                     </div>
 
                     <p style={{ fontSize: '14px', lineHeight: 1.7, color: 'rgba(246, 239, 228, 0.8)', margin: '0 0 16px' }}>
-                      {offer.description}
+                      {offer.description || offer.subtitle}
                     </p>
 
-                    {offer.terms && offer.terms.length > 0 && (
+                    {(offer.terms || offer.items) && (offer.terms || offer.items).length > 0 && (
                       <ul
                         style={{
                           paddingLeft: '18px',
@@ -187,7 +205,7 @@ export default function Offers() {
                           color: 'rgba(246, 239, 228, 0.6)',
                         }}
                       >
-                        {offer.terms.map((term, i) => (
+                        {(offer.terms || offer.items).map((term: string, i: number) => (
                           <li key={i}>{term}</li>
                         ))}
                       </ul>
@@ -205,34 +223,50 @@ export default function Offers() {
                       gap: '12px',
                     }}
                   >
-                    {offer.code && (
+                    {(offer.code || offer.badge) && (
                       <button
-                        onClick={() => handleCopy(offer.code!)}
+                        onClick={() => handleCopy(offer.code || offer.badge)}
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '6px',
                           padding: '6px 12px',
-                          borderRadius: '4px',
+                          borderRadius: '6px',
                           backgroundColor: 'rgba(184, 154, 100, 0.15)',
                           border: '1px dashed var(--color-brass)',
-                          color: 'var(--color-brass-light)',
-                          fontFamily: 'monospace',
-                          fontSize: '13px',
+                          color: 'var(--color-brass)',
+                          fontSize: '12px',
                           fontWeight: 600,
                           cursor: 'pointer',
                         }}
                       >
-                        {copiedCode === offer.code ? <Check size={14} color="#4ADE80" /> : <Copy size={14} />}
-                        <span>{copiedCode === offer.code ? 'Copied!' : offer.code}</span>
+                        {copiedCode === (offer.code || offer.badge) ? (
+                          <>
+                            <Check size={12} />
+                            <span>COPIED</span>
+                          </>
+                        ) : (
+                          <>
+                            <Copy size={12} />
+                            <span>{offer.code || offer.badge}</span>
+                          </>
+                        )}
                       </button>
                     )}
 
                     {offer.validTill && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: 'rgba(246, 239, 228, 0.5)' }}>
+                      <span
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontSize: '11px',
+                          color: 'rgba(246, 239, 228, 0.5)',
+                        }}
+                      >
                         <Clock size={12} />
-                        <span>Valid till {offer.validTill}</span>
-                      </div>
+                        Valid till {offer.validTill}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -242,11 +276,10 @@ export default function Offers() {
         </div>
       </section>
 
-      {/* Closing CTA Band */}
       <PageClosingCta
-        title="Dine with Us at"
-        accentWord="Hestiia"
-        subtitle="Enjoy authentic flavours and thoughtful hospitality on your next visit to Shyam Nagar, Kanpur."
+        title="Reserve Your Table for Special"
+        accentWord="Privileges"
+        subtitle="Call directly to plan custom banquets, party catering, or festival dinner reservations."
       />
     </>
   )

@@ -1,12 +1,25 @@
 import type { Metadata } from 'next'
 import RefundPolicyView from '../../views/RefundPolicy'
+import BreadcrumbJsonLd from '../../components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: 'Refund & Cancellation Policy | Hestiia Restaurant',
-  description:
-    'Cancellation and refund guidelines for table reservations and orders at Hestiia Restaurant Kanpur.',
+  title: 'Refund & Cancellation Policy | Hestiia Restaurant Kanpur',
+  description: 'Verified refund and cancellation terms for dining reservations and food orders at Hestiia Restaurant Kanpur.',
+  alternates: {
+    canonical: '/refund-policy',
+  },
 }
 
 export default function RefundPolicyPage() {
-  return <RefundPolicyView />
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Refund Policy', url: '/refund-policy' },
+        ]}
+      />
+      <RefundPolicyView />
+    </>
+  )
 }

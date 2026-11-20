@@ -131,6 +131,9 @@ function ReelCard({ reel, isDesktop, isDuplicate = false }: ReelCardProps) {
             autoPlay
             playsInline
             preload="metadata"
+            width={360}
+            height={640}
+            {...({ loading: 'lazy' } as any)}
             disablePictureInPicture
             controlsList="nodownload noremoteplayback"
             className="hz-reels-video"

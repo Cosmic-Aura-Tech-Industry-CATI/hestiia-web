@@ -1,12 +1,25 @@
 import type { Metadata } from 'next'
 import TermsView from '../../views/Terms'
+import BreadcrumbJsonLd from '../../components/seo/BreadcrumbJsonLd'
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions | Hestiia Restaurant',
-  description:
-    'Terms and conditions governing dining reservations, takeaways, and services at Hestiia Restaurant Kanpur.',
+  title: 'Terms of Service | Hestiia Restaurant Kanpur',
+  description: 'Official dining, online reservation, and website terms of service for Hestiia Restaurant Kanpur.',
+  alternates: {
+    canonical: '/terms',
+  },
 }
 
 export default function TermsPage() {
-  return <TermsView />
+  return (
+    <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', url: '/' },
+          { name: 'Terms of Service', url: '/terms' },
+        ]}
+      />
+      <TermsView />
+    </>
+  )
 }

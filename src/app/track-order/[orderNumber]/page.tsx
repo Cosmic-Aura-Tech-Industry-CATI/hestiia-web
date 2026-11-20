@@ -8,8 +8,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { orderNumber } = await params
   return {
-    title: `Track Order #${orderNumber} | Hestiia`,
+    title: `Track Order #${orderNumber} | Hestiia Restaurant`,
     description: 'Live food order preparation and delivery tracking at Hestiia Restaurant Kanpur.',
+    robots: {
+      index: false,
+      follow: false,
+    },
   }
 }
 

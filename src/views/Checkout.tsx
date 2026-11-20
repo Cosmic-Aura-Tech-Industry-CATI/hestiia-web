@@ -25,7 +25,8 @@ import { ordersService } from '../services/orders.service'
 import type { CreateOrderDto } from '../types/api'
 
 export default function Checkout() {
-  const { items, subtotal, taxAmount, deliveryCharge, discountAmount, grandTotal, promoCode, clearCart } = useCart()
+  const { items, isHydrated, subtotal, taxAmount, deliveryCharge, discountAmount, grandTotal, promoCode, clearCart } = useCart()
+  const [isOrderSubmitted, setIsOrderSubmitted] = useState(false)
   const { isStoreOpen } = useRestaurant()
   const router = useRouter()
 
@@ -48,10 +49,10 @@ export default function Checkout() {
 
   // Redirect if cart is empty
   useEffect(() => {
-    if (items.length === 0 && !isUpiModalOpen) {
+    if (isHydrated && items.length === 0 && !isUpiModalOpen && !isOrderSubmitted) {
       router.push('/menu')
     }
-  }, [items, router, isUpiModalOpen])
+  }, [items, isHydrated, router, isUpiModalOpen, isOrderSubmitted])
 
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -102,6 +103,7 @@ export default function Checkout() {
           // storage error ignored
         }
 
+        setIsOrderSubmitted(true)
         clearCart()
 
         if (formData.paymentMethod === 'upi') {

@@ -1,15 +1,21 @@
 'use client'
 
+import { useState } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import PageHero from '../components/PageHero'
 import PageClosingCta from '../components/PageClosingCta'
 import { DISHES, MENU_CATEGORIES } from '../content/menu'
-import { Sparkles, ArrowLeft, ShieldCheck } from 'lucide-react'
+import { Sparkles, ArrowLeft, ShieldCheck, Plus, Minus, ShoppingBag, Check } from 'lucide-react'
+import { useCart } from '../context/CartContext'
 
 export default function DishDetail() {
   const params = useParams<{ slug?: string }>()
   const slug = Array.isArray(params?.slug) ? params.slug[0] : params?.slug
+
+  const { addToCart, getItemQuantity, openCart } = useCart()
+  const [selectedQty, setSelectedQty] = useState<number>(1)
+  const [justAdded, setJustAdded] = useState<boolean>(false)
 
   const dish = DISHES.find(d => d.slug === slug || d.id === slug)
   const category = dish ? MENU_CATEGORIES.find(c => c.id === dish.categoryId) : null
@@ -52,8 +58,24 @@ export default function DishDetail() {
     )
   }
 
+  const currentInCart = getItemQuantity(dish.id)
   const imageSrc = dish.image?.src || category?.fallbackImage.src
   const imageSrcSmall = dish.image?.srcSmall || category?.fallbackImage.srcSmall
+
+  const handleAddToCart = () => {
+    addToCart(
+      {
+        id: dish.id,
+        name: dish.name,
+        price: dish.price,
+        image: imageSrcSmall,
+        isVeg: true,
+      },
+      selectedQty
+    )
+    setJustAdded(true)
+    setTimeout(() => setJustAdded(false), 2200)
+  }
 
   return (
     <>
@@ -76,6 +98,7 @@ export default function DishDetail() {
             gap: '40px',
             alignItems: 'start',
             maxWidth: '960px',
+            margin: '0 auto',
           }}
         >
           {/* Dish Image */}
@@ -169,40 +192,197 @@ export default function DishDetail() {
               {dish.detail?.story || dish.description}
             </p>
 
+            {/* Ingredients & Details */}
+            {dish.detail?.ingredients && dish.detail.ingredients.length > 0 && (
+              <div
+                style={{
+                  padding: '16px',
+                  borderRadius: '8px',
+                  backgroundColor: 'rgba(31, 26, 22, 0.6)',
+                  border: '1px solid rgba(184, 154, 100, 0.15)',
+                  fontSize: '13px',
+                }}
+              >
+                <strong style={{ color: 'var(--color-brass)', display: 'block', marginBottom: '6px' }}>
+                  Key Fresh Ingredients:
+                </strong>
+                <span style={{ color: 'rgba(246, 239, 228, 0.8)' }}>
+                  {dish.detail.ingredients.join(', ')}
+                </span>
+              </div>
+            )}
+
             {dish.detail?.pairsWith && dish.detail.pairsWith.length > 0 && (
               <div
                 style={{
-                  paddingTop: '16px',
-                  borderTop: '1px solid rgba(184, 154, 100, 0.15)',
+                  paddingTop: '8px',
                   fontSize: '13px',
                   color: 'rgba(196, 180, 154, 0.9)',
                 }}
               >
-                <strong style={{ color: 'var(--color-brass)' }}>Pairs With: </strong>
+                <strong style={{ color: 'var(--color-brass)' }}>Pairs Perfectly With: </strong>
                 <span>{dish.detail.pairsWith.join(', ')}</span>
               </div>
             )}
 
-            <div style={{ paddingTop: '16px' }}>
+            {/* Interactive Ordering Panel */}
+            <div
+              style={{
+                marginTop: '12px',
+                padding: '20px',
+                borderRadius: '12px',
+                backgroundColor: 'rgba(38, 31, 26, 0.9)',
+                border: '1px solid rgba(184, 154, 100, 0.3)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '16px', flexWrap: 'wrap' }}>
+                {/* Quantity Controls */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)' }}>Quantity:</span>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      borderRadius: '6px',
+                      border: '1px solid rgba(184, 154, 100, 0.35)',
+                      backgroundColor: '#1F1A16',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <button
+                      type="button"
+                      aria-label="Decrease quantity"
+                      onClick={() => setSelectedQty(Math.max(1, selectedQty - 1))}
+                      style={{
+                        padding: '6px 12px',
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--color-brass)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Minus size={14} />
+                    </button>
+                    <span
+                      style={{
+                        padding: '0 8px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: 'var(--color-text-inverse)',
+                        minWidth: '24px',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {selectedQty}
+                    </span>
+                    <button
+                      type="button"
+                      aria-label="Increase quantity"
+                      onClick={() => setSelectedQty(selectedQty + 1)}
+                      style={{
+                        padding: '6px 12px',
+                        background: 'none',
+                        border: 'none',
+                        color: 'var(--color-brass)',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <Plus size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subtotal Display */}
+                <span style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-brass-light)' }}>
+                  Total: ₹{dish.price * selectedQty}
+                </span>
+              </div>
+
+              {/* Add to Cart Button */}
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                <button
+                  type="button"
+                  onClick={handleAddToCart}
+                  style={{
+                    flex: 1,
+                    minWidth: '200px',
+                    padding: '14px 24px',
+                    backgroundColor: justAdded ? '#2F7D4F' : 'var(--color-brass)',
+                    color: justAdded ? '#FFFFFF' : '#1F1A16',
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.06em',
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    transition: 'background-color 0.25s ease, transform 0.15s ease',
+                  }}
+                >
+                  {justAdded ? (
+                    <>
+                      <Check size={16} />
+                      <span>Added to Dining Cart!</span>
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingBag size={16} />
+                      <span>Add to Order · ₹{dish.price * selectedQty}</span>
+                    </>
+                  )}
+                </button>
+
+                {currentInCart > 0 && (
+                  <button
+                    type="button"
+                    onClick={openCart}
+                    style={{
+                      padding: '14px 20px',
+                      backgroundColor: 'transparent',
+                      color: 'var(--color-brass)',
+                      border: '1px solid rgba(184, 154, 100, 0.4)',
+                      borderRadius: '6px',
+                      fontSize: '13px',
+                      fontWeight: 600,
+                      cursor: 'pointer',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                    }}
+                  >
+                    <span>View Cart ({currentInCart})</span>
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Back link */}
+            <div style={{ paddingTop: '8px' }}>
               <Link
                 href="/menu"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '8px',
-                  padding: '12px 24px',
-                  backgroundColor: 'var(--color-brass)',
-                  color: '#1F1A16',
-                  borderRadius: '4px',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
+                  color: 'rgba(246, 239, 228, 0.7)',
+                  fontSize: '13px',
                   textDecoration: 'none',
+                  transition: 'color 0.2s',
                 }}
               >
                 <ArrowLeft size={14} />
-                <span>Explore Full Menu</span>
+                <span>Return to 193-Dish Menu</span>
               </Link>
             </div>
           </div>
