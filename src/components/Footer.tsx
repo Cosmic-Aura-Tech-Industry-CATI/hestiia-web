@@ -1,5 +1,7 @@
+'use client'
+
 import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ExternalLink, Phone, MessageSquare, Mail, MapPin } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -74,7 +76,7 @@ export default function Footer() {
           {/* 1. Brand Descriptor & Pure Veg Certificate */}
           <div>
             <Link
-              to="/"
+              href="/"
               className="footer-logo-shine"
               style={{
                 fontFamily: 'var(--font-serif)',
@@ -149,52 +151,52 @@ export default function Footer() {
               }}
             >
               <li>
-                <Link to="/about" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/about" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Our Story
                 </Link>
               </li>
               <li>
-                <Link to="/cuisines" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/cuisines" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Cuisines & Specialties
                 </Link>
               </li>
               <li>
-                <Link to="/menu" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/menu" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Full Menu (193 Dishes)
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/cart" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Online Ordering Cart
                 </Link>
               </li>
               <li>
-                <Link to="/gallery" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/gallery" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Ambience & Food Gallery
                 </Link>
               </li>
               <li>
-                <Link to="/about#experience" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/about#experience" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Dining Experience
                 </Link>
               </li>
               <li>
-                <Link to="/offers" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/offers" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Exclusive Offers
                 </Link>
               </li>
               <li>
-                <Link to="/reviews" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/reviews" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Guest Reviews
                 </Link>
               </li>
               <li>
-                <Link to="/party" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/party" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Parties & Private Dining
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
+                <Link href="/contact" className="footer-link-slide" style={{ fontSize: '13px', color: 'rgba(246, 239, 228, 0.7)', textDecoration: 'none' }}>
                   Contact & Location
                 </Link>
               </li>
@@ -416,19 +418,19 @@ export default function Footer() {
         >
           {/* Legal Pages */}
           <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-            <Link to="/terms" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
+            <Link href="/terms" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Terms & Conditions
             </Link>
             <span>·</span>
-            <Link to="/privacy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
+            <Link href="/privacy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Privacy Policy
             </Link>
             <span>·</span>
-            <Link to="/refund-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
+            <Link href="/refund-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Refund Policy
             </Link>
             <span>·</span>
-            <Link to="/delivery-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
+            <Link href="/delivery-policy" className="footer-link-slide" style={{ color: 'rgba(246, 239, 228, 0.75)', textDecoration: 'none' }}>
               Delivery Policy
             </Link>
           </div>

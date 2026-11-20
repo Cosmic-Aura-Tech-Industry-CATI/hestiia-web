@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { CUISINES } from '../../content/cuisines'
 import TiltedCard from '../reactbits/TiltedCard'
@@ -122,7 +124,7 @@ export default function CuisinesTeaser() {
 
             const cardContent = (
               <Link
-                to="/cuisines"
+                href="/cuisines"
                 className="cuisines-teaser-card card"
                 aria-label={`${item.title} cuisine: ${item.subtitle}`}
               >

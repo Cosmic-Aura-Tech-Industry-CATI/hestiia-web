@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { RestaurantSettings } from '../types/api';
 import { settingsService } from '../services/settings.service';

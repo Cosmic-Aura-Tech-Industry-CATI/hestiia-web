@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight, Image as ImageIcon, X } from 'lucide-react'
 import { GALLERY_ITEMS, type GalleryItem } from '../../content/gallery'
 import Magnet from '../reactbits/Magnet'
@@ -215,7 +217,7 @@ export default function GalleryTeaser() {
 
   // Fallback handler for missing/broken image paths
   const handleImageError = useCallback((e: React.SyntheticEvent<HTMLImageElement, Event>, src: string) => {
-    if (import.meta.env.DEV) {
+    if (process.env.NODE_ENV === 'development') {
       console.warn(`[Gallery] Failed to load image: ${src}`)
     }
     const img = e.currentTarget
@@ -267,7 +269,7 @@ export default function GalleryTeaser() {
             {[...row1Items, ...row1Items].map((item, idx) => (
               <Link
                 key={`r1-${item.id}-${idx}`}
-                to="/gallery"
+                href="/gallery"
                 className="gallery-card"
                 onClick={(e) => handleCardClick(e, idx % row1Items.length)}
                 aria-label={`View photo of ${item.title}`}
@@ -297,7 +299,7 @@ export default function GalleryTeaser() {
             {[...row2Items, ...row2Items].map((item, idx) => (
               <Link
                 key={`r2-${item.id}-${idx}`}
-                to="/gallery"
+                href="/gallery"
                 className="gallery-card"
                 onClick={(e) => handleCardClick(e, 4 + (idx % row2Items.length))}
                 aria-label={`View photo of ${item.title}`}

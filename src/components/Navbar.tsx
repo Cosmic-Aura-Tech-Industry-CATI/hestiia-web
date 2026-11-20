@@ -1,5 +1,8 @@
+'use client'
+
 import { useState, useEffect, useRef } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Menu, X, ArrowUpRight, Phone, MessageSquare, Navigation, Calendar, ShoppingBag } from 'lucide-react'
 import Magnet from './reactbits/Magnet'
@@ -12,7 +15,7 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { totalItemCount, openCart } = useCart()
 
-  const location = useLocation()
+  const pathname = usePathname()
   const drawerRef = useRef<HTMLDivElement>(null)
   const firstFocusableRef = useRef<HTMLButtonElement>(null)
 
@@ -28,15 +31,9 @@ export default function Navbar() {
   }, [])
 
   // Close mobile drawer on route change
-  const currentPath = location.pathname + location.hash
-  const [prevPath, setPrevPath] = useState(currentPath)
-
-  if (prevPath !== currentPath) {
-    setPrevPath(currentPath)
-    if (mobileOpen) {
-      setMobileOpen(false)
-    }
-  }
+  useEffect(() => {
+    setMobileOpen(false)
+  }, [pathname])
 
   // Handle lock scroll and focus trap for mobile drawer
   useEffect(() => {
@@ -111,7 +108,7 @@ export default function Navbar() {
         >
           {/* Logo */}
           <Link
-            to="/"
+            href="/"
             className="navbar__logo"
             aria-label="Hestiia Restaurant Home"
             style={{
@@ -133,20 +130,20 @@ export default function Navbar() {
             />
           </Link>
 
-          {/* Desktop Nav Links (Route-based with NavLink) */}
+          {/* Desktop Nav Links (Route-based with Next Link) */}
           <nav className="navbar__links" aria-label="Primary Navigation">
             <ul style={{ display: 'flex', alignItems: 'center', gap: '26px', listStyle: 'none', margin: 0, padding: 0 }}>
               {NAV_LINKS.map(link => {
                 // Menu is active on /menu and /menu/*
                 const isActive =
                   link.href === '/menu'
-                    ? location.pathname === '/menu' || location.pathname.startsWith('/menu/')
-                    : location.pathname === link.href
+                    ? pathname === '/menu' || pathname.startsWith('/menu/')
+                    : pathname === link.href
 
                 return (
                   <li key={link.id}>
-                    <NavLink
-                      to={link.href}
+                    <Link
+                      href={link.href}
                       className={isActive ? 'navbar__link navbar__link--active' : 'navbar__link'}
                       style={{
                         position: 'relative',
@@ -174,7 +171,7 @@ export default function Navbar() {
                           }}
                         />
                       )}
-                    </NavLink>
+                    </Link>
                   </li>
                 )
               })}
@@ -236,7 +233,7 @@ export default function Navbar() {
             <div className="navbar__desktop-cta" style={{ display: 'flex', alignItems: 'center' }}>
               <Magnet strength={0.25} padding={30}>
                 <Link
-                  to="/contact#reserve-form"
+                  href="/contact#reserve-form"
                   className="btn btn-primary"
                   id="nav-reserve-btn"
                   style={{
@@ -359,7 +356,7 @@ export default function Navbar() {
                   }}
                 >
                   <Link
-                    to="/"
+                    href="/"
                     onClick={() => setMobileOpen(false)}
                     aria-label="Hestiia Restaurant Home"
                     style={{ textDecoration: 'none', display: 'flex', alignItems: 'center' }}
@@ -406,8 +403,8 @@ export default function Navbar() {
                     {MOBILE_NAV_LINKS.map((link, index) => {
                       const isActive =
                         link.href === '/menu'
-                          ? location.pathname === '/menu' || location.pathname.startsWith('/menu/')
-                          : location.pathname === link.href
+                          ? pathname === '/menu' || pathname.startsWith('/menu/')
+                          : pathname === link.href
 
                       return (
                         <motion.li
@@ -418,7 +415,7 @@ export default function Navbar() {
                           style={{ marginBottom: '8px' }}
                         >
                           <Link
-                            to={link.href}
+                            href={link.href}
                             onClick={() => setMobileOpen(false)}
                             style={{
                               fontFamily: 'var(--font-serif)',
@@ -537,7 +534,7 @@ export default function Navbar() {
 
                   {/* Reserve Action (Routes to /contact) */}
                   <Link
-                    to="/contact"
+                    href="/contact"
                     onClick={() => setMobileOpen(false)}
                     style={{
                       display: 'flex',

@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
 import { OFFERS_CONFIG } from '../../content/offers'
 import { ArrowRight, Copy, Check } from 'lucide-react'

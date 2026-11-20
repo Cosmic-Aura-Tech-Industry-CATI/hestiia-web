@@ -1,4 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
 import { MapPin, Clock, Phone, MessageSquare, Navigation, Calendar, ArrowRight } from 'lucide-react'
 import { RESTAURANT } from '../../content/restaurant'
 import Magnet from '../reactbits/Magnet'

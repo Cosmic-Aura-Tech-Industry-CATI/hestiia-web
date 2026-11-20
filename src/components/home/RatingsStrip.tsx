@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import { RATINGS } from '../../content/ratings'
 import { Star, ShieldCheck, MapPin, ArrowRight, ExternalLink } from 'lucide-react'

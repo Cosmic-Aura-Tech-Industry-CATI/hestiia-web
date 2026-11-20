@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import { Phone, MessageSquare, Calendar } from 'lucide-react'
 import { RESTAURANT } from '../content/restaurant'
 import SplitText from './reactbits/SplitText'
@@ -93,7 +95,7 @@ export default function PageClosingCta({
           <Magnet strength={0.25} padding={20}>
             <ClickSpark sparkColor="var(--color-brass)">
               <Link
-                to="/contact"
+                href="/contact"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',

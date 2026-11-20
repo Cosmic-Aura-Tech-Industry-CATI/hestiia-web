@@ -1,5 +1,7 @@
+'use client'
+
 import React from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import './button.css'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'link'
@@ -61,32 +63,37 @@ export default function Button({
     </>
   )
 
-  // 1. React Router Internal Link
-  if (to && !disabled) {
+  const destination = href || to
+
+  // 1. Link (Internal or External)
+  if (destination && !disabled) {
+    const isExternal =
+      destination.startsWith('http') ||
+      destination.startsWith('tel:') ||
+      destination.startsWith('mailto:')
+
+    if (isExternal) {
+      return (
+        <a
+          href={destination}
+          className={classNames}
+          target={target || '_blank'}
+          rel={rel || 'noopener noreferrer'}
+          {...(props as Record<string, unknown>)}
+        >
+          {content}
+        </a>
+      )
+    }
+
     return (
-      <Link to={to} className={classNames} {...(props as Record<string, unknown>)}>
+      <Link href={destination} className={classNames} {...(props as Record<string, unknown>)}>
         {content}
       </Link>
     )
   }
 
-  // 2. External Anchor Link
-  if (href && !disabled) {
-    const isExternal = href.startsWith('http') || href.startsWith('tel:') || href.startsWith('mailto:')
-    return (
-      <a
-        href={href}
-        className={classNames}
-        target={target || (isExternal && href.startsWith('http') ? '_blank' : undefined)}
-        rel={rel || (isExternal && href.startsWith('http') ? 'noopener noreferrer' : undefined)}
-        {...(props as Record<string, unknown>)}
-      >
-        {content}
-      </a>
-    )
-  }
-
-  // 3. Standard Button
+  // 2. Standard Button
   return (
     <button type={type} className={classNames} disabled={disabled} {...props}>
       {content}

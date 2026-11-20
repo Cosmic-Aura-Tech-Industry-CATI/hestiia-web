@@ -1,4 +1,7 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 import { Star, ExternalLink, ArrowRight } from 'lucide-react'
 import { RATINGS } from '../../content/ratings'
 import { REVIEW_PLATFORMS } from '../../content/testimonials'

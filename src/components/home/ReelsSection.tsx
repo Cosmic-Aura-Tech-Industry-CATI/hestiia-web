@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { Play, Pause, X, ChevronLeft, ChevronRight, Volume2, VolumeX, ArrowUpRight } from 'lucide-react'
 import gsap from 'gsap'

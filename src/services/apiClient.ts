@@ -16,7 +16,7 @@ export class ApiError extends Error {
 }
 
 export class ApiClient {
-  private static baseURL = (import.meta as any).env?.VITE_API_URL || '/api';
+  private static baseURL = process.env.NEXT_PUBLIC_API_URL || '/api';
 
   public static async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const headers = new Headers(options.headers || {});

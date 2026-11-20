@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import { ArrowRight, Users, Music, HeartHandshake } from 'lucide-react'
 import SpotlightCard from '../reactbits/SpotlightCard'

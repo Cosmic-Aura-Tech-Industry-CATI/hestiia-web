@@ -1,3 +1,7 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import interiorImg from '../../assets/images/restaurant_interior.jpg'
 import RevealImage from '../reactbits/RevealImage'
@@ -39,7 +43,7 @@ export default function StoryTeaser() {
           {/* 1 Photo: RevealImage with clip wipe left-to-right & desktop parallax */}
           <div className="story-teaser__image-col">
             <RevealImage
-              src={interiorImg}
+              src={interiorImg.src}
               alt="Hestiia Restaurant Dining Sanctuary Interior in Shyam Nagar, Kanpur"
               aspectRatio="4/3"
             >

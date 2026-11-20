@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { POPULAR_DISHES, MENU_CATEGORIES } from '../../content/menu'

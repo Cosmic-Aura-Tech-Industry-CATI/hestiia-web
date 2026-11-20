@@ -1,16 +1,18 @@
+'use client'
+
 import { useState, useEffect } from 'react'
 import { Phone, MessageSquare, Navigation, Calendar } from 'lucide-react'
 import { RESTAURANT } from '../../content/restaurant'
 import { smoothScroller } from '../../lib/lenis'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { usePathname, useRouter } from 'next/navigation'
 
 export default function FloatingActionBar() {
   const [isHeroIntersecting, setIsHeroIntersecting] = useState(false)
-  const location = useLocation()
-  const navigate = useNavigate()
+  const pathname = usePathname()
+  const router = useRouter()
 
   useEffect(() => {
-    if (location.pathname !== '/') return
+    if (pathname !== '/') return
 
     const heroEl = document.getElementById('home')
     if (!heroEl) return
@@ -24,12 +26,12 @@ export default function FloatingActionBar() {
 
     observer.observe(heroEl)
     return () => observer.disconnect()
-  }, [location.pathname])
+  }, [pathname])
 
-  const isVisible = location.pathname !== '/' || !isHeroIntersecting
+  const isVisible = pathname !== '/' || !isHeroIntersecting
 
   const handleReserve = (e: React.MouseEvent) => {
-    if (location.pathname === '/') {
+    if (pathname === '/') {
       e.preventDefault()
       const el = document.getElementById('visit')
       if (el) {
@@ -37,7 +39,7 @@ export default function FloatingActionBar() {
       }
     } else {
       e.preventDefault()
-      navigate('/#visit')
+      router.push('/#visit')
     }
   }
 

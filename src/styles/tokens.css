@@ -26,8 +26,8 @@
   --color-focus:         #1A5FD0; /* High contrast focus ring */
 
   /* Typography */
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans:  'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
+  --font-sans:  var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
   /* Fluid Font Scale (clamp-based for responsiveness) */
   --font-size-eyebrow: clamp(12px, 1.2vw, 13px);
