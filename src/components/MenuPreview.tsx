@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useEffect, useMemo } from 'react'
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion'
 import {
@@ -12,7 +14,7 @@ import {
   ArrowRight,
   Filter,
 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { useCart } from '../context/CartContext'
 import FlowingMenu, { type FlowingMenuItem } from './reactbits/FlowingMenu'
 import {
@@ -1107,7 +1109,7 @@ export default function MenuPreview() {
                 View Tray
               </button>
               <Link
-                to="/checkout"
+                href="/checkout"
                 style={{
                   background: 'linear-gradient(135deg, var(--color-brass), var(--color-brass-light))',
                   color: '#16110E',

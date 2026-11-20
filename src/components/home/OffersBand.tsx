@@ -1,5 +1,7 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { OFFERS_CONFIG } from '../../content/offers'
 import { ArrowRight, Copy, Check } from 'lucide-react'
 import ShinyText from '../reactbits/ShinyText'
@@ -152,7 +154,7 @@ export default function OffersBand() {
             </button>
 
             <Link
-              to="/offers"
+              href="/offers"
               className="offers-view-btn"
               aria-label="View current dining offers"
             >

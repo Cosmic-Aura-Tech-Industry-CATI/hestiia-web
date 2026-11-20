@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -25,21 +27,22 @@ export default function Hero({ isReady = true }: HeroProps) {
   const ctasRef = useRef<HTMLDivElement>(null)
   const scrollCueRef = useRef<HTMLDivElement>(null)
 
-  const [shouldLoadVideo] = useState(() => {
-    if (typeof window === 'undefined') return false
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+
+  useEffect(() => {
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (isReducedMotion) return false
+    if (isReducedMotion) return
 
     const nav = navigator as unknown as { connection?: NetworkInformation }
     const connection = nav.connection
     if (connection) {
       if (connection.saveData || connection.effectiveType === '2g' || connection.effectiveType === 'slow-2g') {
-        return false
+        return
       }
     }
-    return true
-  })
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false)
+    setShouldLoadVideo(true)
+  }, [])
 
   // 2. Video Playback Management (IntersectionObserver, visibilitychange, and try/catch play)
   useEffect(() => {

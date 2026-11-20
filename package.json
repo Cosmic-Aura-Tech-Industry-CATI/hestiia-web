@@ -4,30 +4,28 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "validate:content": "node scripts/validate-content.mjs",
     "validate:content:prod": "node scripts/validate-content.mjs --production",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "lint": "oxlint"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "framer-motion": "^14.6.0",
     "gsap": "^3.15.0",
     "lucide-react": "^1.61.0",
+    "next": "^16.4.6",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1",
-    "react-router-dom": "^7.18.4"
+    "react-dom": "^19.3.1"
   },
   "devDependencies": {
     "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react": "^6.1.2",
     "oxlint": "^1.88.0",
     "sharp": "^0.35.5",
-    "typescript": "~6.0.3",
-    "vite": "^8.3.4"
+    "typescript": "~6.0.3"
   }
 }

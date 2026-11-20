@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import {
   motion,
@@ -313,9 +315,7 @@ export default function GalleryRing() {
   const [activeIndex, setActiveIndex] = useState(0)
   const [hasInteracted, setHasInteracted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
-    typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)').matches : false
-  )
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
 
   // Track scroll into view for entrance spin
   const isInView = useInView(containerRef, { once: true, amount: 0.2 })
@@ -338,6 +338,7 @@ export default function GalleryRing() {
   // Detect prefers-reduced-motion changes
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    setPrefersReducedMotion(mq.matches)
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches)
     mq.addEventListener('change', handler)
     return () => mq.removeEventListener('change', handler)

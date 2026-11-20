@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { Play, Pause, ArrowUpRight } from 'lucide-react'
 import { motion, useSpring } from 'framer-motion'
@@ -133,7 +135,7 @@ function ReelCard({ reel, isDesktop, isDuplicate = false }: ReelCardProps) {
             controlsList="nodownload noremoteplayback"
             className="hz-reels-video"
             onError={() => {
-              if (import.meta.env.DEV) {
+              if (process.env.NODE_ENV === 'development') {
                 console.warn(`[Reels] Video failed to load: ${reel.video}`)
               }
               setVideoError(true)

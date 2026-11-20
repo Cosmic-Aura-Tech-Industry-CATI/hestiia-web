@@ -1,13 +1,10 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { motion, useSpring } from 'framer-motion'
 
 export default function BlobCursor() {
-  const [isVisible, setIsVisible] = useState(() => {
-    if (typeof window === 'undefined') return false
-    const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches
-    const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    return !isTouch && !isReducedMotion
-  })
+  const [isVisible, setIsVisible] = useState(false)
   const [isHoveringInteractive, setIsHoveringInteractive] = useState(false)
 
   const springConfig = { damping: 28, stiffness: 350, mass: 0.5 }
@@ -19,6 +16,7 @@ export default function BlobCursor() {
     const isTouch = window.matchMedia('(hover: none) and (pointer: coarse)').matches
     const isReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (isTouch || isReducedMotion) return
+    setIsVisible(true)
 
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX)

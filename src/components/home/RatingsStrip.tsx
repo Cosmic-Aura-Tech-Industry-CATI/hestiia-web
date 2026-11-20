@@ -1,7 +1,9 @@
+'use client'
+
 import { useEffect, useRef } from 'react'
 import { RATINGS } from '../../content/ratings'
 import { Star, ShieldCheck, MapPin, ArrowRight, ExternalLink } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import CountUp from '../reactbits/CountUp'
@@ -173,7 +175,7 @@ export default function RatingsStrip() {
 
             {/* Action Chip: All Reviews */}
             <Link
-              to="/reviews"
+              href="/reviews"
               className="ratings-chip ratings-card ratings-chip--all"
               aria-label="View all guest reviews"
             >

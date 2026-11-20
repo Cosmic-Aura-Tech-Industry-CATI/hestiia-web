@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState, useCallback } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 import { POPULAR_DISHES, MENU_CATEGORIES } from '../../content/menu'
 import ShinyText from '../reactbits/ShinyText'
@@ -184,7 +186,7 @@ export default function SignatureDishes() {
           </p>
 
           <Link
-            to="/menu"
+            href="/menu"
             className="signature-menu-btn"
             aria-label="See full menu with 193 dishes"
           >
@@ -309,7 +311,7 @@ export default function SignatureDishes() {
                           <ClickSpark sparkColor="var(--color-brass, #B89A64)" sparkCount={8}>
                             <TapScale scale={0.95}>
                               <Link
-                                to={`/menu/${dish.slug}`}
+                                href={`/menu/${dish.slug}`}
                                 className="dish-card__btn"
                                 aria-label={`View ${dish.name} details`}
                               >

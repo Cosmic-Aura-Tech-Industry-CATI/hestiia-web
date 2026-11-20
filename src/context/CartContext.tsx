@@ -1,4 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
+'use client';
+
+import React, { createContext, useContext, useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import type { CartItem, ApiFoodItem } from '../types/api';
 
 interface CartContextType {
@@ -29,20 +31,28 @@ const CART_STORAGE_KEY = 'hestiiya_web_cart';
 const TAX_PERCENT = 5; // 5% GST on Restaurant Dining/Takeaway
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>(() => {
-    try {
-      const saved = localStorage.getItem(CART_STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
+  const [items, setItems] = useState<CartItem[]>([]);
+  const hasHydratedRef = useRef(false);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [promoCode, setPromoCode] = useState('');
   const [discountPercent, setDiscountPercent] = useState(0);
 
   useEffect(() => {
+    try {
+      const saved = localStorage.getItem(CART_STORAGE_KEY);
+      if (saved) {
+        setItems(JSON.parse(saved));
+      }
+    } catch {
+      // Storage unavailable
+    } finally {
+      hasHydratedRef.current = true;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!hasHydratedRef.current) return;
     try {
       localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
     } catch {

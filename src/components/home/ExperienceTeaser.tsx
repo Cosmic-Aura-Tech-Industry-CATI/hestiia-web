@@ -1,5 +1,7 @@
+'use client'
+
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import Link from 'next/link'
 import { ArrowRight, Users, Music, HeartHandshake } from 'lucide-react'
 import SpotlightCard from '../reactbits/SpotlightCard'
 import TapScale from '../reactbits/TapScale'
@@ -168,7 +170,7 @@ export default function ExperienceTeaser() {
           </div>
 
           <Link
-            to="/about#experience"
+            href="/about#experience"
             className="experience-teaser__header-link"
             aria-label="Explore the dining sanctuary experience"
           >
@@ -227,7 +229,7 @@ export default function ExperienceTeaser() {
 
                 <div style={{ marginTop: '24px' }}>
                   <Link
-                    to="/about#experience"
+                    href="/about#experience"
                     className="exp-card__link"
                     aria-label={`Read details about ${card.title}`}
                   >

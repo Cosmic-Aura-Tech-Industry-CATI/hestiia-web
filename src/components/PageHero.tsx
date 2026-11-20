@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom'
+'use client'
+
+import Link from 'next/link'
 import SplitText from './reactbits/SplitText'
 import DrawLine from './reactbits/DrawLine'
 
@@ -50,7 +52,7 @@ export default function PageHero({
           >
             <li>
               <Link
-                to="/"
+                href="/"
                 style={{
                   color: 'var(--color-brass)',
                   textDecoration: 'none',
@@ -65,7 +67,7 @@ export default function PageHero({
               breadcrumbs.map((b, idx) => (
                 <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   {b.path ? (
-                    <Link to={b.path} style={{ color: 'var(--color-brass)', textDecoration: 'none' }}>
+                    <Link href={b.path} style={{ color: 'var(--color-brass)', textDecoration: 'none' }}>
                       {b.label}
                     </Link>
                   ) : (
