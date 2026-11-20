@@ -14,14 +14,15 @@ export const NAV_LINKS: NavLinkItem[] = [
   { id: 'offers', label: 'Offers', href: '/offers', order: 5 },
 ]
 
-// 6 navigation links for mobile slide-in drawer
+// Navigation links for mobile slide-in drawer
 export const MOBILE_NAV_LINKS: NavLinkItem[] = [
   { id: 'about', label: 'Our Story', href: '/about', order: 1 },
   { id: 'cuisines', label: 'Cuisines', href: '/cuisines', order: 2 },
   { id: 'gallery', label: 'Gallery', href: '/gallery', order: 3 },
   { id: 'menu', label: 'Menu', href: '/menu', order: 4 },
   { id: 'offers', label: 'Offers', href: '/offers', order: 5 },
-  { id: 'reviews', label: 'Reviews', href: '/reviews', order: 6 },
+  { id: 'party', label: 'Parties & Events', href: '/party', order: 6 },
+  { id: 'reviews', label: 'Reviews', href: '/reviews', order: 7 },
 ]
 
 export interface RouteLink {
