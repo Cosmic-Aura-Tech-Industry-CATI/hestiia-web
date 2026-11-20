@@ -12,34 +12,54 @@ interface FaqItem {
 
 const FAQS: FaqItem[] = [
   {
+    question: 'Where is Hestiia Restaurant located in Shyam Nagar, Kanpur?',
+    answer:
+      'Hestiia Restaurant is located at 1-B, Ram Puram, Above Jawed Habib, Shyam Nagar, Kanpur, Uttar Pradesh 208013. We are conveniently situated near PAC Kanpur, easily accessible from Harjinder Nagar, Chakeri, Rama Devi, Naubasta, and Yashoda Nagar.',
+  },
+  {
     question: 'Is Hestiia Restaurant 100% pure vegetarian?',
     answer:
-      'Yes. Hestiia is a certified 100% pure vegetarian restaurant in Shyam Nagar, Kanpur. We do not use, store, or prepare any meat, poultry, seafood, or eggs in our kitchen. All dishes are prepared with pure dairy (paneer, desi ghee, fresh cream) and garden-fresh produce.',
-  },
-  {
-    question: 'Where is Hestiia Restaurant located in Kanpur?',
-    answer:
-      'Hestiia Restaurant is located at 1-B, Ram Puram, Above Jawed Habib, Shyam Nagar, Kanpur, Uttar Pradesh 208013. We are situated near PAC Kanpur and easily accessible from Harjinder Nagar, Chakeri, and Rama Devi.',
-  },
-  {
-    question: 'What are the operating hours of Hestiia Restaurant?',
-    answer:
-      'We are open 7 days a week from 11:00 AM to 11:00 PM for dine-in lunch and dinner, parcel takeaway, and direct home delivery.',
+      'Yes, Hestiia is a certified 100% pure vegetarian restaurant in Shyam Nagar, Kanpur. We do not use, store, or prepare any meat, poultry, seafood, or eggs in our kitchen. All dishes are crafted using farm-fresh vegetables, dairy paneer, and pure desi ghee.',
   },
   {
     question: 'What cuisines and signature dishes are served at Hestiia?',
     answer:
-      'Our kitchen features 193 authentic pure vegetarian dishes across 21 disciplines, including North Indian heritage curries (Paneer Butter Masala, Dal Makhani, Shahi Paneer), hot tandoori breads, sizzling Indo-Chinese wok specialties (Hakka Noodles, Crispy Chilli Paneer), handcrafted pizzas, burgers, sandwiches, and rich desserts like Saffron Badam Kheer.',
+      'We serve over 193 authentic pure vegetarian delicacies across North Indian heritage curries (Paneer Butter Masala, Dal Makhani, Shahi Paneer, Kadhai Paneer), hot tandoori breads, sizzling Indo-Chinese wok specialties (Hakka Noodles, Crispy Chilli Paneer, Manchurian), handcrafted pizzas, gourmet burgers, sandwiches, and traditional desserts.',
   },
   {
-    question: 'How do I book a table or reserve a private celebration hall?',
+    question: 'What is the average cost per person at Hestiia Restaurant?',
     answer:
-      'You can reserve a table directly through our website booking form, call our reception directly at +91 78808 40622, or reserve through verified partner apps including District, Zomato Dining, and EazyDiner. For private banquet bookings, birthday parties, and family gatherings, contact our hospitality desk.',
+      'Hestiia offers premium dining at an affordable price of ₹200 to ₹400 per person. Whether you are visiting for a quick lunch, family dinner, or weekend celebration, our extensive menu offers great quality and generous portions at honest prices.',
   },
   {
-    question: 'Does Hestiia Restaurant deliver food in Kanpur?',
+    question: 'Is Hestiia a family-friendly restaurant in Shyam Nagar?',
     answer:
-      'Yes, we provide pure vegetarian home delivery across Shyam Nagar, Ram Puram, Chakeri, Harjinder Nagar, and neighboring Kanpur sectors. Orders can be placed directly on our website or via partner delivery platforms.',
+      'Yes! Hestiia is widely recognized as one of the best family restaurants in Shyam Nagar, Kanpur. We offer comfortable, spacious seating, warm hospitality, child-friendly dining choices, and a peaceful acoustic atmosphere ideal for family get-togethers and multi-generational dinners.',
+  },
+  {
+    question: 'Do you host birthday parties, anniversaries, and family celebrations?',
+    answer:
+      'Yes, we have a dedicated private dining and event space perfect for birthday celebrations, kitty parties, anniversaries, and family banquets. We offer customized party menus, welcome mocktails, table arrangements, and full celebration assistance.',
+  },
+  {
+    question: 'Does Hestiia provide food delivery in Shyam Nagar and nearby areas?',
+    answer:
+      'Yes, we provide fast pure vegetarian home delivery across Shyam Nagar, Ram Puram, Chakeri, Harjinder Nagar, Naubasta, Yashoda Nagar, and Kidwai Nagar. You can place orders directly through our website or via our delivery partners.',
+  },
+  {
+    question: 'What are the operating hours of Hestiia Restaurant?',
+    answer:
+      'We are open 7 days a week from 11:00 AM to 11:00 PM for dine-in lunch and dinner, parcel takeaways, and home delivery.',
+  },
+  {
+    question: 'Is parking available at Hestiia Restaurant?',
+    answer:
+      'Yes, ample roadside and dedicated parking space is available for two-wheelers and four-wheelers directly outside the restaurant premises in Ram Puram, Shyam Nagar.',
+  },
+  {
+    question: 'How can I reserve a table or order food?',
+    answer:
+      'You can book a table directly through our website booking form, call our reception at +91 78808 40622, or message us on WhatsApp. Table bookings can also be placed through verified partner apps including District, Zomato Dining, and EazyDiner.',
   },
 ]
 

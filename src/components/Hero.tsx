@@ -214,12 +214,12 @@ export default function Hero({ isReady = true }: HeroProps) {
 
           {/* H1 Title */}
           <h1 ref={titleRef} className="hero__title">
-            Hestiia
+            Hestiia <span className="sr-only">— Best Pure Veg Family Restaurant in Shyam Nagar, Kanpur</span>
           </h1>
 
           {/* Subtitle */}
           <p ref={subtitleRef} className="hero__subtitle">
-            Pure vegetarian dining in Shyam Nagar, Kanpur.
+            Best pure vegetarian family dining in Shyam Nagar, Kanpur.
           </p>
 
           {/* CTA Buttons */}
