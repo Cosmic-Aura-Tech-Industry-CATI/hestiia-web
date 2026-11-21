@@ -6,20 +6,6 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
-  async redirects() {
-    return [
-      {
-        source: '/experience',
-        destination: '/about',
-        permanent: false,
-      },
-      {
-        source: '/party',
-        destination: '/contact?type=party',
-        permanent: false,
-      },
-    ]
-  },
   async rewrites() {
     if (process.env.BACKEND_URL || process.env.NODE_ENV === 'development') {
       return [

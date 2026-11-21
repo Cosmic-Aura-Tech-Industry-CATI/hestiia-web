@@ -52,7 +52,7 @@ for (const host of allowedHosts) {
 }
 
 // 3. Validate gallery.ts
-const galContent = checkFile('src/content/gallery.ts')
+const galContent = checkFile('src/data/gallery.ts')
 if (!galContent.includes('alt:')) {
   errors.push('gallery.ts: Gallery items must have descriptive alt attributes.')
 }

@@ -37,7 +37,7 @@ export default function Contact() {
   }, [searchParams])
 
   // 1. Table Reservation State
-  const [formData, setFormData] = useState<CreateBookingDto>({
+  const [formData, setFormData] = useState<CreateBookingDto>(() => ({
     customerName: '',
     phone: '',
     email: '',
@@ -46,7 +46,7 @@ export default function Contact() {
     guests: '4 Guests',
     occasion: 'Family Dinner',
     specialRequests: '',
-  })
+  }))
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submittedBooking, setSubmittedBooking] = useState<any | null>(null)
@@ -55,7 +55,7 @@ export default function Contact() {
   const [errorMsg, setErrorMsg] = useState<string | null>(null)
 
   // 2. Party & Banquet Inquiry State
-  const [partyFormData, setPartyFormData] = useState<CreatePartyInquiryDto>({
+  const [partyFormData, setPartyFormData] = useState<CreatePartyInquiryDto>(() => ({
     customerName: '',
     phone: '',
     email: '',
@@ -64,7 +64,7 @@ export default function Contact() {
     guestCount: 25,
     budgetRange: '₹500 – ₹750 per guest',
     specialRequirements: '',
-  })
+  }))
   const [isPartySubmitting, setIsPartySubmitting] = useState(false)
   const [submittedPartyInquiry, setSubmittedPartyInquiry] = useState<any | null>(null)
   const [partyErrorMsg, setPartyErrorMsg] = useState<string | null>(null)

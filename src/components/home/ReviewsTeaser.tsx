@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Star, ExternalLink, ArrowRight } from 'lucide-react'
 import { RATINGS } from '../../content/ratings'
@@ -20,9 +20,6 @@ export default function ReviewsTeaser() {
   const containerRef = useRef<HTMLDivElement>(null)
 
   const [isMobile, setIsMobile] = useState<boolean>(false)
-  const [hasInteracted, setHasInteracted] = useState<boolean>(false)
-  const autoAdvanceTimerRef = useRef<any>(null)
-  const activeMobileIndexRef = useRef<number>(0)
 
   const scoredRatings = RATINGS.filter((r) => r.score !== null)
 
@@ -130,39 +127,6 @@ export default function ReviewsTeaser() {
     }
   }, [isMobile])
 
-  // Mobile: swipe snap cards, auto-advance every 5s, stops after first touch
-  useEffect(() => {
-    if (!isMobile || hasInteracted || !containerRef.current) return
-
-    autoAdvanceTimerRef.current = setInterval(() => {
-      if (!containerRef.current) return
-      const cards = containerRef.current.querySelectorAll<HTMLElement>('.review-quote-card-wrap')
-      if (cards.length === 0) return
-
-      const nextIndex = (activeMobileIndexRef.current + 1) % cards.length
-      activeMobileIndexRef.current = nextIndex
-
-      cards[nextIndex]?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'nearest',
-        inline: 'center',
-      })
-    }, 5000)
-
-    return () => {
-      if (autoAdvanceTimerRef.current) {
-        clearInterval(autoAdvanceTimerRef.current)
-      }
-    }
-  }, [isMobile, hasInteracted])
-
-  // Stop auto-advance on first touch/interaction
-  const handleTouchStart = useCallback(() => {
-    setHasInteracted(true)
-    if (autoAdvanceTimerRef.current) {
-      clearInterval(autoAdvanceTimerRef.current)
-    }
-  }, [])
 
   // Duplicate platforms for seamless marquee loop on desktop
   const displayPlatforms = !isMobile
@@ -265,7 +229,6 @@ export default function ReviewsTeaser() {
         <div
           ref={containerRef}
           className="reviews-cards-container"
-          onTouchStart={handleTouchStart}
         >
           <div ref={trackRef} className="reviews-cards-track">
             {displayPlatforms.map((platform, idx) => {

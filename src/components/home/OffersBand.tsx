@@ -10,6 +10,8 @@ import CircularText from '../reactbits/CircularText'
 import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { promotionsService } from '../../services/promotions.service'
+import type { Promotion } from '../../types/api'
 import './offers-band.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -17,6 +19,18 @@ gsap.registerPlugin(ScrollTrigger)
 export default function OffersBand() {
   const sectionRef = useRef<HTMLElement>(null)
   const [copied, setCopied] = useState(false)
+  const [promotions, setPromotions] = useState<Promotion[]>([])
+
+  useEffect(() => {
+    promotionsService
+      .getPromotions()
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          setPromotions(data)
+        }
+      })
+      .catch(() => {})
+  }, [])
 
   // Wipe entrance animation
   useEffect(() => {
@@ -45,14 +59,26 @@ export default function OffersBand() {
     return () => trigger.kill()
   }, [])
 
-  // Render only when offers exist, as now
-  if (!OFFERS_CONFIG.enabled || !OFFERS_CONFIG.items || OFFERS_CONFIG.items.length === 0) {
+  const hasStaticOffers = OFFERS_CONFIG.enabled && OFFERS_CONFIG.items && OFFERS_CONFIG.items.length > 0
+  const hasDynamicOffers = promotions.length > 0
+
+  if (!hasStaticOffers && !hasDynamicOffers) {
     return null
   }
 
-  const primaryOffer = OFFERS_CONFIG.items[0]
-  const offerTitles = OFFERS_CONFIG.items.map((item) => item.title)
-  const couponCode = primaryOffer.code || 'HESTIIA10'
+  const primaryOffer = hasDynamicOffers
+    ? {
+        title: promotions[0].title,
+        description: promotions[0].subtitle,
+        code: promotions[0].badge || 'WELCOME10',
+      }
+    : OFFERS_CONFIG.items[0]
+
+  const offerTitles = hasDynamicOffers
+    ? promotions.map((p) => p.title)
+    : OFFERS_CONFIG.items.map((item) => item.title)
+
+  const couponCode = primaryOffer.code || 'WELCOME10'
 
   const handleCopy = () => {
     navigator.clipboard.writeText(couponCode).then(() => {
@@ -65,102 +91,81 @@ export default function OffersBand() {
     <section
       ref={sectionRef}
       className="offers-band"
-      aria-label="Current dining promotions and offers"
+      aria-label="Current Offers and Dining Specials"
     >
-      {/* Slow animated gold gradient borders */}
-      <div className="offers-band__border-top" aria-hidden="true" />
-      <div className="offers-band__border-bottom" aria-hidden="true" />
+      <div className="offers-band__shimmer" aria-hidden="true" />
 
       <div className="container">
         <div className="offers-band__inner">
-          <div className="offers-band__left">
-            {/* CircularText badge: Hidden below 640px */}
-            <div className="offers-circular-badge" aria-hidden="true">
-              <CircularText text="• LIMITED PERK • HESTIIA DINING " radius={34} spinDuration={18} />
+          <div className="offers-band__content">
+            <span className="offers-band__badge">
+              <ShinyText text="Special Dining Privilege" speed={3.5} />
+            </span>
+
+            <div className="offers-band__heading">
+              <span className="offers-band__eyebrow">Limited Time Privilege</span>
+              {offerTitles.length > 1 ? (
+                <div className="offers-band__rotating-title">
+                  <RotatingText texts={offerTitles} interval={3500} />
+                </div>
+              ) : (
+                <h3 className="offers-band__static-title">{primaryOffer.title}</h3>
+              )}
             </div>
 
-            <div>
-              {/* ShinyText headline */}
-              <div style={{ marginBottom: '4px' }}>
-                <ShinyText
-                  text="SANCTUARY DINING PRIVILEGE"
-                  speed={3}
-                  style={{
-                    fontFamily: 'var(--font-sans)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                  }}
-                />
-              </div>
-
-              {/* RotatingText for offer titles */}
-              <div
-                style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontSize: 'clamp(18px, 2.5vw, 22px)',
-                  color: 'var(--color-text-inverse, #F6EFE4)',
-                  fontWeight: 400,
-                  display: 'flex',
-                  alignItems: 'baseline',
-                  gap: '8px',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <RotatingText texts={offerTitles} interval={3200} />
-              </div>
-
-              <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: 'rgba(246, 239, 228, 0.75)' }}>
-                {primaryOffer.description}
-              </p>
-            </div>
+            <p className="offers-band__desc">{primaryOffer.description}</p>
           </div>
 
-          {/* Right Action: Coupon Code Copy Button with tick animation + View Offer Link */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-            <button
-              type="button"
-              className="offers-copy-btn"
-              onClick={handleCopy}
-              aria-label={`Copy coupon code ${couponCode}`}
-            >
-              <AnimatePresence mode="wait">
-                {copied ? (
-                  <motion.span
-                    key="copied"
-                    initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.7, opacity: 0 }}
-                    transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', color: '#2F7D4F' }}
-                  >
-                    <Check size={13} />
-                    <span>Copied!</span>
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="copy"
-                    initial={{ scale: 0.7, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.7, opacity: 0 }}
-                    style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}
-                  >
-                    <Copy size={13} />
-                    <span>Code: {couponCode}</span>
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </button>
+          <div className="offers-band__actions">
+            <div className="offers-band__coupon">
+              <span className="offers-band__coupon-label">Use Privilege Code:</span>
+              <button
+                type="button"
+                className={`offers-band__coupon-btn ${copied ? 'offers-band__coupon-btn--copied' : ''}`}
+                onClick={handleCopy}
+                aria-label={`Copy coupon code ${couponCode}`}
+              >
+                <span className="offers-band__coupon-code">{couponCode}</span>
+                <span className="offers-band__coupon-icon" aria-hidden="true">
+                  <AnimatePresence mode="wait">
+                    {copied ? (
+                      <motion.span
+                        key="check"
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.6, opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <Check size={14} />
+                      </motion.span>
+                    ) : (
+                      <motion.span
+                        key="copy"
+                        initial={{ scale: 0.6, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.6, opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                      >
+                        <Copy size={14} />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </span>
+              </button>
+            </div>
 
             <Link
               href="/offers"
-              className="offers-view-btn"
-              aria-label="View current dining offers"
+              className="btn btn-primary offers-band__cta"
+              aria-label="View all seasonal dining offers"
             >
-              <span>View Offer</span>
-              <ArrowRight size={13} className="offers-arrow" />
+              <span>Explore All Offers</span>
+              <ArrowRight size={14} className="offers-band__cta-arrow" />
             </Link>
+          </div>
+
+          <div className="offers-band__badge-wrap" aria-hidden="true">
+            <CircularText text="PURE VEGETARIAN SANCTUARY · " radius={48} spinDuration={18} />
           </div>
         </div>
       </div>
